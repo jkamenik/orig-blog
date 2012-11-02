@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-10-31T21:53:45-04:00</updated>
+  <updated>2012-11-01T22:01:36-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -20,25 +20,72 @@
     <id>http://jkamenik.github.com/blog/2012/10/31/testing</id>
     <content type="html"><![CDATA[<p>This is a test</p>
 
-<div>
-  <pre><code class='ruby'>class Foo
-  def initialize
-    puts :foo
-    puts 'bar'
-  end
-end</code></pre>
-</div>
+<p>this <code>is</code> inline code</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="n">bar</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">something</span>
+</span><span class='line'>    <span class="s1">&#39;foo&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 
 
-<div>
-  <pre><code class='cucumber'>Scenario: testing
-  Given this
-  When that
-  Then something</code></pre>
-</div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="ss">:foo</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s1">&#39;bar&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Scenario:</span><span class="nf"> testing</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">this</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">that</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">something</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>test </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sr">//</span> <span class="no">Just</span> <span class="n">testing</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>testing  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="n">foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">init</span><span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>other code</p>
 ]]></content>
   </entry>
   
