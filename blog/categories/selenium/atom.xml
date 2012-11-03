@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Random Software Inklings]]></title>
-  <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
+  <title><![CDATA[Category: selenium | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/selenium/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
   <updated>2012-11-03T10:56:21-04:00</updated>
   <id>http://jkamenik.github.com/</id>
@@ -20,7 +20,7 @@
     <id>http://jkamenik.github.com/blog/2010/11/18/learning-selenium</id>
     <content type="html"><![CDATA[<h2>Background</h2>
 
-<p>My basic need is to find a platform where I can test FF, IE, and Safari on Windows, Linux, and OS X.  I use OS X as my platform, and Safari or Webkit as my environment.  I don&#8217;t like Windows or IE.  Linux is OK, but I like OS X because it just works the way I want.  And I find FF to be slow, and Firebug which is needed to debug we pages causes rendering changes and timing issues (most notably causing FF to crash).</p>
+<p>My basic need is to find a platform where I can test FF, IE, and Safari on Windows, Linux, and OS X.  I use OS X as my platform, and Safari or Webkit as my environment.  I don't like Windows or IE.  Linux is OK, but I like OS X because it just works the way I want.  And I find FF to be slow, and Firebug which is needed to debug we pages causes rendering changes and timing issues (most notably causing FF to crash).</p>
 
 <p>Ideally I want the testing environment:</p>
 
@@ -37,7 +37,7 @@
 </ol>
 
 
-<p>From my research it looked like Selenium did basically exactly what I needed. And unfortunately was the only real option.  There were plenty of options for taking screen shots of public sites (which mine isn&#8217;t, yet) and comparing those between browsers.  And there are several options for unit testing javascript, but only Selenium did both and could be run on my own hardware.</p>
+<p>From my research it looked like Selenium did basically exactly what I needed. And unfortunately was the only real option.  There were plenty of options for taking screen shots of public sites (which mine isn't, yet) and comparing those between browsers.  And there are several options for unit testing javascript, but only Selenium did both and could be run on my own hardware.</p>
 
 <h2>Implementation</h2>
 
@@ -47,7 +47,7 @@
 
 <p>This is the sample file that I created to test.</p>
 
-<div><script src='https://gist.github.com/1151478.js?file=code.html'></script>
+<p><div><script src='https://gist.github.com/1151478.js?file=code.html'></script>
 <noscript><pre><code>&lt;html&gt;
 &lt;body&gt;
 &lt;script&gt;
@@ -83,7 +83,7 @@ function Array(item){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre></noscript></div>
-
+</p>
 
 <h3>Using the IDE</h3>
 
@@ -91,8 +91,7 @@ function Array(item){
 
 <p>I am a rails developer, and am familar with rspec so I use the IDE to run the tests to make sure they work, but then I transfer it to rspec since it is a more expressive test framework.  The downside is that you have to use a Remote Control to run the test, which adds an extra level of complications.  We will get to the Remote Control later.</p>
 
-<p>A basic HTML test looks like this:</p>
-
+<p>A basic HTML test looks like this:
 <div><script src='https://gist.github.com/1151478.js?file=test.html'></script>
 <noscript><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
@@ -125,17 +124,13 @@ function Array(item){
 &lt;/tbody&gt;&lt;/table&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre></noscript></div>
-
+</p>
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<blockquote><p>In all tests the <code>this</code> object is the base Selenium object so if you want to get to the <code>window</code> object you have to traverse up the stack via <code>this.browserbot.getUserWindow()</code>.</p></blockquote>
+<p><blockquote><p>In all tests the <code>this</code> object is the base Selenium object so if you want to get to the <code>window</code> object you have to traverse up the stack via <code>this.browserbot.getUserWindow()</code>.</p></blockquote></p>
 
-
-
-
-<blockquote><p>Unfortunately everything tested in Selenium is converted to a string before testing.  So if I need to ensure that an integer parsing function actually produces a number I need to use <code>typeof</code>.</p></blockquote>
-
+<p><blockquote><p>Unfortunately everything tested in Selenium is converted to a string before testing.  So if I need to ensure that an integer parsing function actually produces a number I need to use <code>typeof</code>.</p></blockquote></p>
 
 <h2>Using RSpec</h2>
 
@@ -143,19 +138,17 @@ function Array(item){
 
 <h3>Installing</h3>
 
-<p>This package requires ruby-gems, rspec, and selenium-client.  I am going to assume you have ruby-gems installed already.  The others are installed like this:</p>
-
+<p>This package requires ruby-gems, rspec, and selenium-client.  I am going to assume you have ruby-gems installed already.  The others are installed like this:
 <div><script src='https://gist.github.com/1151478.js?file=install.sh'></script>
 <noscript><pre><code>sudo gem install rspec 
 sudo gem install selenium-client</code></pre></noscript></div>
-
+</p>
 
 <h3>Converting</h3>
 
 <p>When using Rspec the only real thing to remember is that there are no assert<em> or verify</em> methods.  The reason is that Rspec itself is a testing framework so it will have it own version of assert and verify (in this case should).</p>
 
-<p>The IDE has a great feature in that it converts the HTML test into a rspec test for you.  It isn&#8217;t a great format, but it is better then nothing and is a good place to start.</p>
-
+<p>The IDE has a great feature in that it converts the HTML test into a rspec test for you.  It isn't a great format, but it is better then nothing and is a good place to start.
 <div><script src='https://gist.github.com/1151478.js?file=selenium.rb'></script>
 <noscript><pre><code>require &quot;rubygems&quot; 
 gem &quot;rspec&quot; 
@@ -204,39 +197,25 @@ it &quot;test_array_test&quot; do
 end 
 end
 </code></pre></noscript></div>
+</p>
 
+<p><blockquote><p>The browser being shown is <code>chrome</code>.  This actually means Firefox, not Google Chrome.  For Google Chrome use <code>googlechrome</code>.</p></blockquote></p>
 
-
-
-<blockquote><p>The browser being shown is <code>chrome</code>.  This actually means Firefox, not Google Chrome.  For Google Chrome use <code>googlechrome</code>.</p></blockquote>
-
-
-
-
-<blockquote><p>For Safari use <code>safari</code>, but remember that you will need to disable the popup blocker manually and close Safari (for this user) otherwise it will just sit there forever.</p></blockquote>
-
+<p><blockquote><p>For Safari use <code>safari</code>, but remember that you will need to disable the popup blocker manually and close Safari (for this user) otherwise it will just sit there forever.</p></blockquote></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<blockquote><p>The server must be run by a user that has access the browser and has a screen to render to.</p></blockquote>
+<p><blockquote><p>The server must be run by a user that has access the browser and has a screen to render to.</p></blockquote></p>
 
+<p><blockquote><p>Firefox will only run a single profile per user.  If you need to run Firefox concurrently on the same machine you need to fake a second profile.  Don't do it, just create a VM; you will be happier.</p></blockquote></p>
 
-
-
-<blockquote><p>Firefox will only run a single profile per user.  If you need to run Firefox concurrently on the same machine you need to fake a second profile.  Don&#8217;t do it, just create a VM; you will be happier.</p></blockquote>
-
-
-
-
-<blockquote><p>Google Chrome does not works on OS X.  This is because OS X doesn&#8217;t add application executables to the path, and the server code isn&#8217;t smart enough to use the executable directly.  The fix is supposedly <a href="http://groups.google.com/group/selenium-users/browse_thread/thread/7205089285e92973?hide_quotes=no&amp;fwc=1">here</a>, but I was not able to get it to work.  If I do I will probably write another blog entry and link it here.</p></blockquote>
-
+<p><blockquote><p>Google Chrome does not works on OS X.  This is because OS X doesn't add application executables to the path, and the server code isn't smart enough to use the executable directly.  The fix is supposedly <a href="http://groups.google.com/group/selenium-users/browse_thread/thread/7205089285e92973?hide_quotes=no&amp;fwc=1">here</a>, but I was not able to get it to work.  If I do I will probably write another blog entry and link it here.</p></blockquote></p>
 
 <h3>Putting it all together</h3>
 
-<p>By default RSpec provides no runner code and the code the IDE produces is not standalone.  This is not a problem since installing RSpec into a rails app installs script/spec.  I have copied the runner code here so make it easier.</p>
-
+<p>By default RSpec provides no runner code and the code the IDE produces is not standalone.  This is not a problem since installing RSpec into a rails app installs script/spec.  I have copied the runner code here so make it easier.
 <div><script src='https://gist.github.com/1151478.js?file=runner.rb'></script>
 <noscript><pre><code>#!/usr/bin/env ruby 
 if ARGV.any? {|arg| %w[--drb -X --generate-options -G --help -h --version -v].include?(arg)} 
@@ -244,14 +223,13 @@ if ARGV.any? {|arg| %w[--drb -X --generate-options -G --help -h --version -v].in
 end 
 require 'spec/autorun' 
 exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
-
+</p>
 
 <p>I am going to assume the RSpec runner code is called spec and the test file is called test.rb.  To run this test from the command line do the following:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ruby</span> <span class="n">spec</span> <span class="nb">test</span><span class="o">.</span><span class="n">rb</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><code>ruby
+ruby spec test.rb
+</code></p>
 
 <p>Assuming you followed all the steps the test should have opened Firefox, executed a page, run the tests, closed Firefox, and returned the results.  Now you can add more tests and have Selenium execute them.</p>
 
