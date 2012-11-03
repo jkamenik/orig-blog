@@ -2,7 +2,7 @@
 layout: post
 title: "Learning Selenium"
 date: 2010-11-18
-comments: false
+comments: true
 categories:
  - testing
  - selenium
