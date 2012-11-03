@@ -58,7 +58,7 @@ In code it looks like:
 git> git svn rebase
 git> git checkout -b task1
 ... work on task 1
-git> git log -p -n X &gt; task1.diff
+git> git log -p -n X > task1.diff
 ... create diff of all (X) changes needed for task1
 ... email the diff for review
 git> git checkout master
@@ -69,7 +69,7 @@ git> git checkout -b task2
 ... return to task 2 when task 1 is committed
 ```
 
-This style also works well if your boss comes over at the 11th hour and assignes you a new emergency assignment.  When you are done with the emergency switching gears is as easy as switching branches.
+This style also works well if your boss comes over at the 11th hour and assigns you a new emergency assignment.  When you are done with the emergency switching gears is as easy as switching branches.
 
 ## DCommitting your changes
 
@@ -114,7 +114,7 @@ Commits that are in SVN also have the SVN revision number in the log message, bu
 
 Git allows more commands to be added via aliases. An alias can be a shortening of a git command: `st = status`. Or it can be a shell command that git will execute `test = !sh -c 'echo "it works!"'` (notice the leading !).
 
-Here is the alias part of my <span class=code>~/.gitconfig</span> file looks like:
+Here is the alias part of my `~/.gitconfig` file looks like:
 ```
 [alias]
   # Old SVN aliases
