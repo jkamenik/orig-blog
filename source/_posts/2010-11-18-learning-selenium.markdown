@@ -11,6 +11,8 @@ categories:
 ## Background
 My basic need is to find a platform where I can test FF, IE, and Safari on Windows, Linux, and OS X.  I use OS X as my platform, and Safari or Webkit as my environment.  I don't like Windows or IE.  Linux is OK, but I like OS X because it just works the way I want.  And I find FF to be slow, and Firebug which is needed to debug we pages causes rendering changes and timing issues (most notably causing FF to crash).
 
+<!--more-->
+
 Ideally I want the testing environment:
 
 1. To be developed in Safari on OS X

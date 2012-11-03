@@ -15,6 +15,8 @@ I see a lot of posts on how to be a good boss, but the problem there is that the
 
 Nobody is perfect, so you will probably have done at least one of these things in the past. Or you do then without even knowing. Now is your chance to stop, and be a constructive boss who people want to work for.
 
+<!--more-->
+
 ## Be smarmy
 
 Yep, this is number one.Smarmy people are falsely friendly (think used car dealers). Notice I did not say do not "be mean." As a boss sometimes you will need to be mean, or at least not very nice.  And even that should be kept to a minimum, but it is never OK to be smarmy.  All it does is make people uncomfortable confiding in you, which means they will either find better employment (if they can) or they will sabotage you.

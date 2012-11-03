@@ -13,6 +13,8 @@ Normally, I would just use GIT without a bridge to another control system, but m
 
 What I mean by commit early, commit often is that I commit even if I only have part of the solution. As I find the other parts of the solution I commit those as well. That way when I am 2 or 3 days into a fix I already have the commit messages saved in GIT, so I don't have to remember what I did for those 2 or 3 days. When the solution is shippable only then do I push it up to the company's repository.
 
+<!--more-->
+
 ## Benefits of GIT include:
 
 1. Being able to share non production ready code (Peer to Peer)
