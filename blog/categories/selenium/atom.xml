@@ -4,7 +4,7 @@
   <title><![CDATA[Category: selenium | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/selenium/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-11-03T10:56:21-04:00</updated>
+  <updated>2012-11-03T15:13:04-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<h2>Background</h2>
 
 <p>My basic need is to find a platform where I can test FF, IE, and Safari on Windows, Linux, and OS X.  I use OS X as my platform, and Safari or Webkit as my environment.  I don't like Windows or IE.  Linux is OK, but I like OS X because it just works the way I want.  And I find FF to be slow, and Firebug which is needed to debug we pages causes rendering changes and timing issues (most notably causing FF to crash).</p>
+
+<!--more-->
+
 
 <p>Ideally I want the testing environment:</p>
 

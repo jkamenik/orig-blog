@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: email | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/email/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2012-11-03T15:13:04-04:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dealing with Email overload]]></title>
+    <link href="http://jkamenik.github.com/blog/2010/12/12/dealing-with-email-overload/"/>
+    <updated>2010-12-12T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2010/12/12/dealing-with-email-overload</id>
+    <content type="html"><![CDATA[<p>This isn't strictly software related, but a lot of us have to deal with the horror that is email. Email is not a good solution to any problem, but it is ubiquitous so it is used for all things: personal correspondence, commit tracking, defect notification, task notification, etc... Email is all to often used as a mechanism to pass-the-buck.</p>
+
+<p>The only way to deal with this email overload is to set boundaries on email usage. A lot of people will find these boundaries annoying, if not unworkable. Just stick with it and lead by example. Eventually, in a time of high stress, you will be able to get to important messages fast and they will be left floundering.</p>
+
+<!--more-->
+
+
+<h2>My results</h2>
+
+<p>I am putting the summary first in hopes that you might actually try some of these suggestions. On average I get 50 to 200 work related emails a day. In any given day (saturday and sunday included) I will need to respond to 5 to 10 of them. That means that I get between 40 and 195 junk emails that pass (and should pass) my junk mail filters.</p>
+
+<p>By focusing on making sure my inbox only includes import emails I have reduced my inbox to 3 to 5 message each check (and I check twice a day). On busy days I only ever check my inbox, relying on others to contact me via a different medium if they really need me. When there is a less busy day I go through the other inbox and deal with those messages.</p>
+
+<p>At the time I am writing this (on sunday) I have 1 email in my inbox and 91 emails in my other inbox that were all sent saturday. A quick read of the 1 email and I will have to spend 5 minutes reviewing code, but the rest can wait until monday.</p>
+
+<h2>Use the right messaging system</h2>
+
+<p>Use email for messages that do not need an immediate response. Since there is no message size limit, make sure you use the most of it. Write emails that are well detailed and specific. If at any point a message can be answered with "Ok" or some other monosyllabic word then email was not the correct choice.</p>
+
+<p>Use Instant Messages (IM,IRC,etc...) for conversations that need semi immediate responses, and a possible record. Many IM packages can log conversations for later viewing, which is useful when you forget things. There are message length and formatting restrictions so this forces the messages to be brief and specific.</p>
+
+<p>Use Phone, Skype, or face to face contact when a response is needed immediately.</p>
+
+<p>Use Twitter, or some other global message posting service to track commits, continuous integration fails, defects, etc...</p>
+
+<p>Use a wiki, or blog to track generic instructions or documentation.</p>
+
+<h2>Check email twice a day (only)</h2>
+
+<p>The easiest way to train people not to use email as a crutch is not use it as one yourself. Only check email twice a day, and give a concerted effort to reduce that to once a day within a month, and once a week within 6 months. Setup the other messaging systems so that email is used only for what it needs to be. And when people step out of line, correct them.</p>
+
+<p>Email should not be the first thing that you check in the morning, as you should not be working out of email. It should also not be the last thing you check as it will disrupt your already stressful commute/home life. Instead check email 2 hours after the start of the day, and 2 hours before the end of the day. If you work a 9-to-5 that means once at 11am and once at 3pm.</p>
+
+<p>The day you start doing this, tell the people that send you the most email and the ones that you will most affect by the change, and no one else. You are not trying to be sneaky, but if you blast an email to everyone then you are going to make it a big deal; which it is not. The others will learn over time.</p>
+
+<p>When someone tells you that you need to check your email and read their message do it, but only check their email, ignore all other messages.</p>
+
+<h2>Don't use Inbox as an archive</h2>
+
+<p>Once you are finished reading an email, either deal with the email and delete it or archive it. Create a separate archive folder and move emails there if you need to save them. Your goal is aways to reduce the inbox to zero</p>
+
+<h2>Create an other inbox</h2>
+
+<p>Create a filter that will dump any messages where you are not the direct recipient into a different folder. This should be the first filter you create, but the last filter that is applied to any message. Create as many other filters and folders as you can to move useless messages round. The goal is to remove any message that you do not need to act on so that what is left is just what is important. The trash can is a good folder to dump things that are truly useless.</p>
+
+<h2>Use the server's filtering mechanism</h2>
+
+<p>When possible have server do all the filtering that way you can use multiple email clients and will not be dependent on leaving an email client on. All Exchange servers and many online email services can do server filtering. When using Outlook, be careful, the ease of creating filters is sometimes offset by the fact that it lies about what filters can be saved to the server. Though harder, since MS didn't spend much time on the server-side features of Exchange, it is better to build the filters on the server directly.</p>
+
+<h2>Reduce the inbox to zero (in one sitting)</h2>
+
+<p>The goal is always to reduce your inbox to zero. Once all the filters are in place, the only thing left to actually deal with all the important emails (at least that is the hope). When dealing with email decide if the email should be dealt with, deferred, or archived.</p>
+
+<p>If time is really an issue then find the messages to archive and defer first, and move them. That way what is left is just the stuff to deal with now.</p>
+]]></content>
+  </entry>
+  
+</feed>

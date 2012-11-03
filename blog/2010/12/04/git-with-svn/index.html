@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>GIT with SVN - Random Software Inklings</title>
+  <meta name="author" content="John T. Kamenik">
+
+  
+  <meta name="description" content="Normally, I would just use GIT without a bridge to another control system, but many companies use SVN. There are just so many benefits to using GIT &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2010/12/04/git-with-svn/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Random Software Inklings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Random Software Inklings</a></h1>
+  
+    <h2>Random documentation of things I have learned.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jkamenik.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">GIT With SVN</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-04T00:00:00-05:00" pubdate data-updated="true">Dec 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Normally, I would just use GIT without a bridge to another control system, but many companies use SVN.  There are just so many benefits to using GIT that, for me, I am going to use it if there is a bridge to repository type the company uses.  I certainly don&#8217;t hate SVN or CVS or Perforce, but GIT allows me to work the way that I know I am most productive; which is commit early, commit often.</p>
+
+<p>What I mean by commit early, commit often is that I commit even if I only have part of the solution. As I find the other parts of the solution I commit those as well. That way when I am 2 or 3 days into a fix I already have the commit messages saved in GIT, so I don&#8217;t have to remember what I did for those 2 or 3 days. When the solution is shippable only then do I push it up to the company&#8217;s repository.</p>
+
+<!--more-->
+
+
+<h2>Benefits of GIT include:</h2>
+
+<ol>
+<li>Being able to share non production ready code (Peer to Peer)</li>
+<li>Being able to have many local branches</li>
+<li>Being able to logically group commits (via local branches) and push all at once</li>
+<li>Fantastic branch switching/merging
+
+<ol>
+<li>Rarely will you ever have to fix a merge conflict yourself</li>
+</ol>
+</li>
+<li>Rebase as well as merge
+
+<ol>
+<li>Rebase is SVNs style of linear commits</li>
+<li>Merge is non-linear and tries to keep commits sequentially ordered by date.  So if two branches are merged and both were actively worked on then the commits are intermixed.  (makes a lot more sense in practice then in writing)</li>
+</ol>
+</li>
+</ol>
+
+
+<p>With GIT&#8217;s power comes a little bit more complexity, and here I will detail the method that I have developed over months of fits and starts.  That way you can experience the benefits of using GIT for day to day work, but still use SVN when dealing with corporate.</p>
+
+<h2>Settings up the SVN Bridge</h2>
+
+<p>You can have GIT manage an entire SVN repository, branches and all. However, for GIT to do this it must checkout every revision of the SVN repo. This can be very painful when there are a lot of commits. Instead I recommend only managing a single branch starting a specific revision near HEAD. You will lose history older then that revision, but it does save a lot of time for large SVN repositories.</p>
+
+<p>For the below example I am going to assume we have a standard SVN repository at http://example.com/svn, the latest revision is 400, and the SVN username is test.</p>
+
+<p>Find the latest revision of the repository:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>svn log http://example.com/svn/trunk | head
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The latest revision will start with an &#8220;r&#8221; and be within the first 5 lines.</p>
+
+<p>Setting up a git repo:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git svn init --username<span class="o">=</span><span class="nb">test </span>http://example.com/svn/trunk dev
+</span><span class='line'>git svn fetch -r 400
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you have a local GIT repo in dev that is synced to SVN trunk at revision 400. And when you <code>git svn dcommit</code> the user <code>test</code> will be used.</p>
+
+<h2>Always work in a branch</h2>
+
+<p>In my company before anything is allowed to be checked into SVN it must go through a peer review.  In any given day I might work on 2 or 3 bugs/tasks.  For each, I create a GIT branch with the bug/task ID and work there.  When I am done I use <code>git log -p</code> to list the diffs that I submit for review. Then I move on to the next item, while the fix is being reviewed.  When the first bug/task is reviewed and accepted I jump back to master, rebase it, jump to the branch, rebase master, jump back to master and merge the branch, and finally svn dcommit everything.  After I mark the bug/task complete I also delete the branch. If the code is not accepted then I still have a branch where I can make the required corrections and repeat the process.</p>
+
+<p>It might sound complicated, but it really isn&#8217;t. The only reason for all this rebasing is so that GIT&#8217;s native merge tools deal with SVN merge conflicts. I am not sure why, but they are far better then what the SVN bridge can do, and will ultimately lead to few headaches for you.</p>
+
+<p>In code it looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git&gt; git svn rebase
+</span><span class='line'>git&gt; git checkout -b task1
+</span><span class='line'>... work on task 1
+</span><span class='line'>git&gt; git log -p -n X &gt; task1.diff
+</span><span class='line'>... create diff of all <span class="o">(</span>X<span class="o">)</span> changes needed <span class="k">for </span>task1
+</span><span class='line'>... email the diff <span class="k">for </span>review
+</span><span class='line'>git&gt; git checkout master
+</span><span class='line'>git&gt; git svn rebase
+</span><span class='line'>git&gt; git checkout -b task2
+</span><span class='line'>... work on task 2
+</span><span class='line'>... when task 1 is approved commit what you have <span class="k">for </span>task 2 and dcommit task1
+</span><span class='line'>... <span class="k">return </span>to task 2 when task 1 is committed
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This style also works well if your boss comes over at the 11th hour and assigns you a new emergency assignment.  When you are done with the emergency switching gears is as easy as switching branches.</p>
+
+<h2>DCommitting your changes</h2>
+
+<p>As states above I use the checkout, rebase, checkout, rebase, checkout, merge, dcommit style.  This seems cumbersome until you understand the purpose.</p>
+
+<p>From any branch always checkout into master.  This allows master to stay pure of your changes and makes its less likely that git svn will fail.</p>
+
+<p>Once master is up-to-date checkout the branch again and rebase the master changes into the branch.  Fixing any rebase conflicts there might be.  By fixing them on the branch we keep master clean so we are using git&#8217;s rebase/merge capabilities, not the SVN bridge&#8217;s.  There are times this step can be skipped, but once you have to deal with your first rebase conflict from the bridge you will wish you had branched.</p>
+
+<p>Now that the branch holds the latest code to be dcommitted to SVN: checkout master, merge the branch, and dcommit master.  You could rebase the changes from the branch if you prefer, it really makes no difference because your changes are on top of SVN now either way.  Once done all of master&#8217;s log messages will be rewritten to what is in SVN.</p>
+
+<p>All together it looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git&gt; git checkout master
+</span><span class='line'>git&gt; git svn rebase
+</span><span class='line'>git&gt; git checkout task1
+</span><span class='line'>git&gt; git rebase master
+</span><span class='line'>... SVN needs your changes to be rebased so rebase master
+</span><span class='line'>... by rebasing onto to a branch it is easier to deal with rebase failures
+</span><span class='line'>... fix any rebase issues
+</span><span class='line'>git&gt; git checkout master
+</span><span class='line'>git&gt; git merge task1
+</span><span class='line'>... could merge or rebase, doesn<span class="s1">&#39;t matter here</span>
+</span><span class='line'><span class="s1">git&gt; git svn dcommit</span>
+</span><span class='line'><span class="s1">... mark the task closed</span>
+</span><span class='line'><span class="s1">git&gt; git brach -D task1</span>
+</span><span class='line'><span class="s1">... svn doesn&#39;</span>t always mark the branch merged properly so use -D instead of -d
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Pro Tips</h2>
+
+<h3>Different user names</h3>
+
+<p>Use a different username for SVN and GIT.  That way it is easy to see in the log what is committed to SVN since the bridge will rewrite the commit log from what SVN says.</p>
+
+<ul>
+<li>For SVN I use jkamenik.</li>
+<li>For GIT I use jkamenik at gmail dot com.</li>
+</ul>
+
+
+<p>Commits that are in SVN also have the SVN revision number in the log message, but I find it easier to use usernames since it is at the top of the log message.</p>
+
+<h3>Setup Aliases</h3>
+
+<p>Git allows more commands to be added via aliases. An alias can be a shortening of a git command: <code>st = status</code>. Or it can be a shell command that git will execute <code>test = !sh -c 'echo "it works!"'</code> (notice the leading !).</p>
+
+<p>Here is the alias part of my <code>~/.gitconfig</code> file looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span><span class="nb">alias</span><span class="o">]</span>
+</span><span class='line'>  <span class="c"># Old SVN aliases</span>
+</span><span class='line'>  <span class="nv">ci</span> <span class="o">=</span> commit
+</span><span class='line'>  <span class="nv">co</span> <span class="o">=</span> checkout
+</span><span class='line'>  <span class="nv">st</span> <span class="o">=</span> status
+</span><span class='line'>  <span class="nv">stat</span> <span class="o">=</span> status
+</span><span class='line'>  <span class="c"># stuff I find useful</span>
+</span><span class='line'>  <span class="nv">br</span> <span class="o">=</span> branch
+</span><span class='line'>  <span class="nv">df</span> <span class="o">=</span> diff
+</span><span class='line'>  rm-all <span class="o">=</span> !git st | grep deleted | awk <span class="s1">&#39;{print $3}&#39;</span> | xargs git rm
+</span><span class='line'>  add-all <span class="o">=</span> !git st | grep modified | awk <span class="s1">&#39;{print $3}&#39;</span> | xargs git add
+</span><span class='line'>  st-br <span class="o">=</span> <span class="s2">&quot;!f(){ git co master &amp;&amp; git svn rebase &amp;&amp; git co -b $1 }; `f`&quot;</span>
+</span><span class='line'>  up-br <span class="o">=</span> <span class="s2">&quot;!f(){ git co master &amp;&amp; git svn rebase &amp;&amp; git co $1 }; `f`&quot;</span>
+</span><span class='line'>  co-br <span class="o">=</span> <span class="s2">&quot;!f(){ git up-br $1 &amp;&amp; git co master &amp;&amp; git merge $1 &amp;&amp; git svn dcommit }; `f`&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that <code>st-br</code>, <code>up-br</code>, and <code>co-br</code> are basically all the set of commands I noted above in single command style.</p>
+
+<h3>Stashing changes</h3>
+
+<p>The stash is a hidden place that git can keep changes that are not yet ready to commit.  This is very useful if you get switched to another task and really don&#8217;t have time to fully vet a change on the current task.  You can stash the outstanding change and later replay them.</p>
+
+<p><code>git stash</code> keeps a queue of changes so you can stash more then one thing, but you can only replay them top down.</p>
+
+<p>&#8220;` bash
+git> git stash
+&#8230; hides all modified files
+git> git stash list
+&#8230; lists all stashes
+git> git stash apply
+&#8230; applies the top stash, but does not remove it
+git> git stash pop
+&#8230; applies the top stash, and remove it</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://www.biostat.jhsph.edu/~rpeng/biostat776/workflow.html">GIT <-> SVN workflow</a></li>
+<li><a href="http://www.viget.com/extend/effectively-using-git-with-subversion/">Effectively using GIT with SVN</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-04T00:00:00-05:00" pubdate data-updated="true">Dec 4<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/svn/'>svn</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2010/12/04/git-with-svn/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2010/12/04/git-with-svn/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/11/18/learning-selenium/" title="Previous Post: Learning Selenium">&laquo; Learning Selenium</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/12/05/how-to-be-bad-boss/" title="Next Post: How to be a bad boss">How to be a bad boss &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2010/12/12/dealing-with-email-overload/">Dealing with Email overload</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/05/how-to-be-bad-boss/">How to be a bad boss</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/04/git-with-svn/">GIT with SVN</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/11/18/learning-selenium/">Learning Selenium</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/email/'>email (1)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (3)</a></li>
+<li class='category'><a href='/blog/categories/opinion/'>opinion (2)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (1)</a></li>
+<li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (1)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("jkamenik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/jkamenik" class="twitter-follow-button" data-show-count="false">Follow @jkamenik</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jkamenik',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John T. Kamenik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'randomsoftwareinklings';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2010/12/04/git-with-svn/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2010/12/04/git-with-svn/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
