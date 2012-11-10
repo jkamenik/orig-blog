@@ -1,0 +1,47 @@
+---
+layout: post
+title: "Bunco"
+date: 2012-11-10 10:30
+comments: true
+categories:
+  - bunco
+  - planning
+---
+
+The rules of Bunco are very easy, but you really do need to have 12 players or so.  Mel and I were able to modify the rules to work better for just two players, but it is very annoying to have to have record score with such a fast paced game.  I would like to eventually allow Mel and I to play the game over the internet like _Words with Friends_.
+
+See: [Bunco](http://en.wikipedia.org/wiki/Bunco)
+
+<!-- more -->
+
+## Rules
+
+Like I siad the rule are very easy, but they can and do change based on the group you are with.  The official Bunco site has the rules for a full group of 12 people.  And they only deal with multiples of 4.  We are 2 people so we are going to modify the rules a bit.  They are as follows:
+
+1. There are 6 rounds (each corresponding to a number on the die)
+1. Each player roles 3 dice
+1. 1 point is gained for each die matching the round number
+1. 5 points are gained if all dice match (but don't match the round number, i.e. 5,5,5 in round 1)
+1. 21 points are gained if all dice match the round number
+1. The player keeps rolling until no points are gained in a role
+1. The first player to 21 points wins the round
+1. The player that wins the most round (4 of 6) wins
+
+## Aproach
+
+I find that if I approach a project from Ivory tower then it ends up being to big and I will not start anything.  I find that if you split things up into distinct steps it is easy to get started.  Also, between each step you can evaluate the success over the previous step, expand or contract the next step, or change directions entirely.
+
+### Phase 1 - Infrastructure / Design / Score Card
+
+This phase is probably too big, but the end goal is to have a clean but simple score board.  It has to work, but it has to work well and be better then a pen and paper.  Also, part of the design we have to choose the infrastructure including: the online hosting provider, the language, the libraries, and the client.
+
+### Phase 2 - Add Dice
+
+Once we have a simple score board going it shouldn't be too much work to add rolling of the dice to the game.  This step is kept purposely small because there are likely a lot of things learned in the previous section and will bleed into this phase.
+
+### Phase 3 - Multiplayer
+
+The end goal is to be able to have two players to play over the internet.  So we have to think about things like maintaining sessions, user signups, tracking stats, keeping users in sync, and realtime signaling.
+
+This section is way to big, but it is too early to go into too much detail.  It is going to be interesting to see how
+close I get to my ultimate goal, and how long it takes to get there.
