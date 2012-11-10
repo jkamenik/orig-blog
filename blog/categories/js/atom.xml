@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JS | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/js/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2012-11-10T10:25:01-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JS Unit Testing using YUI]]></title>
+    <link href="http://jkamenik.github.com/blog/2010/12/15/js-unit-testing-using-yui/"/>
+    <updated>2010-12-15T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2010/12/15/js-unit-testing-using-yui</id>
+    <content type="html"><![CDATA[<p>Ok, Selenium was a partial success that you can read about <a href="http://randomsoftwareinklings.blogspot.com/2010/11/learning-selenium.html">here</a>, but it really was harder then I wanted it to be and it required a lot of setup for only a little bit of testing. I noticed that a project that I use a lot ExtJS uses a modified version of YUI Test. So I converted my Selenium test example to YUI Test.</p>
+
+<!-- more -->
+
+
+<p>My initial impression was confusion because you have to download the entire YUI 2 suite just get to get the <a href="http://developer.yahoo.com/yui/yuitest/">test tools</a>. Also, when you download the entire suite they are many different copies of the same file in various stages of minification. But following the documentation I boiled down exactly what I needed and threw away the rest. I put all the code for my test <a href="https://github.com/jkamenik/yui-test-example">here</a> so you can follow along.</p>
+
+<p>You will need the following files from the YUI archive:</p>
+
+<ul>
+<li>build/logger/assets/logger.css</li>
+<li>build/logger/logger.js</li>
+<li>build/yuiloader-dom-event/yuiloader-dom-event.js</li>
+<li>build/yuitest/assets/testlogger.css</li>
+<li>build/yuitest/yuitest.js</li>
+</ul>
+
+
+<p>Create an HTML file that includes the css and js files:
+<div><script src='https://gist.github.com/1151464.js?file=index-header.html'></script>
+<noscript><pre><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;logger.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;testlogger.css&quot;&gt;
+
+&lt;!-- Test runner code --&gt;
+&lt;script src=&quot;yahoo-dom-event.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;logger.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;yuitest.js&quot;&gt;&lt;/script&gt;</code></pre></noscript></div>
+</p>
+
+<p>The HTML will also need to instantiate the test logger and run the test runner global. I bound the test run to a button so I could control when it ran:
+<div><script src='https://gist.github.com/1151464.js?file=index-body.html'></script>
+<noscript><pre><code>&lt;body&gt;
+    &lt;input onclick=&quot;javascript:runAllTests()&quot; type=&quot;button&quot; value=&quot;Run Tests&quot; /&gt;
+    
+    &lt;script&gt;
+        new YAHOO.tool.TestLogger();
+        
+        function runAllTests(){
+            YAHOO.tool.TestRunner.run();
+        }
+    &lt;/script&gt;
+&lt;/body&gt;</code></pre></noscript></div>
+</p>
+
+<p>Now that we have a <code>YAHOO.tool.TestRunner</code> we need to add a test that can be run.  Instantiate a <code>new YAHOO.tool.TestCase</code> and add it to the TestRunner. All a TestCase needs is a name and a bunch of functions that start with "test". Everything else is automatic. Below is a simplified version of the <a href="https://github.com/jkamenik/yui-test-example/blob/master/test.js">full file</a>.
+<div><script src='https://gist.github.com/1151464.js?file=test.js'></script>
+<noscript><pre><code>var assert = YAHOO.util.Assert;
+
+YAHOO.tool.TestRunner.add(new YAHOO.tool.TestCase({
+  name: 'Tests for string',
+  
+  test_true: function(){
+    var test = String(true);
+    assert.isString(test);
+    assert.areEqual('true',test);
+  }
+});</code></pre></noscript></div>
+</p>
+
+<h2>Conclusion</h2>
+
+<p>Though Selenium is more automated that comes at the cost of being more complicated then testing should be. If I were a team of programmers then sure setting up and maintaining Selenium Remote controls would be a small part of the overall effort, but since I am not a team of programmers I think it is overkill.</p>
+
+<p>What I really need is an easy to run, easy to write, repeatable, unit testing framework in JS. I do the leg work on pointing my various browsers at the html and reviewing the results. When things get big enough that I need to setup a continuous integration server, or I have a QA department, then I will give Selenium another go. For now YUI test is the way to go.</p>
+]]></content>
+  </entry>
+  
+</feed>

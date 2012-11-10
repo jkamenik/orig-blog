@@ -4,7 +4,7 @@
   <title><![CDATA[Category: opinion | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/opinion/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-11-03T15:13:04-04:00</updated>
+  <updated>2012-11-10T10:25:01-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Problems with Agile Implementation]]></title>
+    <link href="http://jkamenik.github.com/blog/2011/01/10/problems-with-agile-implementation/"/>
+    <updated>2011-01-10T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2011/01/10/problems-with-agile-implementation</id>
+    <content type="html"><![CDATA[<p>I really like agile programming. It keeps me close to the action, and makes me have to think about my next moves. It also keeps me informed as to what is going on around me. But in my many years of using agile I realize that, though the process itself is very nice, its implementations can tend not to be.</p>
+
+<!--more-->
+
+
+<p>Problem don't arise from agile itself, but who and how it was implemented. If the implementer's goals do not match the <a href="http://en.wikipedia.org/wiki/Agile_software_development">Agile Manifesto</a> there is little chance of success. I have used <a href="http://en.wikipedia.org/wiki/Scrum_(development)">scrum</a> many times and the most common problems I see are:</p>
+
+<ol>
+<li>Agile as Micromanagement</li>
+<li>Agile as a Whip</li>
+<li>Agile as an Excuse</li>
+</ol>
+
+
+<h3>Agile as Micromanagement</h3>
+
+<h4>It looks like:</h4>
+
+<ol>
+<li>Having to break task down into hourly segments of work</li>
+<li>Having to break task that logically have to be done by a single person</li>
+<li>Having to account for ALL time taken, even time not related to code like attending meetings</li>
+</ol>
+
+
+<h4>Agile tenet misused:</h4>
+
+<ol>
+<li>Individuals and interactions over process and tools</li>
+<li>Working software over comprehensive documentation</li>
+</ol>
+
+
+<p>This happens when a manager (<a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a>) is the Scrum Master or when the Product Owner has say over implementation specifics. It is a confusion of roles, which in turn leads to a confusion of goals, which in turn leads to over documentation.</p>
+
+<h3>Agile as a Whip</h3>
+
+<h4>It looks like:</h4>
+
+<ol>
+<li>Filtering a burn-down on an individual basis</li>
+<li>Placing more in the sprint then can be done (but still requiring it all to be done)</li>
+<li>Associating points with people (publicly)</li>
+<li>Associating number of tasks done with effort</li>
+<li>Associating points with hours</li>
+<li>Basically anything where measured output is more important then people</li>
+</ol>
+
+
+<h4>Agile tenet misused:</h4>
+
+<ol>
+<li>Individuals and interactions over process and tools</li>
+</ol>
+
+
+<p>Anytime you associate numbers with people you have created a <a href="http://en.wikipedia.org/wiki/Crab_mentality">crab mentality</a>. Their focus will stop being on software, but on making their numbers better. Those that are better at number games will succeed, those that are better at software will fail.</p>
+
+<p>Anytime you put your people under undo pressure then simple mistakes are made. This is going to later erode confidence in the team. It is going to happen like this: "you missed a comma in a Javascript file which causes it not to work in IE. That was such a simple mistake to have tested for that I am not sure you are testing any of your code." The problem was caused by 4 hours of sleep in 72 hours of coding at the end of an over-extended sprint. The programmer was nearly delirious. It is shocking it was the only mistake, not that it was a simple mistake!</p>
+
+<p>Unfortunately I have seen this situation start innocent enough, with comments like "we don't want to over work the staff" or "we want to make sure they always have something to do" or "we want them working on the correct things". If the "we" in question is management (<a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a>) then there is probably already micromanagement going on, and Agile is being used as whip to solve the problems created by the bad implementation.</p>
+
+<h3>Agile as an Excuse.</h3>
+
+<h4>It looks like:</h4>
+
+<ol>
+<li>"You said it would take XXX. It took YYY. You need to make up the difference out of your own time"</li>
+<li>"We cannot slip these date, and you have already pared back the release N sprints ago. You need to put in extra effort"</li>
+<li>"Agile is about being agile. Even though we are mid sprint we are radically changing direction, but we are not canceling the sprint or doing sprint planning. We are just swapping out some tasks for others."</li>
+<li>"You picked the language. It is now your problem to bring this project to conclusion and under budget."</li>
+</ol>
+
+
+<h4>Agile tenet misused:</h4>
+
+<ol>
+<li>Individuals and interactions over process and tools</li>
+<li>Responding to change over following a plan</li>
+</ol>
+
+
+<p>These are all excuses I have heard. Each time given by a person in <a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a> (managers) because they are ignoring changes in the field (military term). Every choice has a set of outcomes: some good, some bad. The attempt with agile is not to mitigate bad outcomes, but to allow those outcomes to contribute to the overall direction.</p>
+
+<p>Sometimes the bad outcome will be that something took to long, or that one language/tool was not the correct choice given the problem set. If for every problem that happens the developer has to take their own time, or face embarrassment, to solve the problem then they will stop making choices. Not just choices that might have bad outcomes, but choices altogether. At which point someone in a <a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a> will start making more choices then they should.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dealing with Email overload]]></title>
