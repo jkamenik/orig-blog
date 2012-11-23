@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-11-10T12:45:29-05:00</updated>
+  <updated>2012-11-22T22:54:32-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,335 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bunco Phase 1.2]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/11/22/bunco-phase-1-dot-2/"/>
+    <updated>2012-11-22T21:55:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/11/22/bunco-phase-1-dot-2</id>
+    <content type="html"><![CDATA[<p>This is just a slight addendum to the <a href="http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1/">Bunco Phase 1</a> Post.  After having used the score card in severnal games there are a few issues that arise with the existing layout.</p>
+
+<ol>
+<li>Input is cumbersome</li>
+<li>The interface is SLOW!</li>
+<li>Cannot correct screw ups</li>
+</ol>
+
+
+<h2>Cumbersome input</h2>
+
+<p>It is hard to tell how well a design is going to work without actually using it.  When we actually started to use it we noticed that it was too difficult to keep track of whose turn it was and it really slowed down the game.  This is exactly the opposite of what using the phone as a scorecard should be.</p>
+
+<p>The major reason for the slow down is that we maintain the player turn state in the app.  More specifically I <em>force</em> the management of whose turn it is.  I had done this as a way of saving space, but when implemented it sucked.</p>
+
+<p>I redesigned things a bit to include score buttons for each player.  But inorder to fix the buttons I had to lose the header and refresh button.</p>
+
+<p><img src="http://jkamenik.github.com/images/bunco/ScoreBoard_2.png"></p>
+
+<h2>Slow!</h2>
+
+<p>Between clicking a score button and seeing the score applied and being able to click the button again was at least 1 second.  Not huge if you only need to enter a small number of inputs.  But a long game can take up to 246 inputs ((21 + 20)*6).  So in just the inputs it takes more then 4 minutes!  The problem is that rolling the dice is very quick with a long game being less then 2 minutes.</p>
+
+<p>I used the Safari profiler and it was very clear that 99% of the total time was in repainting the view.  I use Backbone to get the events and a simple MVC, and as such you would expect it to refresh the view using the new data.  Specifically <em>all</em> the time was taken after triggering the &#8220;create&#8221; event.</p>
+
+<p>The template that repeats for each round is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/template&quot;</span> <span class="na">id=</span><span class="s">&quot;round&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">data</span><span class="o">-</span><span class="nx">role</span><span class="o">=</span><span class="s2">&quot;collapsible&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">collapsed</span><span class="o">=</span><span class="s2">&quot;&lt;%= !active %&gt;&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="o">&lt;%</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">active</span><span class="p">){</span>
+</span><span class='line'>            <span class="nx">person</span> <span class="o">=</span> <span class="s2">&quot;(P&quot;</span><span class="o">+</span><span class="nx">player</span><span class="o">+</span><span class="s2">&quot;&#39;s turn)&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">complete</span><span class="p">){</span>
+</span><span class='line'>            <span class="nx">person</span> <span class="o">=</span> <span class="s2">&quot;(P&quot;</span><span class="o">+</span><span class="nx">player</span><span class="o">+</span><span class="s2">&quot; wins)&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="o">%&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nx">h3</span><span class="o">&gt;</span><span class="nx">Round</span> <span class="o">&lt;%=</span> <span class="nx">round_number</span> <span class="o">%&gt;</span> <span class="o">&lt;%=</span> <span class="nx">person</span> <span class="o">%&gt;&lt;</span><span class="err">/h3&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;ui-grid-a&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;ui-block-a&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>                <span class="o">&lt;%=</span> <span class="nx">p1_score</span> <span class="o">%&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;ui-block-b&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>                <span class="o">&lt;%=</span> <span class="nx">p2_score</span> <span class="o">%&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The view is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="nx">score_card</span><span class="p">.</span><span class="nx">RoundListView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#round&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">());</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">dom</span>      <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">;</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">dom</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">round</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">dom</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">template</span><span class="p">(</span><span class="nx">round</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()));</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// needed for jquery to rerender dom</span>
+</span><span class='line'>      <span class="nx">dom</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;create&#39;</span><span class="p">);</span>  <span class="c1">// Massive time sink, 99% of rendering time</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When any record is changed I rerender the entire page.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">rounds</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">){</span><span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">()});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Find and replace, instead of rerender</h3>
+
+<p>Rerendering shouldn&#8217;t really be an issue, but it turns out that jQuery Mobile does a huge amount of DOM pollution, which is hugely expensive.  It would be much faster if we could just find and replace single items and regenerating the entire page.</p>
+
+<p>I changed the template to include more IDs to making finding items faster and easier:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/template&quot;</span> <span class="na">id=</span><span class="s">&quot;round&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">data</span><span class="o">-</span><span class="nx">role</span><span class="o">=</span><span class="s2">&quot;collapsible&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;round&lt;%=round_number%&gt;&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">collapsed</span><span class="o">=</span><span class="s2">&quot;&lt;%= !active %&gt;&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="o">&lt;%</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">complete</span><span class="p">){</span>
+</span><span class='line'>            <span class="nx">person</span> <span class="o">=</span> <span class="s2">&quot;(P&quot;</span><span class="o">+</span><span class="nx">player</span><span class="o">+</span><span class="s2">&quot; wins)&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">p1_score_id</span> <span class="o">=</span> <span class="s2">&quot;p1_r&quot;</span><span class="o">+</span><span class="nx">round_number</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">p2_score_id</span> <span class="o">=</span> <span class="s2">&quot;p2_r&quot;</span><span class="o">+</span><span class="nx">round_number</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">%&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nx">h3</span><span class="o">&gt;</span><span class="nx">Round</span> <span class="o">&lt;%=</span> <span class="nx">round_number</span> <span class="o">%&gt;</span> <span class="o">&lt;%=</span> <span class="nx">person</span> <span class="o">%&gt;&lt;</span><span class="err">/h3&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;ui-grid-a&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;ui-block-a&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>                <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;&lt;%= p1_score_id %&gt;&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>                    <span class="o">&lt;%=</span> <span class="nx">p1_score</span> <span class="o">%&gt;</span>
+</span><span class='line'>                <span class="o">&lt;</span><span class="err">/span&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;ui-block-b&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>                <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;&lt;%= p2_score_id %&gt;&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>                    <span class="o">&lt;%=</span> <span class="nx">p2_score</span> <span class="o">%&gt;</span>
+</span><span class='line'>                <span class="o">&lt;</span><span class="err">/span&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I added a find and replace method to the view:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">score_card</span><span class="o">.</span><span class="n">RoundListView</span> <span class="o">=</span> <span class="no">Backbone</span><span class="o">.</span><span class="n">View</span><span class="o">.</span><span class="n">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="sr">//s</span><span class="n">ame</span> <span class="n">as</span> <span class="n">before</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">findAndReplace</span><span class="p">:</span> <span class="n">function</span><span class="p">(</span><span class="n">round</span><span class="p">){</span>
+</span><span class='line'>      <span class="n">var</span> <span class="n">player</span>   <span class="o">=</span> <span class="n">round</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;player&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">var</span> <span class="n">complete</span> <span class="o">=</span> <span class="n">round</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;complete&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">var</span> <span class="n">number</span>   <span class="o">=</span> <span class="n">round</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;round_number&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">var</span> <span class="n">p1_score</span> <span class="o">=</span> <span class="n">round</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;p1_score&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">var</span> <span class="n">p2_score</span> <span class="o">=</span> <span class="n">round</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;p2_score&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">this</span><span class="o">.</span><span class="vg">$el</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#p1_r&quot;</span><span class="o">+</span><span class="n">number</span><span class="p">)</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">p1_score</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">this</span><span class="o">.</span><span class="vg">$el</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#p2_r&quot;</span><span class="o">+</span><span class="n">number</span><span class="p">)</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">p2_score</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">complete</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">this</span><span class="o">.</span><span class="vg">$el</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;#round&#39;</span><span class="o">+</span><span class="n">number</span><span class="o">+</span><span class="s1">&#39; h3 .ui-btn-text&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="s2">&quot;Round &quot;</span><span class="o">+</span><span class="n">number</span><span class="o">+</span><span class="s2">&quot; (P&quot;</span><span class="o">+</span><span class="n">player</span><span class="o">+</span><span class="s2">&quot; wins)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s1">&#39;collapse&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="sr">//</span> <span class="k">when</span> <span class="n">chaging</span> <span class="n">a</span> <span class="n">header</span> <span class="ow">and</span> <span class="n">mark</span> <span class="n">the</span> <span class="n">winner</span> <span class="n">we</span> <span class="n">have</span> <span class="n">to</span> <span class="n">repaint</span> <span class="n">the</span> <span class="n">entire</span> <span class="n">page</span><span class="o">.</span>
+</span><span class='line'>        <span class="n">this</span><span class="o">.</span><span class="vg">$el</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s1">&#39;create&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="sr">//</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">complete</span> <span class="n">just</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">the</span> <span class="n">item</span> <span class="n">is</span> <span class="n">expanded</span>
+</span><span class='line'>        <span class="n">this</span><span class="o">.</span><span class="vg">$el</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;#round&#39;</span><span class="o">+</span><span class="n">number</span><span class="o">+</span><span class="s1">&#39; h3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s1">&#39;expand&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then I just need to change the on change event to find:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">rounds</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">){</span><span class="nx">view</span><span class="p">.</span><span class="nx">findAndReplace</span><span class="p">(</span><span class="nx">model</span><span class="p">)});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Screw ups</h2>
+
+<p>Adding points to the wrong user happens, and for the time being I still don&#8217;t have a good answer.  But then again there are a lot of design changes to be tested before we try to tackle this.  It is hard to tell if this will even be an issue now.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bunco Phase 1]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1/"/>
+    <updated>2012-11-21T08:21:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1</id>
+    <content type="html"><![CDATA[<p>Phase 1 is alwasy a learning experience.  Often very little work is done, but a lot of research is done.  I generally do not like that approach.  Instead I like to start out simple and let that guide me.  And it has guided me to a initial working version at <a href="http://jkamenik.github.com/Bunco">http://jkamenik.github.com/Bunco</a>.</p>
+
+<!-- more -->
+
+
+<h2>The Target</h2>
+
+<p>Before any design could start I first had to decide what language, what library, what device, and how it will be accessed.</p>
+
+<h3>Device</h3>
+
+<p>I have my phone with me everywhere I go.  So it is a clear choice as the scorecard and input device.  The only question then becomes: do I host it from the web, or create a native app?</p>
+
+<p>I don&#8217;t know native iPhone, but I know that PhoneGap can be used to generate a native app from a hosted one.  So I can still go native if I want, but I don&#8217;t have to start with an all or nothing approach.</p>
+
+<h3>Hosting</h3>
+
+<p>Now that I have decided on using the phone and hosting I have to figure out where to host and let that inform what else is available to me.</p>
+
+<p>I could use a standard LAMP install on a hosting provider, but those can get expensive.</p>
+
+<p>I could use a home server with DDNS to reverse port through my firewall, but I don&#8217;t like maintaining my own infrastructor.</p>
+
+<p>I could use a Micro Amazon EC2 instance (free for the first year), but again I have to do a lot of setup.</p>
+
+<p>I could use Heroku and either spinup a simple Node.js or Ruby on Rails app.  Actually I started doing this, but then decided that in this stage with the need to message between phones it was overkill to even setup a server.</p>
+
+<p>That is where Github Pages comes in.  I already use them to serve my blog, and a few other things.  And I am pretty much serving a static site.  All I have to do is work out of a git branch called gh_pages and everything will just work.</p>
+
+<h3>Lanuage and Libraries</h3>
+
+<p>Knowing that I am serving a static site from GitHub I open to using the web, but limited into things that are pre-compiled and static.  And since it going to be for the iPhone jQuery Mobile is a natrual fit because it just uses HTML5&#8217;s Sematic markup feautres.</p>
+
+<p>I could use CoffeeScript - in fact if it gets any bigger I will - which compile to Javascript, but has a lot of nicities I am used to when working on Rails.  But since this isn&#8217;t a full blown Rails 3.2 app - with the full asset pipeline and compiling, mimifing, and cache busting that goes along with it - the boon of CoffeeScript is slightly deminished.  Also, since I am starting with a library I haven&#8217;t used before it might be more complicated debuging a CoffeeScript bug vs a jQuery Mobile bug.  I will leave CoffeeScript on the back burner for now.</p>
+
+<h4>Aside (Backbone.js)</h4>
+
+<p>As an aside, when I started I was writing raw JS hashes, but was having trouble keeping things sorted.  I remember my days of using ExtJS, which is great for managing complex GUIs, but very large.  Then I remembered Backbone.js which is what I use now.  Much smaller, and less combersome.</p>
+
+<h2>Design</h2>
+
+<p>Once all the limitation are know (or at least most of them) everything starts with a design.  And I am not graphic designer, so I usually just go at the problem using rails.  Not really an option here.</p>
+
+<p>But since I plan on using jQuery Mobile, right on their website they have a embedded designer.  The output is HTML5 markup with the &#8220;data&#8221; flash that jQuery Mobile uses.  Here is my initial design:</p>
+
+<!-- image here -->
+
+
+<ol>
+<li>Header - Refresh button and title</li>
+<li>Footer - Scoring buttons: 0, 1, 5, 21</li>
+<li>Body - The score board.  Players across, Rounds down.</li>
+</ol>
+
+
+<h3>The score board</h3>
+
+<p>Very quickly I figured out that I really didn&#8217;t have the room for the scoreboard.  Not without shrinking the size of the text to unreadable levels.  So I had to switch to another style.</p>
+
+<p>Enter the accordian.  Instead of a grid where I see all scores I use an accordian showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.</p>
+
+<p><img src="http://jkamenik.github.com/images/bunco/ScoreBoard_1.png"></p>
+
+<!-- image here -->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bunco]]></title>
@@ -725,13 +1054,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<blockquote><p>In all tests the <code>this</code> object is the base Selenium object so if you want to get to the <code>window</code> object you have to traverse up the stack via <code>this.browserbot.getUserWindow()</code>.</p></blockquote>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f831254caf8></p>
 
-
-
-
-<blockquote><p>Unfortunately everything tested in Selenium is converted to a string before testing.  So if I need to ensure that an integer parsing function actually produces a number I need to use <code>typeof</code>.</p></blockquote>
-
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f831254c238></p>
 
 <h2>Using RSpec</h2>
 
@@ -802,32 +1127,19 @@ end
 </code></pre></noscript></div>
 
 
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f83126cf1c8></p>
 
-
-<blockquote><p>The browser being shown is <code>chrome</code>.  This actually means Firefox, not Google Chrome.  For Google Chrome use <code>googlechrome</code>.</p></blockquote>
-
-
-
-
-<blockquote><p>For Safari use <code>safari</code>, but remember that you will need to disable the popup blocker manually and close Safari (for this user) otherwise it will just sit there forever.</p></blockquote>
-
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f83126ce5c0></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<blockquote><p>The server must be run by a user that has access the browser and has a screen to render to.</p></blockquote>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f83126cd918></p>
 
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f83126cce78></p>
 
-
-
-<blockquote><p>Firefox will only run a single profile per user.  If you need to run Firefox concurrently on the same machine you need to fake a second profile.  Don&#8217;t do it, just create a VM; you will be happier.</p></blockquote>
-
-
-
-
-<blockquote><p>Google Chrome does not works on OS X.  This is because OS X doesn&#8217;t add application executables to the path, and the server code isn&#8217;t smart enough to use the executable directly.  The fix is supposedly <a href="http://groups.google.com/group/selenium-users/browse_thread/thread/7205089285e92973?hide_quotes=no&amp;fwc=1">here</a>, but I was not able to get it to work.  If I do I will probably write another blog entry and link it here.</p></blockquote>
-
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f831269bf30></p>
 
 <h3>Putting it all together</h3>
 
