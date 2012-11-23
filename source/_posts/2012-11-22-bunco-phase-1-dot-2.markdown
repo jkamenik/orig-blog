@@ -8,11 +8,13 @@ categories:
   - phase1
 ---
 
-This is just a slight addendum to the [Bunco Phase 1]({% post_url 2012-11-21-bunco-phase-1 %}) Post.  After having used the score card in severnal games there are a few issues that arise with the existing layout.
+This is just a slight addendum to the [Bunco Phase 1]({% post_url 2012-11-21-bunco-phase-1 %}) Post.  After having used the score card in several games there are a few issues that arise with the existing layout.
 
 1. Input is cumbersome
 1. The interface is SLOW!
 1. Cannot correct screw ups
+
+<!-- more -->
 
 ## Cumbersome input
 
@@ -20,7 +22,7 @@ It is hard to tell how well a design is going to work without actually using it.
 
 The major reason for the slow down is that we maintain the player turn state in the app.  More specifically I _force_ the management of whose turn it is.  I had done this as a way of saving space, but when implemented it sucked.
 
-I redesigned things a bit to include score buttons for each player.  But inorder to fix the buttons I had to lose the header and refresh button.
+I redesigned things a bit to include score buttons for each player.  But in order to fix the buttons I had to lose the header and refresh button.
 
 {% img /images/bunco/ScoreBoard_2.png %}
 

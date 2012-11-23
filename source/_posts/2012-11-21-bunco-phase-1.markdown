@@ -8,7 +8,7 @@ categories:
   - phase1
 ---
 
-Phase 1 is alwasy a learning experience.  Often very little work is done, but a lot of research is done.  I generally do not like that approach.  Instead I like to start out simple and let that guide me.  And it has guided me to a initial working version at [http://jkamenik.github.com/Bunco](http://jkamenik.github.com/Bunco).
+Phase 1 is always a learning experience.  Often very little work is done, but a lot of research is done.  I generally do not like that approach.  Instead I like to start out simple and let that guide me.  And it has guided me to a initial working version at [http://jkamenik.github.com/Bunco](http://jkamenik.github.com/Bunco).
 
 <!-- more -->
 
@@ -28,23 +28,23 @@ Now that I have decided on using the phone and hosting I have to figure out wher
 
 I could use a standard LAMP install on a hosting provider, but those can get expensive.
 
-I could use a home server with DDNS to reverse port through my firewall, but I don't like maintaining my own infrastructor.
+I could use a home server with DDNS to reverse port through my firewall, but I don't like maintaining my own infrastructure.
 
 I could use a Micro Amazon EC2 instance (free for the first year), but again I have to do a lot of setup.
 
-I could use Heroku and either spinup a simple Node.js or Ruby on Rails app.  Actually I started doing this, but then decided that in this stage with the need to message between phones it was overkill to even setup a server.
+I could use Heroku and either spin-up a simple Node.js or Ruby on Rails app.  Actually I started doing this, but then decided that in this stage with the need to message between phones it was overkill to even setup a server.
 
 That is where Github Pages comes in.  I already use them to serve my blog, and a few other things.  And I am pretty much serving a static site.  All I have to do is work out of a git branch called gh_pages and everything will just work.
 
 ### Lanuage and Libraries
 
-Knowing that I am serving a static site from GitHub I open to using the web, but limited into things that are pre-compiled and static.  And since it going to be for the iPhone jQuery Mobile is a natrual fit because it just uses HTML5's Sematic markup feautres.
+Knowing that I am serving a static site from GitHub I open to using the web, but limited into things that are pre-compiled and static.  And since it going to be for the iPhone jQuery Mobile is a natural fit because it just uses HTML5's Semantic markup features.
 
-I could use CoffeeScript - in fact if it gets any bigger I will - which compile to Javascript, but has a lot of nicities I am used to when working on Rails.  But since this isn't a full blown Rails 3.2 app - with the full asset pipeline and compiling, mimifing, and cache busting that goes along with it - the boon of CoffeeScript is slightly deminished.  Also, since I am starting with a library I haven't used before it might be more complicated debuging a CoffeeScript bug vs a jQuery Mobile bug.  I will leave CoffeeScript on the back burner for now.
+I could use CoffeeScript - in fact if it gets any bigger I will - which compile to Javascript, but has a lot of niceties I am used to when working on Rails.  But since this isn't a full blown Rails 3.2 app - with the full asset pipeline and compiling, minifying, and cache busting that goes along with it - the boon of CoffeeScript is slightly diminished.  Also, since I am starting with a library I haven't used before it might be more complicated debugging a CoffeeScript bug vs a jQuery Mobile bug.  I will leave CoffeeScript on the back burner for now.
 
 #### Aside (Backbone.js)
 
-As an aside, when I started I was writing raw JS hashes, but was having trouble keeping things sorted.  I remember my days of using ExtJS, which is great for managing complex GUIs, but very large.  Then I remembered Backbone.js which is what I use now.  Much smaller, and less combersome.
+As an aside, when I started I was writing raw JS hashes, but was having trouble keeping things sorted.  I remember my days of using ExtJS, which is great for managing complex GUIs, but very large.  Then I remembered Backbone.js which is what I use now.  Much smaller, and less cumbersome.
 
 ## Design
 
@@ -61,7 +61,7 @@ But since I plan on using jQuery Mobile, right on their website they have a embe
 
 Very quickly I figured out that I really didn't have the room for the scoreboard.  Not without shrinking the size of the text to unreadable levels.  So I had to switch to another style.
 
-Enter the accordian.  Instead of a grid where I see all scores I use an accordian showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.
+Enter the accordion.  Instead of a grid where I see all scores I use an accordion showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.
 
 {% img /images/bunco/ScoreBoard_1.png %}
 <!-- image here -->
