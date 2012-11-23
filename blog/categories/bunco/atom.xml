@@ -4,7 +4,7 @@
   <title><![CDATA[Category: bunco | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/bunco/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-11-22T22:58:26-05:00</updated>
+  <updated>2012-11-22T23:04:38-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jkamenik.github.com/blog/2012/11/22/bunco-phase-1-dot-2/"/>
     <updated>2012-11-22T21:55:00-05:00</updated>
     <id>http://jkamenik.github.com/blog/2012/11/22/bunco-phase-1-dot-2</id>
-    <content type="html"><![CDATA[<p>This is just a slight addendum to the <a href="{%%20post_url%202012-11-21-bunco-phase-1%20%}">Bunco Phase 1</a> Post.  After having used the score card in severnal games there are a few issues that arise with the existing layout.</p>
+    <content type="html"><![CDATA[<p>This is just a slight addendum to the <a href="{%%20post_url%202012-11-21-bunco-phase-1%20%}">Bunco Phase 1</a> Post.  After having used the score card in several games there are a few issues that arise with the existing layout.</p>
 
 <ol>
 <li>Input is cumbersome</li>
@@ -36,7 +36,7 @@
 
 <p>The major reason for the slow down is that we maintain the player turn state in the app.  More specifically I <em>force</em> the management of whose turn it is.  I had done this as a way of saving space, but when implemented it sucked.</p>
 
-<p>I redesigned things a bit to include score buttons for each player.  But inorder to fix the buttons I had to lose the header and refresh button.</p>
+<p>I redesigned things a bit to include score buttons for each player.  But in order to fix the buttons I had to lose the header and refresh button.</p>
 
 <p>{% img /images/bunco/ScoreBoard_2.png %}</p>
 
@@ -196,7 +196,7 @@ rounds.on('change',function(model){view.findAndReplace(model)});
     <link href="http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1/"/>
     <updated>2012-11-21T08:21:00-05:00</updated>
     <id>http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1</id>
-    <content type="html"><![CDATA[<p>Phase 1 is alwasy a learning experience.  Often very little work is done, but a lot of research is done.  I generally do not like that approach.  Instead I like to start out simple and let that guide me.  And it has guided me to a initial working version at <a href="http://jkamenik.github.com/Bunco">http://jkamenik.github.com/Bunco</a>.</p>
+    <content type="html"><![CDATA[<p>Phase 1 is always a learning experience.  Often very little work is done, but a lot of research is done.  I generally do not like that approach.  Instead I like to start out simple and let that guide me.  And it has guided me to a initial working version at <a href="http://jkamenik.github.com/Bunco">http://jkamenik.github.com/Bunco</a>.</p>
 
 <!-- more -->
 
@@ -217,23 +217,23 @@ rounds.on('change',function(model){view.findAndReplace(model)});
 
 <p>I could use a standard LAMP install on a hosting provider, but those can get expensive.</p>
 
-<p>I could use a home server with DDNS to reverse port through my firewall, but I don't like maintaining my own infrastructor.</p>
+<p>I could use a home server with DDNS to reverse port through my firewall, but I don't like maintaining my own infrastructure.</p>
 
 <p>I could use a Micro Amazon EC2 instance (free for the first year), but again I have to do a lot of setup.</p>
 
-<p>I could use Heroku and either spinup a simple Node.js or Ruby on Rails app.  Actually I started doing this, but then decided that in this stage with the need to message between phones it was overkill to even setup a server.</p>
+<p>I could use Heroku and either spin-up a simple Node.js or Ruby on Rails app.  Actually I started doing this, but then decided that in this stage with the need to message between phones it was overkill to even setup a server.</p>
 
 <p>That is where Github Pages comes in.  I already use them to serve my blog, and a few other things.  And I am pretty much serving a static site.  All I have to do is work out of a git branch called gh_pages and everything will just work.</p>
 
 <h3>Lanuage and Libraries</h3>
 
-<p>Knowing that I am serving a static site from GitHub I open to using the web, but limited into things that are pre-compiled and static.  And since it going to be for the iPhone jQuery Mobile is a natrual fit because it just uses HTML5's Sematic markup feautres.</p>
+<p>Knowing that I am serving a static site from GitHub I open to using the web, but limited into things that are pre-compiled and static.  And since it going to be for the iPhone jQuery Mobile is a natural fit because it just uses HTML5's Semantic markup features.</p>
 
-<p>I could use CoffeeScript - in fact if it gets any bigger I will - which compile to Javascript, but has a lot of nicities I am used to when working on Rails.  But since this isn't a full blown Rails 3.2 app - with the full asset pipeline and compiling, mimifing, and cache busting that goes along with it - the boon of CoffeeScript is slightly deminished.  Also, since I am starting with a library I haven't used before it might be more complicated debuging a CoffeeScript bug vs a jQuery Mobile bug.  I will leave CoffeeScript on the back burner for now.</p>
+<p>I could use CoffeeScript - in fact if it gets any bigger I will - which compile to Javascript, but has a lot of niceties I am used to when working on Rails.  But since this isn't a full blown Rails 3.2 app - with the full asset pipeline and compiling, minifying, and cache busting that goes along with it - the boon of CoffeeScript is slightly diminished.  Also, since I am starting with a library I haven't used before it might be more complicated debugging a CoffeeScript bug vs a jQuery Mobile bug.  I will leave CoffeeScript on the back burner for now.</p>
 
 <h4>Aside (Backbone.js)</h4>
 
-<p>As an aside, when I started I was writing raw JS hashes, but was having trouble keeping things sorted.  I remember my days of using ExtJS, which is great for managing complex GUIs, but very large.  Then I remembered Backbone.js which is what I use now.  Much smaller, and less combersome.</p>
+<p>As an aside, when I started I was writing raw JS hashes, but was having trouble keeping things sorted.  I remember my days of using ExtJS, which is great for managing complex GUIs, but very large.  Then I remembered Backbone.js which is what I use now.  Much smaller, and less cumbersome.</p>
 
 <h2>Design</h2>
 
@@ -255,7 +255,7 @@ rounds.on('change',function(model){view.findAndReplace(model)});
 
 <p>Very quickly I figured out that I really didn't have the room for the scoreboard.  Not without shrinking the size of the text to unreadable levels.  So I had to switch to another style.</p>
 
-<p>Enter the accordian.  Instead of a grid where I see all scores I use an accordian showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.</p>
+<p>Enter the accordion.  Instead of a grid where I see all scores I use an accordion showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.</p>
 
 <p>{% img /images/bunco/ScoreBoard_1.png %}</p>
 
