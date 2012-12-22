@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-11-22T23:04:38-05:00</updated>
+  <updated>2012-12-22T17:30:13-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -203,9 +203,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007f815c11f528></p>
+<p><blockquote><p>In all tests the <code>this</code> object is the base Selenium object so if you want to get to the <code>window</code> object you have to traverse up the stack via <code>this.browserbot.getUserWindow()</code>.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007f815c11ebc8></p>
+<p><blockquote><p>Unfortunately everything tested in Selenium is converted to a string before testing.  So if I need to ensure that an integer parsing function actually produces a number I need to use <code>typeof</code>.</p></blockquote></p>
 
 <h2>Using RSpec</h2>
 
@@ -274,19 +274,19 @@ end
 </code></pre></noscript></div>
 </p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007f815c11c418></p>
+<p><blockquote><p>The browser being shown is <code>chrome</code>.  This actually means Firefox, not Google Chrome.  For Google Chrome use <code>googlechrome</code>.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007f815c11bbf8></p>
+<p><blockquote><p>For Safari use <code>safari</code>, but remember that you will need to disable the popup blocker manually and close Safari (for this user) otherwise it will just sit there forever.</p></blockquote></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007f815c11b518></p>
+<p><blockquote><p>The server must be run by a user that has access the browser and has a screen to render to.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007f815c11a938></p>
+<p><blockquote><p>Firefox will only run a single profile per user.  If you need to run Firefox concurrently on the same machine you need to fake a second profile.  Don't do it, just create a VM; you will be happier.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007f815c11a208></p>
+<p><blockquote><p>Google Chrome does not works on OS X.  This is because OS X doesn't add application executables to the path, and the server code isn't smart enough to use the executable directly.  The fix is supposedly <a href="http://groups.google.com/group/selenium-users/browse_thread/thread/7205089285e92973?hide_quotes=no&amp;fwc=1">here</a>, but I was not able to get it to work.  If I do I will probably write another blog entry and link it here.</p></blockquote></p>
 
 <h3>Putting it all together</h3>
 
