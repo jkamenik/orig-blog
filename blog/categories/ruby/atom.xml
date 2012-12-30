@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2012-12-29T23:09:36-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby module instance and class methods]]></title>
+    <link href="http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/"/>
+    <updated>2011-11-21T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods</id>
+    <content type="html"><![CDATA[<p>A very common idiom especially when code starts to become complicated is to put functions in modules and mix in that behavior to several classes. And a common expansion is to have a single <code>include</code> add both instance and class methods.</p>
+
+<!-- more -->
+
+
+<p>Here is how to do it:
+<div><script src='https://gist.github.com/1384045.js?file=include.rb'></script>
+<noscript><pre><code>module Foo
+  def self.included(base)
+    base.extend ClassMethods
+  end
+
+  module ClassMethods
+    def bar
+    end
+  end
+
+  def baz
+  end
+end
+
+class Test
+  include Foo
+end
+
+Test.bar     # class method
+Test.new.bar # No method error
+Test.baz     # No method error
+Test.new.baz # Instance method
+</code></pre></noscript></div>
+</p>
+
+<p><code>include</code> is used to add a module's instance methods as instance methods to the including class, but it doesn't traverse sub modules. <code>extend</code> is used to add a module's instance methods as class methods to a class.</p>
+
+<p>When a module is <code>included</code> it can register a callback which is passed the class that is doing the including. And calling <code>extend</code> on the base and passing a submodule will cause it to put those methods at the class level. This causes a chain reaction of loading both instance and class methods using a single <code>include</code>.</p>
+
+<p><strong>Pro Tip</strong>: It is possible to cause the same behavior using <code>extend</code> by using the <code>extended</code> callback; however, this is not common and <code>include 'x'</code> reads better then <code>extend 'y'</code>.</p>
+]]></content>
+  </entry>
+  
+</feed>

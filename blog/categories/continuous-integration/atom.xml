@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: continuous_integration | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/continuous-integration/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2012-12-29T23:09:36-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CI server using Firefox]]></title>
+    <link href="http://jkamenik.github.com/blog/2011/11/30/ci-server-using-firefox/"/>
+    <updated>2011-11-30T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2011/11/30/ci-server-using-firefox</id>
+    <content type="html"><![CDATA[<p>If you are like me, you always setup a CI to ensure things that you already finished are not broken by things you are currently doing. And if you are like me, you use <a href="http://github.com/jnicklas/capybara">capybara</a>, <a href="http://github.com/lanej/selenium-webdriver">selenium-webdriver</a>, and <a href="http://www.mozilla.org/en-US/firefox/new/">firefox</a> to actually test the results in a browser. The rub comes when the CI server (running headless) needs to run firefox, which needs a screen.</p>
+
+<p>Virtual Frame Buffer (xvfb) is a great package. All it does is provide an X11 interface in memory instead of requiring a screen. Below I detail what I do on Ubuntu, but it should work the same on any Linux distro.</p>
+
+<!-- more -->
+
+
+<h3>Installing Firefox</h3>
+
+<p><div><script src='https://gist.github.com/1409172.js?file=install_firefox.sh'></script>
+<noscript><pre><code>$ sudo apt-get install firefox</code></pre></noscript></div>
+</p>
+
+<h3>Testing Firefox</h3>
+
+<p><div><script src='https://gist.github.com/1409172.js?file=test_firefox.sh'></script>
+<noscript><pre><code>$ echo $DISPLAY
+localhost:10.0
+$ firefox</code></pre></noscript></div>
+</p>
+
+<p>Once firefox is installed it can be tested on a X11-forwarded ssh connection. X11-forwarding has to be enabled on the server and client and can be tested by checking <code>DISPLAY</code>.</p>
+
+<h3>Installing Xvfb</h3>
+
+<p><div><script src='https://gist.github.com/1409172.js?file=install_xvfb.sh'></script>
+<noscript><pre><code>$ sudo apt-get install xvfb
+...Lots of stuff...</code></pre></noscript></div>
+</p>
+
+<h3>Testing Firefox again</h3>
+
+<p><div><script src='https://gist.github.com/1409172.js?file=test_firefox_again.sh'></script>
+<noscript><pre><code>$ sudo apt-get install imagemagick
+$ Xvfb :1 &amp;
+$ export DISPLAY=:1
+$ firefox http://google.com
+...from another terminal...
+$ export DISPLAY=:1
+$ import -window root example.png
+...from another terminal...
+$ killall firefox
+$ firefox example.png</code></pre></noscript></div>
+</p>
+
+<p>The easiest way to test is to use image magick to take a screen shot of the VFB and save it to an image that can be opened in Firefox. If the image opens and it looks like a firefox browser is running on the google page then you did it correctly.</p>
+
+<h3>Create a xvfb startup script</h3>
+
+<p><div><script src='https://gist.github.com/1409172.js?file=xvfb.sh'></script>
+<noscript><pre><code>/usr/bin/Xvfb :1 &amp;</code></pre></noscript></div>
+</p>
+
+<p>On ubuntu no start script is provided, but a simple one put in <code>/etc/init.d/xvfb</code> is enough.</p>
+
+<h3>Getting the CI server to use the VFB</h3>
+
+<p>At this point getting a CI server to use Xvfb will depend on how it is started. If you use the Xvfb startup script then the display is <code>:1</code>. All you have to do is <code>export DISPLAY=:1</code> before the CI server starts.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-12-29T22:42:36-05:00</updated>
+  <updated>2012-12-29T23:09:36-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -877,6 +877,148 @@ close I get to my ultimate goal, and how long it takes to get there.</p>
 </span><span class='line'>  #  |- Baz
 </span></code></pre></td></tr></table></div></figure>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CI server using Firefox]]></title>
+    <link href="http://jkamenik.github.com/blog/2011/11/30/ci-server-using-firefox/"/>
+    <updated>2011-11-30T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2011/11/30/ci-server-using-firefox</id>
+    <content type="html"><![CDATA[<p>If you are like me, you always setup a CI to ensure things that you already finished are not broken by things you are currently doing. And if you are like me, you use <a href="http://github.com/jnicklas/capybara">capybara</a>, <a href="http://github.com/lanej/selenium-webdriver">selenium-webdriver</a>, and <a href="http://www.mozilla.org/en-US/firefox/new/">firefox</a> to actually test the results in a browser. The rub comes when the CI server (running headless) needs to run firefox, which needs a screen.</p>
+
+<p>Virtual Frame Buffer (xvfb) is a great package. All it does is provide an X11 interface in memory instead of requiring a screen. Below I detail what I do on Ubuntu, but it should work the same on any Linux distro.</p>
+
+<!-- more -->
+
+
+<h3>Installing Firefox</h3>
+
+<div><script src='https://gist.github.com/1409172.js?file=install_firefox.sh'></script>
+<noscript><pre><code>$ sudo apt-get install firefox</code></pre></noscript></div>
+
+
+<h3>Testing Firefox</h3>
+
+<div><script src='https://gist.github.com/1409172.js?file=test_firefox.sh'></script>
+<noscript><pre><code>$ echo $DISPLAY
+localhost:10.0
+$ firefox</code></pre></noscript></div>
+
+
+<p>Once firefox is installed it can be tested on a X11-forwarded ssh connection. X11-forwarding has to be enabled on the server and client and can be tested by checking <code>DISPLAY</code>.</p>
+
+<h3>Installing Xvfb</h3>
+
+<div><script src='https://gist.github.com/1409172.js?file=install_xvfb.sh'></script>
+<noscript><pre><code>$ sudo apt-get install xvfb
+...Lots of stuff...</code></pre></noscript></div>
+
+
+<h3>Testing Firefox again</h3>
+
+<div><script src='https://gist.github.com/1409172.js?file=test_firefox_again.sh'></script>
+<noscript><pre><code>$ sudo apt-get install imagemagick
+$ Xvfb :1 &amp;
+$ export DISPLAY=:1
+$ firefox http://google.com
+...from another terminal...
+$ export DISPLAY=:1
+$ import -window root example.png
+...from another terminal...
+$ killall firefox
+$ firefox example.png</code></pre></noscript></div>
+
+
+<p>The easiest way to test is to use image magick to take a screen shot of the VFB and save it to an image that can be opened in Firefox. If the image opens and it looks like a firefox browser is running on the google page then you did it correctly.</p>
+
+<h3>Create a xvfb startup script</h3>
+
+<div><script src='https://gist.github.com/1409172.js?file=xvfb.sh'></script>
+<noscript><pre><code>/usr/bin/Xvfb :1 &amp;</code></pre></noscript></div>
+
+
+<p>On ubuntu no start script is provided, but a simple one put in <code>/etc/init.d/xvfb</code> is enough.</p>
+
+<h3>Getting the CI server to use the VFB</h3>
+
+<p>At this point getting a CI server to use Xvfb will depend on how it is started. If you use the Xvfb startup script then the display is <code>:1</code>. All you have to do is <code>export DISPLAY=:1</code> before the CI server starts.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby module instance and class methods]]></title>
+    <link href="http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/"/>
+    <updated>2011-11-21T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods</id>
+    <content type="html"><![CDATA[<p>A very common idiom especially when code starts to become complicated is to put functions in modules and mix in that behavior to several classes. And a common expansion is to have a single <code>include</code> add both instance and class methods.</p>
+
+<!-- more -->
+
+
+<p>Here is how to do it:</p>
+
+<div><script src='https://gist.github.com/1384045.js?file=include.rb'></script>
+<noscript><pre><code>module Foo
+  def self.included(base)
+    base.extend ClassMethods
+  end
+
+  module ClassMethods
+    def bar
+    end
+  end
+
+  def baz
+  end
+end
+
+class Test
+  include Foo
+end
+
+Test.bar     # class method
+Test.new.bar # No method error
+Test.baz     # No method error
+Test.new.baz # Instance method
+</code></pre></noscript></div>
+
+
+<p><code>include</code> is used to add a module&#8217;s instance methods as instance methods to the including class, but it doesn&#8217;t traverse sub modules. <code>extend</code> is used to add a module&#8217;s instance methods as class methods to a class.</p>
+
+<p>When a module is <code>included</code> it can register a callback which is passed the class that is doing the including. And calling <code>extend</code> on the base and passing a submodule will cause it to put those methods at the class level. This causes a chain reaction of loading both instance and class methods using a single <code>include</code>.</p>
+
+<p><strong>Pro Tip</strong>: It is possible to cause the same behavior using <code>extend</code> by using the <code>extended</code> callback; however, this is not common and <code>include 'x'</code> reads better then <code>extend 'y'</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The 3N Rule for deployment]]></title>
+    <link href="http://jkamenik.github.com/blog/2011/08/16/3n-rule-for-deployment/"/>
+    <updated>2011-08-16T00:00:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2011/08/16/3n-rule-for-deployment</id>
+    <content type="html"><![CDATA[<p>As a programmer I am lazy, but in a productive way.  It is not that I don&#8217;t do anything.  It is that I only do things a set number of times.  I have a simple rule, which I call the &#8220;3N rule&#8221;, which states &#8220;I will doing something once, script it the second time, and use the script from then on&#8221;.  Therefore, if I have 3 to N devices to manage then I have a script that takes minimal input and replicates the change on all devices.</p>
+
+<!-- more -->
+
+
+<p>I also have a 3N rule for programming, but that is a matter for another time.</p>
+
+<p>By using a script I eliminate a lot of the human error and also increase my productivity because computers are, now days, faster at responding to stimuli then I am.  But computers are &#8220;swift idiots&#8221; so for this to work the environment has got to be controlled.  I recommend doing the following:</p>
+
+<ol>
+<li>Use VMs</li>
+<li>Run headless, enable SSH</li>
+<li>Use <a href="http://sourceforge.net/apps/mediawiki/clusterssh/index.php?title=Main_Page">ClusterSSH</a> or <a href="http://code.google.com/p/csshx/">csshX</a> for learning what to script</li>
+<li>Use <a href="https://github.com/capistrano/capistrano/wiki">Capistrano</a> or <a href="http://docs.fabfile.org/en/1.2.0/index.html">Fabric</a> for automating change</li>
+</ol>
+
+
+<p>By using a VM and running headless you remove the temptation to sit at a physical terminal. It also eliminates the fear associated with screwing something up as it is trivial to snapshot a machine and restore its state.</p>
+
+<p>By using SSH and ClusterSSH you enable yourself to start thinking about the cluster as a whole, and more importantly start acting on the cluster as a whole. If some of the servers get out of sync then it makes management more difficult, so by using ClusterSSH you eliminate that problem.</p>
+
+<p>By using Capistrano, or its like, then you eliminate the human error entirely. This is just good policy. Also, a benefit of a deployment script is that it is self documenting (assuming you know how to read).</p>
 ]]></content>
   </entry>
   
