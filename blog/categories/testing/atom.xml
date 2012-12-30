@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-12-29T21:09:42-05:00</updated>
+  <updated>2012-12-29T22:42:36-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,247 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Factory Girl Automatic Tests]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/03/09/factory-girl-automatic-tests/"/>
+    <updated>2012-03-09T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/03/09/factory-girl-automatic-tests</id>
+    <content type="html"><![CDATA[<p>Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like <code>Given /^(\d+) blog exists$/</code> and <code>Given /^the following blogs exist:$/</code> I started to come up with generic functions that would build those steps.</p>
+
+<p>Stupid me for not checking that factory girl already does something like that. All you have to do is include factory girl's <a href="http://github.com/thoughtbot/factory_girl/blob/master/lib/factory_girl/step_definitions.rb">step_definition</a> file:</p>
+
+<p><code>ruby env.rb
+requie 'factory_girl/step_definitions'
+</code></p>
+
+<p>Once you start using FactoryGirl correctly there are a world of new features that can make your steps both cleaner and more concise. Here are some tips I have found via trial and error.</p>
+
+<!-- more -->
+
+
+<h1>Tip 1: Do not reinvent the wheel</h1>
+
+<p>Factory girl will create steps for all factories that you have register.</p>
+
+<p>```text example_steps.feature
+Scenario: Showing example steps
+  Given the following blogs exist:</p>
+
+<pre><code>| name       |
+| first blog |
+</code></pre>
+
+<p>  Given a blog exists with a name of "first blog"
+  Given a blog exists
+  Given 41 blogs exist
+  Given 14 blogs exist with a description of "Test"
+```</p>
+
+<h1>Tip 2: Use association, Do not add more steps then are needed</h1>
+
+<p>Factory girlassociation are automatically created before the factory is created and they are automatically linked. It only supports the <strong>belongs_to</strong> behavior, so keep that in mind.</p>
+
+<p>Using the "<strong>Given the following XXX exist</strong>" step you can define attributes, on the theassociation, in the table. If we leave the association out then a default is created. If we define an attribute then it will be found or created using that attribute.</p>
+
+<p>Lets say you have a product and it can belog to a category. You do not need to create a category.</p>
+
+<p>```ruby product_category.rb
+class Category &lt; ActiveRecord::Base
+end</p>
+
+<p>class Product &lt; ActiveRecord::Base
+  belongs_to :category
+end</p>
+
+<p>FactoryGirl.define do
+  factory :category do</p>
+
+<pre><code>name 'Foo'
+</code></pre>
+
+<p>  end</p>
+
+<p>  factory :product do</p>
+
+<pre><code>association :category
+
+name 'Bar'
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>```text product_category.feature
+Scenario: Bad
+ Given a category exists with a name of "Foo"
+ Given a product exists with a category of "Foo"</p>
+
+<p>Scenario: Good
+  Given the following products exist:</p>
+
+<pre><code>| name | category  |
+| Foo  | name: Bar |
+</code></pre>
+
+<p>```</p>
+
+<h1>Tip 3: Attaching files via CarrierWave</span></h1>
+
+<p>Since cucumber is a text file it doesn't make much sense for you to define full files in steps. It also doesn't really make sense to embed full file paths in the tests. Instead, you can use a Transient attribute and some code so that in cucumber you define a file name and in the factory it converts to an actual file.</p>
+
+<p>```ruby file_product.rb
+class Product &lt; ActiveRecord::Base
+  mount_uploader :file, FileUploader
+end</p>
+
+<p>FactoryGirl.define do
+  factory :product do</p>
+
+<pre><code>ignore do
+  file_name 'small_image.png'
+end
+file { File.open(Rails.root.join("path/to/files",file_name)) unless file_name.blank? }
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>```text file_product.feature
+Scenario: Products
+  Given a product exists</p>
+
+<pre><code># 1 product with an included file whose file_name was "small_image.png"
+</code></pre>
+
+<p>  Given the following products exist:</p>
+
+<pre><code>| name      | file name     |
+| No image  |               |
+| Big image | big_image.png |
+</code></pre>
+
+<p>```</p>
+
+<h1>Tip 4: Fixing a circular dependency between two models</span></h1>
+
+<p>Lets say you have a Store model and User model. And a User can both work at and own a Store. If you put associations in both the User and the Store model then each will try to create the other, infinitely. We can reuse the transient method as before to break the circle.</p>
+
+<p>The trick is to avoid defining an association in both factories, but instead use a transient attribute in one factory to simulate the behavior of an association. Also, since transient attributes are not likely to have the same level of sophistication as the associations you should use the association to define the more complex of the two models.</p>
+
+<p>```ruby  user_store.rb
+class User &lt; ActiveRecord::Base
+  belongs_to :store
+  has_many   :stores, :foreign_key => 'owner_id'
+end</p>
+
+<p>class Store &lt; ActiveRecord::Base
+  belongs_to :owner, :class_name => 'User'
+end</p>
+
+<p>FactoryGirl.define do
+  factory :user do</p>
+
+<pre><code>name 'John Doe'
+
+ignore do
+  store_name nil
+end
+store {Store.find_or_create_by_name(store_name || 'Test store')}
+</code></pre>
+
+<p>  end</p>
+
+<p>  factory :store do</p>
+
+<pre><code>name 'Test store'
+
+association :owner, :factory =&gt; :user
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>```text user_store.feature
+Scenario: 2 users named 'John Doe', and 2 stores named "Test store"
+  Given a user exists
+  Given a store exists</p>
+
+<p>Scenario: 2 users both working at the same store
+  Given the following users exist:</p>
+
+<pre><code>| name     | store name |
+| John Doe | Test store |
+| Jane Doe | Test store |
+</code></pre>
+
+<p>Scenario: 2 stores both owned by the same person
+  Given the following stores exist:</p>
+
+<pre><code>| name     | owner          |
+| MD Store | name: John Doe |
+| CA Store | name: John Doe |
+</code></pre>
+
+<p>```</p>
+
+<h1>Tip 5: Fixing a circular dependency between the same model</span></h1>
+
+<p>Let say you have a Category model, and that model can belong to another Category (a tree) then you cannot use an association or you get the same infinite recursion issue as before. Here we can use a transient attribute along with an <strong>after_create</strong> hook to simulate the behavior we want.</p>
+
+<p>```ruby category.rb
+class Category &lt; ActiveRecord::Base
+  acts_as_nested_set
+end</p>
+
+<p>FactoryGirl.define do
+  factory :category do</p>
+
+<pre><code>name 'Foo'
+
+ignore do
+  parent nil
+end
+after_create do |category,attributes|
+  unless attributes.parent.blank?
+    parent = Category.find_by_name(attributes.parent)
+    category.move_to_child_of(parent)
+  end
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>```text category.feature
+Scenario: Has no parents
+  Given the following categories exist:</p>
+
+<pre><code>| name |
+| Foo  |
+| Bar  |
+| Baz  |
+</code></pre>
+
+<p>Scenario: Nested tree
+  Given the following categories exist:</p>
+
+<pre><code>| name | parent |
+| Foo  |        |
+| Bar  | Foo    |
+| Baz  | Bar    |
+</code></pre>
+
+<p>  # + Foo
+  # |+ Bar
+  #  |- Baz
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[JS Unit Testing using YUI]]></title>
@@ -203,9 +444,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fcca1579a70></p>
+<p><blockquote><p>In all tests the <code>this</code> object is the base Selenium object so if you want to get to the <code>window</code> object you have to traverse up the stack via <code>this.browserbot.getUserWindow()</code>.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fcca1579408></p>
+<p><blockquote><p>Unfortunately everything tested in Selenium is converted to a string before testing.  So if I need to ensure that an integer parsing function actually produces a number I need to use <code>typeof</code>.</p></blockquote></p>
 
 <h2>Using RSpec</h2>
 
@@ -274,19 +515,19 @@ end
 </code></pre></noscript></div>
 </p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fcca1576c58></p>
+<p><blockquote><p>The browser being shown is <code>chrome</code>.  This actually means Firefox, not Google Chrome.  For Google Chrome use <code>googlechrome</code>.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fcca11ec5d8></p>
+<p><blockquote><p>For Safari use <code>safari</code>, but remember that you will need to disable the popup blocker manually and close Safari (for this user) otherwise it will just sit there forever.</p></blockquote></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fcca10474f8></p>
+<p><blockquote><p>The server must be run by a user that has access the browser and has a screen to render to.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fcca167b158></p>
+<p><blockquote><p>Firefox will only run a single profile per user.  If you need to run Firefox concurrently on the same machine you need to fake a second profile.  Don't do it, just create a VM; you will be happier.</p></blockquote></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fcca13b71d8></p>
+<p><blockquote><p>Google Chrome does not works on OS X.  This is because OS X doesn't add application executables to the path, and the server code isn't smart enough to use the executable directly.  The fix is supposedly <a href="http://groups.google.com/group/selenium-users/browse_thread/thread/7205089285e92973?hide_quotes=no&amp;fwc=1">here</a>, but I was not able to get it to work.  If I do I will probably write another blog entry and link it here.</p></blockquote></p>
 
 <h3>Putting it all together</h3>
 

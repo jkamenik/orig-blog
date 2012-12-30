@@ -246,6 +246,56 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/03/09/factory-girl-automatic-tests/">Factory Girl Automatic Tests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-09T00:00:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like <code>Given /^(\d+) blog exists$/</code> and <code>Given /^the following blogs exist:$/</code> I started to come up with generic functions that would build those steps.</p>
+
+<p>Stupid me for not checking that factory girl already does something like that. All you have to do is include factory girl&#8217;s <a href="http://github.com/thoughtbot/factory_girl/blob/master/lib/factory_girl/step_definitions.rb">step_definition</a> file:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">requie</span> <span class="s1">&#39;factory_girl/step_definitions&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you start using FactoryGirl correctly there are a world of new features that can make your steps both cleaner and more concise. Here are some tips I have found via trial and error.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/03/09/factory-girl-automatic-tests/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2011/01/10/problems-with-agile-implementation/">Problems With Agile Implementation</a></h1>
     
     
@@ -454,50 +504,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/18/learning-selenium/">Learning Selenium</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-18T00:00:00-05:00" pubdate data-updated="true">Nov 18<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Background</h2>
-
-<p>My basic need is to find a platform where I can test FF, IE, and Safari on Windows, Linux, and OS X.  I use OS X as my platform, and Safari or Webkit as my environment.  I don&#8217;t like Windows or IE.  Linux is OK, but I like OS X because it just works the way I want.  And I find FF to be slow, and Firebug which is needed to debug we pages causes rendering changes and timing issues (most notably causing FF to crash).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2010/11/18/learning-selenium/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -526,7 +535,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2011/01/10/problems-with-agile-implementation/">Problems with Agile Implementation</a>
+        <a href="/blog/2012/03/09/factory-girl-automatic-tests/">Factory Girl Automatic Tests</a>
       </li>
     
   </ul>
@@ -538,6 +547,7 @@
 <li class='category'><a href='/blog/categories/js/'>JS (1)</a></li>
 <li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
 <li class='category'><a href='/blog/categories/email/'>email (1)</a></li>
+<li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
 <li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 <li class='category'><a href='/blog/categories/howto/'>howto (4)</a></li>
@@ -547,7 +557,7 @@
 <li class='category'><a href='/blog/categories/rant/'>rant (2)</a></li>
 <li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
-<li class='category'><a href='/blog/categories/testing/'>testing (2)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (3)</a></li>
 
   </ul>
 </section>

@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2012-12-29T21:09:42-05:00</updated>
+  <updated>2012-12-29T22:42:36-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -531,6 +531,352 @@
 
 <p>This section is way to big, but it is too early to go into too much detail.  It is going to be interesting to see how
 close I get to my ultimate goal, and how long it takes to get there.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Factory Girl Automatic Tests]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/03/09/factory-girl-automatic-tests/"/>
+    <updated>2012-03-09T00:00:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/03/09/factory-girl-automatic-tests</id>
+    <content type="html"><![CDATA[<p>Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like <code>Given /^(\d+) blog exists$/</code> and <code>Given /^the following blogs exist:$/</code> I started to come up with generic functions that would build those steps.</p>
+
+<p>Stupid me for not checking that factory girl already does something like that. All you have to do is include factory girl&#8217;s <a href="http://github.com/thoughtbot/factory_girl/blob/master/lib/factory_girl/step_definitions.rb">step_definition</a> file:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">requie</span> <span class="s1">&#39;factory_girl/step_definitions&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you start using FactoryGirl correctly there are a world of new features that can make your steps both cleaner and more concise. Here are some tips I have found via trial and error.</p>
+
+<!-- more -->
+
+
+<h1>Tip 1: Do not reinvent the wheel</h1>
+
+<p>Factory girl will create steps for all factories that you have register.</p>
+
+<figure class='code'><figcaption><span>example_steps.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Showing example steps
+</span><span class='line'>  Given the following blogs exist:
+</span><span class='line'>    | name       |
+</span><span class='line'>    | first blog |
+</span><span class='line'>  Given a blog exists with a name of &quot;first blog&quot;
+</span><span class='line'>  Given a blog exists
+</span><span class='line'>  Given 41 blogs exist
+</span><span class='line'>  Given 14 blogs exist with a description of &quot;Test&quot;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Tip 2: Use association, Do not add more steps then are needed</h1>
+
+<p>Factory girlassociation are automatically created before the factory is created and they are automatically linked. It only supports the <strong>belongs_to</strong> behavior, so keep that in mind.</p>
+
+<p>Using the &#8221;<strong>Given the following XXX exist</strong>&#8221; step you can define attributes, on the theassociation, in the table. If we leave the association out then a default is created. If we define an attribute then it will be found or created using that attribute.</p>
+
+<p>Lets say you have a product and it can belog to a category. You do not need to create a category.</p>
+
+<figure class='code'><figcaption><span>product_category.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Category</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:category</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:category</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Foo&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:product</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">association</span> <span class="ss">:category</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Bar&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>product_category.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Bad
+</span><span class='line'> Given a category exists with a name of &quot;Foo&quot;
+</span><span class='line'> Given a product exists with a category of &quot;Foo&quot;
+</span><span class='line'>
+</span><span class='line'>Scenario: Good
+</span><span class='line'>  Given the following products exist:
+</span><span class='line'>    | name | category  |
+</span><span class='line'>    | Foo  | name: Bar |
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Tip 3: Attaching files via CarrierWave</span></h1>
+
+<p>Since cucumber is a text file it doesn&#8217;t make much sense for you to define full files in steps. It also doesn&#8217;t really make sense to embed full file paths in the tests. Instead, you can use a Transient attribute and some code so that in cucumber you define a file name and in the factory it converts to an actual file.</p>
+
+<figure class='code'><figcaption><span>file_product.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">mount_uploader</span> <span class="ss">:file</span><span class="p">,</span> <span class="no">FileUploader</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:product</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">ignore</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">file_name</span> <span class="s1">&#39;small_image.png&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">file</span> <span class="p">{</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;path/to/files&quot;</span><span class="p">,</span><span class="n">file_name</span><span class="p">))</span> <span class="k">unless</span> <span class="n">file_name</span><span class="o">.</span><span class="n">blank?</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>file_product.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Products
+</span><span class='line'>  Given a product exists
+</span><span class='line'>    # 1 product with an included file whose file_name was &quot;small_image.png&quot;
+</span><span class='line'>  Given the following products exist:
+</span><span class='line'>    | name      | file name     |
+</span><span class='line'>    | No image  |               |
+</span><span class='line'>    | Big image | big_image.png |
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Tip 4: Fixing a circular dependency between two models</span></h1>
+
+<p>Lets say you have a Store model and User model. And a User can both work at and own a Store. If you put associations in both the User and the Store model then each will try to create the other, infinitely. We can reuse the transient method as before to break the circle.</p>
+
+<p>The trick is to avoid defining an association in both factories, but instead use a transient attribute in one factory to simulate the behavior of an association. Also, since transient attributes are not likely to have the same level of sophistication as the associations you should use the association to define the more complex of the two models.</p>
+
+<figure class='code'><figcaption><span>user_store.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:store</span>
+</span><span class='line'>  <span class="n">has_many</span>   <span class="ss">:stores</span><span class="p">,</span> <span class="ss">:foreign_key</span> <span class="o">=&gt;</span> <span class="s1">&#39;owner_id&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Store</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:owner</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;User&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:user</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;John Doe&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">ignore</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">store_name</span> <span class="kp">nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">store</span> <span class="p">{</span><span class="no">Store</span><span class="o">.</span><span class="n">find_or_create_by_name</span><span class="p">(</span><span class="n">store_name</span> <span class="o">||</span> <span class="s1">&#39;Test store&#39;</span><span class="p">)}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:store</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Test store&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">association</span> <span class="ss">:owner</span><span class="p">,</span> <span class="ss">:factory</span> <span class="o">=&gt;</span> <span class="ss">:user</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>user_store.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: 2 users named &#39;John Doe&#39;, and 2 stores named &quot;Test store&quot;
+</span><span class='line'>  Given a user exists
+</span><span class='line'>  Given a store exists
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Scenario: 2 users both working at the same store
+</span><span class='line'>  Given the following users exist:
+</span><span class='line'>    | name     | store name |
+</span><span class='line'>    | John Doe | Test store |
+</span><span class='line'>    | Jane Doe | Test store |
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Scenario: 2 stores both owned by the same person
+</span><span class='line'>  Given the following stores exist:
+</span><span class='line'>    | name     | owner          |
+</span><span class='line'>    | MD Store | name: John Doe |
+</span><span class='line'>    | CA Store | name: John Doe |
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Tip 5: Fixing a circular dependency between the same model</span></h1>
+
+<p>Let say you have a Category model, and that model can belong to another Category (a tree) then you cannot use an association or you get the same infinite recursion issue as before. Here we can use a transient attribute along with an <strong>after_create</strong> hook to simulate the behavior we want.</p>
+
+<figure class='code'><figcaption><span>category.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Category</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">acts_as_nested_set</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:category</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Foo&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">ignore</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">parent</span> <span class="kp">nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">after_create</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="p">,</span><span class="n">attributes</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">unless</span> <span class="n">attributes</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>        <span class="n">parent</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">attributes</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">category</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>category.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Has no parents
+</span><span class='line'>  Given the following categories exist:
+</span><span class='line'>    | name |
+</span><span class='line'>    | Foo  |
+</span><span class='line'>    | Bar  |
+</span><span class='line'>    | Baz  |
+</span><span class='line'>
+</span><span class='line'>Scenario: Nested tree
+</span><span class='line'>  Given the following categories exist:
+</span><span class='line'>    | name | parent |
+</span><span class='line'>    | Foo  |        |
+</span><span class='line'>    | Bar  | Foo    |
+</span><span class='line'>    | Baz  | Bar    |
+</span><span class='line'>
+</span><span class='line'>  # + Foo
+</span><span class='line'>  # |+ Bar
+</span><span class='line'>  #  |- Baz
+</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
@@ -1197,9 +1543,13 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fcca135c9e0></p>
+<blockquote><p>In all tests the <code>this</code> object is the base Selenium object so if you want to get to the <code>window</code> object you have to traverse up the stack via <code>this.browserbot.getUserWindow()</code>.</p></blockquote>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fcca135c350></p>
+
+
+
+<blockquote><p>Unfortunately everything tested in Selenium is converted to a string before testing.  So if I need to ensure that an integer parsing function actually produces a number I need to use <code>typeof</code>.</p></blockquote>
+
 
 <h2>Using RSpec</h2>
 
@@ -1270,19 +1620,32 @@ end
 </code></pre></noscript></div>
 
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fcca135a758></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fcca150d848></p>
+
+<blockquote><p>The browser being shown is <code>chrome</code>.  This actually means Firefox, not Google Chrome.  For Google Chrome use <code>googlechrome</code>.</p></blockquote>
+
+
+
+
+<blockquote><p>For Safari use <code>safari</code>, but remember that you will need to disable the popup blocker manually and close Safari (for this user) otherwise it will just sit there forever.</p></blockquote>
+
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fcca150d190></p>
+<blockquote><p>The server must be run by a user that has access the browser and has a screen to render to.</p></blockquote>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fcca150cad8></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fcca150c4c0></p>
+
+
+<blockquote><p>Firefox will only run a single profile per user.  If you need to run Firefox concurrently on the same machine you need to fake a second profile.  Don&#8217;t do it, just create a VM; you will be happier.</p></blockquote>
+
+
+
+
+<blockquote><p>Google Chrome does not works on OS X.  This is because OS X doesn&#8217;t add application executables to the path, and the server code isn&#8217;t smart enough to use the executable directly.  The fix is supposedly <a href="http://groups.google.com/group/selenium-users/browse_thread/thread/7205089285e92973?hide_quotes=no&amp;fwc=1">here</a>, but I was not able to get it to work.  If I do I will probably write another blog entry and link it here.</p></blockquote>
+
 
 <h3>Putting it all together</h3>
 
