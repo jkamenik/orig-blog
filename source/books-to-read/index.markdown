@@ -6,3 +6,12 @@ comments: true
 sharing: true
 footer: true
 ---
+
+* The Phonenix Project
+* The Goal
+
+## Other Reference Matterial ##
+
+* Ruby Tapas
+* Rails casts
+* Ruby Rogues podcast
