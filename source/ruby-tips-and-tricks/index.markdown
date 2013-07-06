@@ -5,6 +5,7 @@ date: 2013-07-04 21:46
 comments: true
 sharing: true
 footer: true
+toc: true
 ---
 
 This is a basic stream of useful ruby information that I aquired over the years.
