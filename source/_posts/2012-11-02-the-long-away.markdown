@@ -9,6 +9,8 @@ comments: false
 
 First, let me apologize to my 3 readers that I have been away for so long.  There are a lot of reasons why I have been gone, but mainly it boils down to how much I hate the blogger interface for dealing with code.
 
+<!-- more -->
+
 Sure, blogger is a simple platform and does exactly what it says.  Sure, it integrates with google plus, twitter, etc...  Sure, it was easy to configure, setup and deploy.  Sure, it has a lot of features.
 
 But, it sucks for code!  And I mean Sucks!  For code there are a few very specific hot button items that are must haves:
