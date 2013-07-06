@@ -30,7 +30,7 @@ I spend to much time thinking about the blog entries and not enough time trying 
 1. Minimum RCov
 1. Extjs 3 Views and controllers
 
-## Entries still needing ##
+## Entries still needing import ##
 
 1. The long way
 1. Testing rails in IE though pow
