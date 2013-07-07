@@ -1,8 +1,9 @@
 ---
 layout: post
-title: "The "Everyone else's job is easy" paradox"
+title: The "Everyone else's job is easy" paradox
 date: 2012-05-19
-comments: false
+comments: true
+toc: true
 categories:
  - rant
 ---
@@ -15,32 +16,32 @@ The stereotype from the Employee's perspective is this "I hate dealing with IT. 
 
 The stereotype from the IT's perspective is this "I have to fix everyone's stupid computer.  If only they would read that Wiki article I emailed about the proper way to do this thing then I wouldn't have to keep fixing things.  I tried to prevent these kind of issues by not giving admin rights to users, but they always need to install some piece of crap software, and they won't take the time to learn to take responsibility.  After all with great power comes great responsibility, and I see none of it.  In addition to keeping everyone's computer working all the damn time I also have to keep all the internal and external services running.  Besides most of the time these people are on the phone chit-chatting, or standing around the water cooler; clearly their job easy enough for a monkey, so why should I rush."
 
-The problem
+## The problem ##
 
 It was a pretty extreme example, but I bet that everyone has acted this way to another individual at least one.  How could you not, after all when tentions are high and emotions are frayed devaluation of other is a natural defense.  And though it is a natural defense it is certainly not an acceptable one.
 
 I am certainly no Psychologist, but here are some ways I have found to prevent the escalation.
 
-1. Understand how hard everyone's job actually is
+## 1. Understand how hard everyone's job actually is ##
 
 I term if difficultly, both mentally and physically here are the jobs in order from most difficult to least.
 
-Bering Straight Fishermen
-Any other Fishermen
-Logger
-Political leader/Dictator
-Fugitive
-Mangers (above you in the company)
-Everyone else's Job
-Your job
+1. Bering Straight Fishermen
+1. Any other Fishermen
+1. Logger
+1. Political leader/Dictator
+1. Fugitive
+1. Mangers (above you in the company)
+1. Everyone else's Job
+1. Your job
+
 Yep, once you understand that more then likely the person that you are dealing with has a more difficult job then you do then it is easier to compromise.
 
-2. Humanize
+## 2. Humanize ##
 
 This is hands down the hardest thing to do when nerves are frayed, but remember the other person in the argument is also a human.
 
-
-3. Eliminate Cognitive load
+## 3. Eliminate Cognitive load ##
 
 Cognitive load is simply an amount of mental work that must be processed before learning can be accomplished.  For example, it is not uncommon for requests between departments to have to be done in a formal way, like though a task tracking system.  This is completely unacceptable.
 
@@ -50,7 +51,7 @@ The same has to be true between departments.  If you are in IT and you have to f
 
 But at the same time, other departments are as busy as you, so you have to remember that once asked turnaround can take a while.
 
-4. Detail the difficulty
+## 4. Detail the difficulty ##
 
 If the other person doesn't know a lot about all your responsibilities then they are more likely to thing of things as easy.  And most of the time everything that is being asked of you is easy, because it is your job and you are good at your job; right?
 
@@ -58,7 +59,7 @@ The problem is usually more likely the amount of stuff you have to do before you
 
 So in this case the difficulty is prioritizing all the "easy" features.  Especially since each market person was responsible for their own projects and did not have a company wide view of things.
 
-5. Be concise, but be human
+## 5. Be concise, but be human ##
 
 Often times people see conciseness as talking about work and nothing else.  But in my experience more time is wasted talking about work topics then for any other reason.  I don't mean that work topics are a waste of time, but how many time have there been several hours of talk when 15 minutes of actual investigation would have eliminated the need for talk.
 
