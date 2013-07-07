@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Ruby module instance and class methods - Random Software Inklings</title>
+  <title>Testing Rails in IE though Pow - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="A very common idiom especially when code starts to become complicated is to put functions in modules and mix in that behavior to several classes. And &hellip;">
+  <meta name="description" content="My Problem I can&#8217;t test in IE (but the client wants it to work in IE 7 and IE 8) My Setup A mac - because I need it to work the first time &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2012/09/11/testing-rails-in-ie-though-pow/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -72,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">Ruby Module Instance and Class Methods</h1>
+      <h1 class="entry-title">Testing Rails in IE Though Pow</h1>
     
     
       <p class="meta">
@@ -88,51 +88,110 @@
   
 
 
-<time datetime="2011-11-21T00:00:00-05:00" pubdate data-updated="true">Nov 21<span>st</span>, 2011</time>
+<time datetime="2012-09-11T00:00:00-04:00" pubdate data-updated="true">Sep 11<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>A very common idiom especially when code starts to become complicated is to put functions in modules and mix in that behavior to several classes. And a common expansion is to have a single <code>include</code> add both instance and class methods.</p>
+<div class="entry-content"><h2>My Problem</h2>
+
+<p>I can&#8217;t test in IE (but the client wants it to work in IE 7 and IE 8)</p>
 
 <!-- more -->
 
 
-<p>Here is how to do it:</p>
+<h2>My Setup</h2>
 
-<div><script src='https://gist.github.com/1384045.js?file=include.rb'></script>
-<noscript><pre><code>module Foo
-  def self.included(base)
-    base.extend ClassMethods
-  end
+<ol>
+<li>A mac - because I need it to work the first time every time</li>
+<li><a href="http://rubyonrails.org">Rails</a></li>
+<li><a href="https://rvm.io">RVM</a> - because you should be using it</li>
+<li>PostgreSQL - it is better then MySQL and actually easier to setup after you do it once.</li>
+<li><a href="http://pow.cx">Pow</a> - because it is small, spins up the rails server when you need it and the url looks like http://myhost.dev, not http://127.0.0.1:3000 (some browsers will attempt to look up &#8220;localhost&#8221; via google search, before asking DNS)</li>
+<li>TDD
 
-  module ClassMethods
-    def bar
-    end
-  end
-
-  def baz
-  end
-end
-
-class Test
-  include Foo
-end
-
-Test.bar     # class method
-Test.new.bar # No method error
-Test.baz     # No method error
-Test.new.baz # Instance method
-</code></pre></noscript></div>
+<ol>
+<li><a href="http://cukes.info">Cucumber</a> - because it is easier to read integration level testing</li>
+<li><a href="https://www.relishapp.com/rspec">Rspec</a> - because I like it (it both backs cucumber, and also us the unit testing for models and libraries)</li>
+<li><a href="https://github.com/jnicklas/capybara">Capybara</a></li>
+<li><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> - so the browser is opened headless and doesn&#8217;t intrupt other work</li>
+</ol>
+</li>
+</ol>
 
 
-<p><code>include</code> is used to add a module&#8217;s instance methods as instance methods to the including class, but it doesn&#8217;t traverse sub modules. <code>extend</code> is used to add a module&#8217;s instance methods as class methods to a class.</p>
+<h2>My Solution</h2>
 
-<p>When a module is <code>included</code> it can register a callback which is passed the class that is doing the including. And calling <code>extend</code> on the base and passing a submodule will cause it to put those methods at the class level. This causes a chain reaction of loading both instance and class methods using a single <code>include</code>.</p>
+<p>First do everything as normal, since you will be developing faster and only at the END worry about IE.  This is counter to a lot of thinking, but I have found that if you stick to good TDD and are testing using an actual opened browser then the only issue you will end up with are CSS related issues.</p>
 
-<p><strong>Pro Tip</strong>: It is possible to cause the same behavior using <code>extend</code> by using the <code>extended</code> callback; however, this is not common and <code>include 'x'</code> reads better then <code>extend 'y'</code>.</p>
+<h3>Before you start</h3>
+
+<p>Since it is likely that you will only have CSS issues it is a requirement that you make the main CSS work on HTML5 compliant browsers.  And add exceptions for the others.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;real&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;!--[if IE]&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
+</span><span class='line'><span class="x">&lt;!--[if IE 8]&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie8&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
+</span><span class='line'><span class="x">&lt;!--[if IE 7]&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie7&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Use a Windows VM</h3>
+
+<p>Go to https://github.com/xdissent/ievms and install the various IE VMs.  I have not had luck with IE6 and IE7, but IE8 works fine.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -s https://raw.github.com/xdissent/ievms/master/ievms.sh | <span class="nv">IEVMS_VERSIONS</span><span class="o">=</span><span class="s2">&quot;8&quot;</span> bash
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If it fails, just keep rerunning it, or try a different version</p>
+
+<h4>Boot and wait for driver detection</h4>
+
+<p>On first boot I usually go in as Admin and let windows detect everything and install all the needed components.  This isn&#8217;t a genuine version of windows so after 30 days you will be locked out, at which point you just need to revert to the &#8220;clean&#8221; snapshot.</p>
+
+<h4>Install the OS extensions</h4>
+
+<p>For some reason the CD doesn&#8217;t autoplay for me.  Just enter &#8220;d:&#8221; in the Start Menu -> Search and then select the installer.</p>
+
+<h4>Add Fake DNS</h4>
+
+<p>Pow munges DNS on the Mac so that you don&#8217;t have to use &#8220;localhost&#8221;.  I actually really like this about Pow and so will remain using it.  The only thing that you need to do is edit the windows Hosts file and add the Fake DNS there as well.</p>
+
+<ol>
+<li>Login as the IEUser</li>
+<li>Start -> Search -> &#8220;Notepad&#8221;</li>
+<li>Right click and select &#8220;Open as administrator&#8221;</li>
+<li>File -> Open</li>
+<li>Change URL to &#8220;C:\WINDOWS\system32\drivers\etc\hosts&#8221;</li>
+<li>Add the following (change the host names as you need)
+
+<ol>
+<li>&#8220;10.0.2.2       myhost.dev&#8221;</li>
+<li>&#8220;10.0.2.2       myhost1.dev&#8221;</li>
+</ol>
+</li>
+<li>Now open http://myhost.dev in IE and it will work</li>
+</ol>
+
 </div>
 
 
@@ -155,21 +214,15 @@ Test.new.baz # Instance method
   
 
 
-<time datetime="2011-11-21T00:00:00-05:00" pubdate data-updated="true">Nov 21<span>st</span>, 2011</time>
+<time datetime="2012-09-11T00:00:00-04:00" pubdate data-updated="true">Sep 11<span>th</span>, 2012</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/ruby/'>ruby</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2012/09/11/testing-rails-in-ie-though-pow/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2012/09/11/testing-rails-in-ie-though-pow/" >Tweet</a>
   
   
   
@@ -180,20 +233,14 @@ Test.new.baz # Instance method
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2011/08/16/3n-rule-for-deployment/" title="Previous Post: The 3N Rule for deployment">&laquo; The 3N Rule for deployment</a>
+        <a class="basic-alignment left" href="/blog/2012/03/09/factory-girl-automatic-tests/" title="Previous Post: Factory Girl Automatic Tests">&laquo; Factory Girl Automatic Tests</a>
       
       
-        <a class="basic-alignment right" href="/blog/2011/11/30/ci-server-using-firefox/" title="Next Post: CI server using Firefox">CI server using Firefox &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2012/11/02/the-long-away/" title="Next Post: The long away">The long away &raquo;</a>
       
     </p>
   </footer>
 </article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
 
 </div>
 
@@ -310,22 +357,6 @@ Test.new.baz # Instance method
 
 </footer>
   
-
-<script type="text/javascript">
-      var disqus_shortname = 'randomsoftwareinklings';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/';
-        var disqus_url = 'http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
 
 
 

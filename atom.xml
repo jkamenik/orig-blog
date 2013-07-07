@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-05T23:03:23-04:00</updated>
+  <updated>2013-07-06T17:20:21-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Blog changes]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/07/06/blog-changes/"/>
+    <updated>2013-07-06T10:58:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/07/06/blog-changes</id>
+    <content type="html"><![CDATA[<p>My last blog entry was when my son was born.  A perfect reason for a blog entry, but I had fully intended to keep blogging and just didn&#8217;t find the time.  Turns out the issue isn&#8217;t really that I don&#8217;t have the time, but that I don&#8217;t have the time write the really involved articles.</p>
+
+<!-- more -->
+
+
+<p>There is nothing wrong with a fully detailed article, when the time permits.  However, I have a great many partially started articles that still need hours of research and development to finish.  My previous process something like:</p>
+
+<ol>
+<li>Find a concept</li>
+<li>Initial research</li>
+<li>Outline</li>
+<li>Code spike / actual developement</li>
+<li>Refactoring</li>
+<li>Final code (something to be reasonably proud of)</li>
+<li>Start the blog</li>
+<li>More research</li>
+<li>Final blog</li>
+<li>Proof read - Send to editor</li>
+<li>Publish blog</li>
+</ol>
+
+
+<p>Clearly, way to involved to involved to do every week with the time I do have.  The new goal is eposodic entries that may not be fully formed, but would eventually lead to a fully formed article.  To that end I have codified my goals (more as a ways to keep myself inline) <a href="http://jkamenik.github.com/blog-goals">here</a>.</p>
+
+<h2>Knowledge / Continously updated pages</h2>
+
+<p>In addition to adjusting the way I blog I am also going to move continously updated content out of blog entries and into individual pages.  The <a href="http://jkamenik.github.com/knowledge">Knowledge</a> section of the blog is dedicated for these.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Francis Alexander Kamenik]]></title>
@@ -531,6 +566,171 @@
 
 <p>This section is way to big, but it is too early to go into too much detail.  It is going to be interesting to see how
 close I get to my ultimate goal, and how long it takes to get there.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The long away]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/11/02/the-long-away/"/>
+    <updated>2012-11-02T00:00:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/11/02/the-long-away</id>
+    <content type="html"><![CDATA[<h2>The Reason</h2>
+
+<p>First, let me apologize to my 3 readers that I have been away for so long.  There are a lot of reasons why I have been gone, but mainly it boils down to how much I hate the blogger interface for dealing with code.</p>
+
+<!-- more -->
+
+
+<p>Sure, blogger is a simple platform and does exactly what it says.  Sure, it integrates with google plus, twitter, etc&#8230;  Sure, it was easy to configure, setup and deploy.  Sure, it has a lot of features.</p>
+
+<p>But, it sucks for code!  And I mean Sucks!  For code there are a few very specific hot button items that are must haves:</p>
+
+<ol>
+<li>Monospaced font and significant whitespace (&lt;pre> in HTML)</li>
+<li>Line numbers</li>
+<li>Syntax highlighting</li>
+</ol>
+
+
+<p>Not that much to ask, but those features are ONLY ever going to be needed by a programmer.  So I can see why they don&#8217;t get that much attention.</p>
+
+<p>Both the old and the new blogger interface have a way of dealing with this, but it is time consuming and annoying:</p>
+
+<ol>
+<li>Use gist.github.com as a dumping place for all your code samples
+
+<ol>
+<li>Create a separate file in the gist for each sample (makes it easier later)</li>
+<li>Make sure the file name has the right extension so that syntax highlighting happens</li>
+<li>Copy the embed codes for each gist</li>
+</ol>
+</li>
+<li>When editing the blog only use HTML mode!
+
+<ol>
+<li>The gist code is a javascript so it will only render in preview</li>
+<li>Switching between HMTL and compose sometimes rearranges non-visible items, which means when your page renders your code could be anywhere</li>
+<li>If I am going to write raw HTML I might as well use Markdown, which sucks less and converts to HTML</li>
+</ol>
+</li>
+<li>Hope that nobody views your blog with JS disabled!</li>
+</ol>
+
+
+<h2>The Solution</h2>
+
+<p>After playing with many blogging solution and giving up on Wordpress entirely (Sorry I just cannot get what I want without a LOT of php hacking), I have decided to give a Octopress a serious shot.  I use github all the time and even host a few things using github pages.</p>
+
+<p>In case you don&#8217;t know, Github pages can render Jekyll sites.  And Jekyll is a blog aware static site generator, which can read markdown.  And Markdown is a much more human friendly markup language then HTML, but compiles into HTML; also, Github uses it everywhere in their site (as do a lot of other places).</p>
+
+<p>So things started to fall into place with Jekyll.  I just needed to install a syntax highlighting gem, and design the site.  In the process, I stumbled across Octopress, which is a wrapper around a Jekyll site, works with github, has syntax highlighting, provides a clean theme, and has a programmer friendly workflow.</p>
+
+<p>So Octopress is the blog engine for me.  And it will reside at <a href="http://jkamenik.github.com">http://jkamenik.github.com</a>.  I will slowly be transferring all my entries from here, but I doubt I will retire this site entirely.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing Rails in IE though Pow]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/09/11/testing-rails-in-ie-though-pow/"/>
+    <updated>2012-09-11T00:00:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/09/11/testing-rails-in-ie-though-pow</id>
+    <content type="html"><![CDATA[<h2>My Problem</h2>
+
+<p>I can&#8217;t test in IE (but the client wants it to work in IE 7 and IE 8)</p>
+
+<!-- more -->
+
+
+<h2>My Setup</h2>
+
+<ol>
+<li>A mac - because I need it to work the first time every time</li>
+<li><a href="http://rubyonrails.org">Rails</a></li>
+<li><a href="https://rvm.io">RVM</a> - because you should be using it</li>
+<li>PostgreSQL - it is better then MySQL and actually easier to setup after you do it once.</li>
+<li><a href="http://pow.cx">Pow</a> - because it is small, spins up the rails server when you need it and the url looks like http://myhost.dev, not http://127.0.0.1:3000 (some browsers will attempt to look up &#8220;localhost&#8221; via google search, before asking DNS)</li>
+<li>TDD
+
+<ol>
+<li><a href="http://cukes.info">Cucumber</a> - because it is easier to read integration level testing</li>
+<li><a href="https://www.relishapp.com/rspec">Rspec</a> - because I like it (it both backs cucumber, and also us the unit testing for models and libraries)</li>
+<li><a href="https://github.com/jnicklas/capybara">Capybara</a></li>
+<li><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> - so the browser is opened headless and doesn&#8217;t intrupt other work</li>
+</ol>
+</li>
+</ol>
+
+
+<h2>My Solution</h2>
+
+<p>First do everything as normal, since you will be developing faster and only at the END worry about IE.  This is counter to a lot of thinking, but I have found that if you stick to good TDD and are testing using an actual opened browser then the only issue you will end up with are CSS related issues.</p>
+
+<h3>Before you start</h3>
+
+<p>Since it is likely that you will only have CSS issues it is a requirement that you make the main CSS work on HTML5 compliant browsers.  And add exceptions for the others.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;real&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;!--[if IE]&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
+</span><span class='line'><span class="x">&lt;!--[if IE 8]&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie8&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
+</span><span class='line'><span class="x">&lt;!--[if IE 7]&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie7&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Use a Windows VM</h3>
+
+<p>Go to https://github.com/xdissent/ievms and install the various IE VMs.  I have not had luck with IE6 and IE7, but IE8 works fine.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -s https://raw.github.com/xdissent/ievms/master/ievms.sh | <span class="nv">IEVMS_VERSIONS</span><span class="o">=</span><span class="s2">&quot;8&quot;</span> bash
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If it fails, just keep rerunning it, or try a different version</p>
+
+<h4>Boot and wait for driver detection</h4>
+
+<p>On first boot I usually go in as Admin and let windows detect everything and install all the needed components.  This isn&#8217;t a genuine version of windows so after 30 days you will be locked out, at which point you just need to revert to the &#8220;clean&#8221; snapshot.</p>
+
+<h4>Install the OS extensions</h4>
+
+<p>For some reason the CD doesn&#8217;t autoplay for me.  Just enter &#8220;d:&#8221; in the Start Menu -> Search and then select the installer.</p>
+
+<h4>Add Fake DNS</h4>
+
+<p>Pow munges DNS on the Mac so that you don&#8217;t have to use &#8220;localhost&#8221;.  I actually really like this about Pow and so will remain using it.  The only thing that you need to do is edit the windows Hosts file and add the Fake DNS there as well.</p>
+
+<ol>
+<li>Login as the IEUser</li>
+<li>Start -> Search -> &#8220;Notepad&#8221;</li>
+<li>Right click and select &#8220;Open as administrator&#8221;</li>
+<li>File -> Open</li>
+<li>Change URL to &#8220;C:\WINDOWS\system32\drivers\etc\hosts&#8221;</li>
+<li>Add the following (change the host names as you need)
+
+<ol>
+<li>&#8220;10.0.2.2       myhost.dev&#8221;</li>
+<li>&#8220;10.0.2.2       myhost1.dev&#8221;</li>
+</ol>
+</li>
+<li>Now open http://myhost.dev in IE and it will work</li>
+</ol>
+
 ]]></content>
   </entry>
   
@@ -1685,9 +1885,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007febca858820></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f9739b4bb58></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007febca857c40></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f9739b4b4f0></p>
 
 <h2>Using RSpec</h2>
 
@@ -1758,19 +1958,19 @@ end
 </code></pre></noscript></div>
 
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007febca84f590></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f9739b49ad8></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007febca84ed70></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f9739bbd7a8></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007febca84e6e0></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f9739bbd118></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007febca83b360></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f9739bbc9c0></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007febca83a910></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f9739bbc2b8></p>
 
 <h3>Putting it all together</h3>
 
