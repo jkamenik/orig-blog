@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rant | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/rant/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-06T17:20:21-04:00</updated>
+  <updated>2013-07-07T17:17:18-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The problem with Best Practices]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/05/20/the-problem-with-best-practices/"/>
+    <updated>2012-05-20T00:00:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/05/20/the-problem-with-best-practices</id>
+    <content type="html"><![CDATA[<p>I hate the term "Best Practices" for two important reasons.  First, in an attempt to be concise the eliminate the most import information: the reasoning.  They are often just the call-to-action statement. and they are often passed down as policy.  Some best practices are good practices (for example pre-flight checklist) when applied to the correct situation.  But without the reasoning statement, it is hard to tell if the practice can be applied to other situations.  If I had to apply a pre-flight checklist before starting to code then I would waste a huge amount of time.</p>
+
+<!-- more -->
+
+
+<p>Second, best practices eliminate critical thinking.  With a misnomer like "Best Practices" it is not surprising that they are not questions.  And in most situation questioning a "Best Practice" is taken as an affront to the person/department that introduced the Best Practice.  I am not sure why this is, because very rarely is a Best Practice the best practice for every situation.  But since they defy questioning once instituted they become technical dept when they outlive their usefulness.</p>
+
+<p>Instead of "Best Practices" I prefer "Pro Tips."  But the name itself is not as important as to how it is presented.  In order for me to consider a "Pro Tip" it must have three parts: a list of benefits, a list of drawbacks, and description of behavior.</p>
+
+<h2>A best practice: Always backup your work using git</h2>
+
+<p>I do not think that any software engineer is going to argue that backing up work is a good thing.  But by phasing it this way the problem because that "git" becomes an afterthought and therefore an annoyance.</p>
+
+<h2>A Pro Tip: Use git as a journal</h2>
+
+<p>Using git as a backup mechanism is a good thing.  But it is better to use git to journal what you are doing.  So instead of work for an entire day, committing everything at a single time, and then pushing everything at once you should do a single complete thing, and commit that.  Usually commits happend every 5 to 10 minutes, but they are generally self contained.</p>
+
+<p>Benefits:</p>
+
+<ol>
+<li>Your work is backed up</li>
+<li>You and others can see your train of thought</li>
+<li>You can return of any point and attempt other options</li>
+<li>You eliminate the fear of trying new things</li>
+<li>Focused work</li>
+</ol>
+
+
+<p>Drawbacks:</p>
+
+<ol>
+<li>You have to know git to make the most of it</li>
+<li>You have to take the time to make smaller commits</li>
+<li>You have to push more often</li>
+<li>You might have to start branching in order to keep organized</li>
+<li>Difficult for messy thinkers (tinkerers)</li>
+</ol>
+
+
+<p>See: a pro tip is a bit longer, and more detailed, but at the same time it is more convincing.  The reader can then choose when and how to try the tip, and also is free to adapt the tip to their given situation.  For example: a developer is going to use git differently then a designer; but git could be useful for both.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The "Everyone else's job is easy" paradox]]></title>
+    <link href="http://jkamenik.github.com/blog/2012/05/19/the-everyone-else-s-job-is-easy-paradox/"/>
+    <updated>2012-05-19T00:00:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2012/05/19/the-everyone-else-s-job-is-easy-paradox</id>
+    <content type="html"><![CDATA[<p>The "Everyone else's job is easy" is a easy trap to fall into and an almost impossible trap to get out of.  My point is best illustrated using the stereotypical Employee/IT relationship.</p>
+
+<p>The stereotype from the Employee's perspective is this "I hate dealing with IT.  They are a bunch of asses, and never do things right, and my computer is alway worse after they leave then it was with the problem that I called them for.  What is their problem?  It is their f'n job to keep these computers working so that I can do my job.  I have no interest in working this weekend because IT was not able to get my computer fixed in a reasonable amount of time.  When ever I walk by their desk they are always goofing off, if they only did their job I could do mine, how hard could it be."</p>
+
+<!-- more -->
+
+
+<p>The stereotype from the IT's perspective is this "I have to fix everyone's stupid computer.  If only they would read that Wiki article I emailed about the proper way to do this thing then I wouldn't have to keep fixing things.  I tried to prevent these kind of issues by not giving admin rights to users, but they always need to install some piece of crap software, and they won't take the time to learn to take responsibility.  After all with great power comes great responsibility, and I see none of it.  In addition to keeping everyone's computer working all the damn time I also have to keep all the internal and external services running.  Besides most of the time these people are on the phone chit-chatting, or standing around the water cooler; clearly their job easy enough for a monkey, so why should I rush."</p>
+
+<h2>The problem</h2>
+
+<p>It was a pretty extreme example, but I bet that everyone has acted this way to another individual at least one.  How could you not, after all when tentions are high and emotions are frayed devaluation of other is a natural defense.  And though it is a natural defense it is certainly not an acceptable one.</p>
+
+<p>I am certainly no Psychologist, but here are some ways I have found to prevent the escalation.</p>
+
+<h2>1. Understand how hard everyone's job actually is</h2>
+
+<p>I term if difficultly, both mentally and physically here are the jobs in order from most difficult to least.</p>
+
+<ol>
+<li>Bering Straight Fishermen</li>
+<li>Any other Fishermen</li>
+<li>Logger</li>
+<li>Political leader/Dictator</li>
+<li>Fugitive</li>
+<li>Mangers (above you in the company)</li>
+<li>Everyone else's Job</li>
+<li>Your job</li>
+</ol>
+
+
+<p>Yep, once you understand that more then likely the person that you are dealing with has a more difficult job then you do then it is easier to compromise.</p>
+
+<h2>2. Humanize</h2>
+
+<p>This is hands down the hardest thing to do when nerves are frayed, but remember the other person in the argument is also a human.</p>
+
+<h2>3. Eliminate Cognitive load</h2>
+
+<p>Cognitive load is simply an amount of mental work that must be processed before learning can be accomplished.  For example, it is not uncommon for requests between departments to have to be done in a formal way, like though a task tracking system.  This is completely unacceptable.</p>
+
+<p>If communication between departments has to be done in a formal way then it department HAS to consider every other depart as a customer.  Would you as a customer of Comcast think that it is acceptable to have to login into a Comcast support portal in order to request them to fix your TV?  No, you would call them, or email them, or do something else that is convient to you, and your would let Comcast deal with formalizing the request in a way useful to them.</p>
+
+<p>The same has to be true between departments.  If you are in IT and you have to formally use Autotask, or Zendesk, or anything else then YOU MUST also find a way to get the requests into that system.  Other departments have to be able to call, email, or walk over to YOU and make requests.</p>
+
+<p>But at the same time, other departments are as busy as you, so you have to remember that once asked turnaround can take a while.</p>
+
+<h2>4. Detail the difficulty</h2>
+
+<p>If the other person doesn't know a lot about all your responsibilities then they are more likely to thing of things as easy.  And most of the time everything that is being asked of you is easy, because it is your job and you are good at your job; right?</p>
+
+<p>The problem is usually more likely the amount of stuff you have to do before you can do this one other "easy" thing.  At one company I worked for we liked to call these type of situation marketing fire drills.  Marketing would have a client that promised to buy 200 hundred widgets every year if only the widget has some feature.  But we have 20 other features that have to be implemented before we can start on the new feature is started.</p>
+
+<p>So in this case the difficulty is prioritizing all the "easy" features.  Especially since each market person was responsible for their own projects and did not have a company wide view of things.</p>
+
+<h2>5. Be concise, but be human</h2>
+
+<p>Often times people see conciseness as talking about work and nothing else.  But in my experience more time is wasted talking about work topics then for any other reason.  I don't mean that work topics are a waste of time, but how many time have there been several hours of talk when 15 minutes of actual investigation would have eliminated the need for talk.</p>
+
+<p>What I mean about being concise is only add information if it is relevant.  "Because it is always done this way" is not relevant, no matter what you might think.  So unless you have specific experience keep it to yourself.  Also, raise any relevant questions, and take any relevant advice.</p>
+
+<p>By eliminating the work conversation waste you can and should spend time talking about personal things.  I have always been a huge fan of eating lunch away from the office with co-workers.  It is the best to respect people and be respected.  And by humanizing, barriers can be eliminated.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Problems with Agile Implementation]]></title>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: js | Random Software Inklings]]></title>
-  <link href="http://jkamenik.github.com/blog/categories/js/atom.xml" rel="self"/>
+  <title><![CDATA[Category: octopress | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
   <updated>2013-07-07T17:17:18-04:00</updated>
   <id>http://jkamenik.github.com/</id>

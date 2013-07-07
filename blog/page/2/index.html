@@ -9,7 +9,7 @@
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="As a programmer I am lazy, but in a productive way. It is not that I don&#8217;t do anything. It is that I only do things a set number of times. I &hellip;">
+  <meta name="description" content="Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like Given /^(\d+) blog exists &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +69,140 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/09/factory-girl-automatic-tests/">Factory Girl Automatic Tests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-09T00:00:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like <code>Given /^(\d+) blog exists$/</code> and <code>Given /^the following blogs exist:$/</code> I started to come up with generic functions that would build those steps.</p>
+
+<p>Stupid me for not checking that factory girl already does something like that. All you have to do is include factory girl&#8217;s <a href="http://github.com/thoughtbot/factory_girl/blob/master/lib/factory_girl/step_definitions.rb">step_definition</a> file:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">requie</span> <span class="s1">&#39;factory_girl/step_definitions&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you start using FactoryGirl correctly there are a world of new features that can make your steps both cleaner and more concise. Here are some tips I have found via trial and error.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/03/09/factory-girl-automatic-tests/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/30/ci-server-using-firefox/">CI Server Using Firefox</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-30T00:00:00-05:00" pubdate data-updated="true">Nov 30<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you are like me, you always setup a CI to ensure things that you already finished are not broken by things you are currently doing. And if you are like me, you use <a href="http://github.com/jnicklas/capybara">capybara</a>, <a href="http://github.com/lanej/selenium-webdriver">selenium-webdriver</a>, and <a href="http://www.mozilla.org/en-US/firefox/new/">firefox</a> to actually test the results in a browser. The rub comes when the CI server (running headless) needs to run firefox, which needs a screen.</p>
+
+<p>Virtual Frame Buffer (xvfb) is a great package. All it does is provide an X11 interface in memory instead of requiring a screen. Below I detail what I do on Ubuntu, but it should work the same on any Linux distro.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/11/30/ci-server-using-firefox/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/21/ruby-module-instance-and-class-methods/">Ruby Module Instance and Class Methods</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-21T00:00:00-05:00" pubdate data-updated="true">Nov 21<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A very common idiom especially when code starts to become complicated is to put functions in modules and mix in that behavior to several classes. And a common expansion is to have a single <code>include</code> add both instance and class methods.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/11/21/ruby-module-instance-and-class-methods/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -382,6 +516,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/07/octopress-toc/">Octopress TOC</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/07/06/blog-changes/">Blog changes</a>
       </li>
     
@@ -395,10 +533,6 @@
     
       <li class="post">
         <a href="/blog/2012/11/21/bunco-phase-1/">Bunco Phase 1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/10/bunco/">Bunco</a>
       </li>
     
   </ul>
@@ -417,10 +551,12 @@
 <li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 <li class='category'><a href='/blog/categories/howto/'>howto (4)</a></li>
+<li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/opinion/'>opinion (3)</a></li>
 <li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
 <li class='category'><a href='/blog/categories/planning/'>planning (1)</a></li>
-<li class='category'><a href='/blog/categories/rant/'>rant (2)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (4)</a></li>
 <li class='category'><a href='/blog/categories/ruby/'>ruby (1)</a></li>
 <li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
