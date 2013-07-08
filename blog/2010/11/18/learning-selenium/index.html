@@ -209,9 +209,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007ff485971860></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f8d8bb1cd38></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007ff4859711a8></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f8d8bb1c6d0></p>
 
 <h2>Using RSpec</h2>
 
@@ -282,19 +282,19 @@ end
 </code></pre></noscript></div>
 
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007ff48597ddb8></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f8d8bb1af60></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007ff48597d610></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f8d8bb1a948></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007ff48597c990></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f8d8bb22300></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007ff48597be28></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f8d8bb21ce8></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007ff48597b450></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007f8d8bb216d0></p>
 
 <h3>Putting it all together</h3>
 
@@ -444,19 +444,9 @@ exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
   </ul>
 </section>
 <section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("jkamenik", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/jkamenik" class="twitter-follow-button" data-show-count="false">Follow @jkamenik</a>
-  
+  <h1>Twitter</h1>
+    <a class="twitter-timeline" href="https://twitter.com/jkamenik" data-widget-id="354049262578982914">Tweets by @jkamenik</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </section>
 
 
@@ -469,7 +459,7 @@ exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
   <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    jQuery(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';

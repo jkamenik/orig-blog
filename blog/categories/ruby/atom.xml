@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-07T21:13:30-04:00</updated>
+  <updated>2013-07-08T08:27:42-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -24,31 +24,7 @@
 
 
 <p>Here is how to do it:
-<div><script src='https://gist.github.com/1384045.js?file=include.rb'></script>
-<noscript><pre><code>module Foo
-  def self.included(base)
-    base.extend ClassMethods
-  end
-
-  module ClassMethods
-    def bar
-    end
-  end
-
-  def baz
-  end
-end
-
-class Test
-  include Foo
-end
-
-Test.bar     # class method
-Test.new.bar # No method error
-Test.baz     # No method error
-Test.new.baz # Instance method
-</code></pre></noscript></div>
-</p>
+{% gist 1384045 include.rb %}</p>
 
 <p><code>include</code> is used to add a module's instance methods as instance methods to the including class, but it doesn't traverse sub modules. <code>extend</code> is used to add a module's instance methods as class methods to a class.</p>
 
