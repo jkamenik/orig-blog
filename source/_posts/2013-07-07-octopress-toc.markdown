@@ -4,7 +4,7 @@ title: "Octopress TOC"
 date: 2013-07-07 14:35
 comments: true
 toc: true
-categories: 
+categories:
   - octopress
   - js
 ---
@@ -18,7 +18,7 @@ Full credit it due to a google search which turned up this [https://github.com/b
 I followed it to get an idea of what I wanted, but diverged a lot.  What I wanted was:
 
 1. The TOC to be driven by a `toc: true` in the YML front matter of any page
-1. The TOC to be the first item in teh sidebar.
+1. The TOC to be the first item in the sidebar.
 1. The TOC to contain only the h2 tags and below (Ignoring the H1 page title)
 
 ## 1. Add JS TOC code ##
@@ -33,7 +33,7 @@ Add the following code to the head.
 <script src="{{ root_url }}/javascripts/generate-toc.js" type="text/javascript"></script>
 ```
 
-This downloads jQuery from a CDN, loads the TOC plugin and will eventually load our driver code.sa
+This downloads jQuery from a CDN, loads the TOC plugin and will eventually load our driver code.
 
 ## 2. Write the driver and trigger code ##
 
@@ -72,7 +72,7 @@ The `page` variable is the YML front mater hash so we can check for `toc` to ens
 
 ## 3. Adjust the generators ##
 
-`rake new_post` and `rake new_page` generate a stub page with some YML head matter so it make sense for me to adjust the generators to incude `toc`.
+`rake new_post` and `rake new_page` generate a stub page with some YML head matter so it make sense for me to adjust the generators to include `toc`.
 
 Just add something like this to the `Rakefile`:
 
