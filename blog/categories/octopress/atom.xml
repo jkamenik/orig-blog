@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-07T17:17:18-04:00</updated>
+  <updated>2013-07-07T21:13:30-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -29,7 +29,7 @@
 
 <ol>
 <li>The TOC to be driven by a <code>toc: true</code> in the YML front matter of any page</li>
-<li>The TOC to be the first item in teh sidebar.</li>
+<li>The TOC to be the first item in the sidebar.</li>
 <li>The TOC to contain only the h2 tags and below (Ignoring the H1 page title)</li>
 </ol>
 
@@ -53,7 +53,7 @@
 
 <p>```</p>
 
-<p>This downloads jQuery from a CDN, loads the TOC plugin and will eventually load our driver code.sa</p>
+<p>This downloads jQuery from a CDN, loads the TOC plugin and will eventually load our driver code.</p>
 
 <h2>2. Write the driver and trigger code</h2>
 
@@ -88,7 +88,7 @@ function generateTOC(heading) {
 
 <h2>3. Adjust the generators</h2>
 
-<p><code>rake new_post</code> and <code>rake new_page</code> generate a stub page with some YML head matter so it make sense for me to adjust the generators to incude <code>toc</code>.</p>
+<p><code>rake new_post</code> and <code>rake new_page</code> generate a stub page with some YML head matter so it make sense for me to adjust the generators to include <code>toc</code>.</p>
 
 <p>Just add something like this to the <code>Rakefile</code>:</p>
 
