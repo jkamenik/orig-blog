@@ -38,7 +38,7 @@ This is the sample file that I created to test.
 ### Using the IDE
 It took a long time to understand this tool, since I had no background in Selenium.  The basic premiss is that each file is a single test case, which is a set of tests.  Each test is a grouping of three items: the action, the target, and the expected result.  It natively creates a 3 column HTML table, which it can also run, but personal preference is that use the IDE to export the basic test into a different language.
 
-I am a rails developer, and am familar with rspec so I use the IDE to run the tests to make sure they work, but then I transfer it to rspec since it is a more expressive test framework.  The downside is that you have to use a Remote Control to run the test, which adds an extra level of complications.  We will get to the Remote Control later.
+I am a rails developer, and am familiar with rspec so I use the IDE to run the tests to make sure they work, but then I transfer it to rspec since it is a more expressive test framework.  The downside is that you have to use a Remote Control to run the test, which adds an extra level of complications.  We will get to the Remote Control later.
 
 A basic HTML test looks like this:
 {% gist 1151478 test.html %}
