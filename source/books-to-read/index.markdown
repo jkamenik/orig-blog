@@ -7,8 +7,22 @@ sharing: true
 footer: true
 ---
 
-* The Phonenix Project
+Books I need to read:
+
 * The Goal
+* Confident Ruby - Avdi Grimm
+* Exceptional Ruby - Avdi Grimm
+* [Getting Real](http://gettingreal.37signals.com/) - 37 Signals
+* [Rework](http://37signals.com/rework) - 37 Signals
+* [Remote](http://37signals.com/remote) - 37 Signals
+
+Books I need to write about:
+
+* The Phonenix Project
+* Rails receipies
+* Rails Anitpatterns
+
+
 
 ## Other Reference Matterial ##
 
