@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Francis | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/francis/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-08T08:27:42-04:00</updated>
+  <updated>2013-07-19T23:17:27-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -20,12 +20,12 @@
     <id>http://jkamenik.github.com/blog/2012/12/02/francis-alexander-kamenik</id>
     <content type="html"><![CDATA[<p>Born November 28th, 2012 at 12:48pm.  9lbs 1oz, 21 1/4 inches.</p>
 
-<p>{% img /images/francis/IMG_0555.jpg %}</p>
+<p><img src="/images/francis/IMG_0555.jpg"></p>
 
 <!-- more -->
 
 
-<p>{% img /images/francis/IMG_0556.JPG %}</p>
+<p><img src="/images/francis/IMG_0556.JPG"></p>
 
 <h2>Our Experience</h2>
 

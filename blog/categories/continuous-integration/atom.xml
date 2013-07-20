@@ -4,7 +4,7 @@
   <title><![CDATA[Category: continuous_integration | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/continuous-integration/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-08T08:27:42-04:00</updated>
+  <updated>2013-07-19T23:17:27-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -27,27 +27,49 @@
 
 <h3>Installing Firefox</h3>
 
-<p>{% gist 1409172 install_firefox.sh %}</p>
+<p><div><script src='https://gist.github.com/1409172.js?file=install_firefox.sh'></script>
+<noscript><pre><code>$ sudo apt-get install firefox</code></pre></noscript></div>
+</p>
 
 <h3>Testing Firefox</h3>
 
-<p>{% gist 1409172 test_firefox.sh %}</p>
+<p><div><script src='https://gist.github.com/1409172.js?file=test_firefox.sh'></script>
+<noscript><pre><code>$ echo $DISPLAY
+localhost:10.0
+$ firefox</code></pre></noscript></div>
+</p>
 
 <p>Once firefox is installed it can be tested on a X11-forwarded ssh connection. X11-forwarding has to be enabled on the server and client and can be tested by checking <code>DISPLAY</code>.</p>
 
 <h3>Installing Xvfb</h3>
 
-<p>{% gist 1409172 install_xvfb.sh %}</p>
+<p><div><script src='https://gist.github.com/1409172.js?file=install_xvfb.sh'></script>
+<noscript><pre><code>$ sudo apt-get install xvfb
+...Lots of stuff...</code></pre></noscript></div>
+</p>
 
 <h3>Testing Firefox again</h3>
 
-<p>{% gist 1409172 test_firefox_again.sh %}</p>
+<p><div><script src='https://gist.github.com/1409172.js?file=test_firefox_again.sh'></script>
+<noscript><pre><code>$ sudo apt-get install imagemagick
+$ Xvfb :1 &amp;
+$ export DISPLAY=:1
+$ firefox http://google.com
+...from another terminal...
+$ export DISPLAY=:1
+$ import -window root example.png
+...from another terminal...
+$ killall firefox
+$ firefox example.png</code></pre></noscript></div>
+</p>
 
 <p>The easiest way to test is to use image magick to take a screen shot of the VFB and save it to an image that can be opened in Firefox. If the image opens and it looks like a firefox browser is running on the google page then you did it correctly.</p>
 
 <h3>Create a xvfb startup script</h3>
 
-<p>{% gist 1409172 xvfb.sh %}</p>
+<p><div><script src='https://gist.github.com/1409172.js?file=xvfb.sh'></script>
+<noscript><pre><code>/usr/bin/Xvfb :1 &amp;</code></pre></noscript></div>
+</p>
 
 <p>On ubuntu no start script is provided, but a simple one put in <code>/etc/init.d/xvfb</code> is enough.</p>
 

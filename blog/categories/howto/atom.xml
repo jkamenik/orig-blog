@@ -4,7 +4,7 @@
   <title><![CDATA[Category: howto | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/howto/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-08T08:27:42-04:00</updated>
+  <updated>2013-07-19T23:17:27-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -37,13 +37,45 @@
 
 
 <p>Create an HTML file that includes the css and js files:
-{% gist 1151464 index-header.html %}</p>
+<div><script src='https://gist.github.com/1151464.js?file=index-header.html'></script>
+<noscript><pre><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;logger.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;testlogger.css&quot;&gt;
+
+&lt;!-- Test runner code --&gt;
+&lt;script src=&quot;yahoo-dom-event.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;logger.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;yuitest.js&quot;&gt;&lt;/script&gt;</code></pre></noscript></div>
+</p>
 
 <p>The HTML will also need to instantiate the test logger and run the test runner global. I bound the test run to a button so I could control when it ran:
-{% gist 1151464 index-body.html %}</p>
+<div><script src='https://gist.github.com/1151464.js?file=index-body.html'></script>
+<noscript><pre><code>&lt;body&gt;
+    &lt;input onclick=&quot;javascript:runAllTests()&quot; type=&quot;button&quot; value=&quot;Run Tests&quot; /&gt;
+    
+    &lt;script&gt;
+        new YAHOO.tool.TestLogger();
+        
+        function runAllTests(){
+            YAHOO.tool.TestRunner.run();
+        }
+    &lt;/script&gt;
+&lt;/body&gt;</code></pre></noscript></div>
+</p>
 
 <p>Now that we have a <code>YAHOO.tool.TestRunner</code> we need to add a test that can be run.  Instantiate a <code>new YAHOO.tool.TestCase</code> and add it to the TestRunner. All a TestCase needs is a name and a bunch of functions that start with "test". Everything else is automatic. Below is a simplified version of the <a href="https://github.com/jkamenik/yui-test-example/blob/master/test.js">full file</a>.
-{% gist 1151464 test.js %}</p>
+<div><script src='https://gist.github.com/1151464.js?file=test.js'></script>
+<noscript><pre><code>var assert = YAHOO.util.Assert;
+
+YAHOO.tool.TestRunner.add(new YAHOO.tool.TestCase({
+  name: 'Tests for string',
+  
+  test_true: function(){
+    var test = String(true);
+    assert.isString(test);
+    assert.areEqual('true',test);
+  }
+});</code></pre></noscript></div>
+</p>
 
 <h2>Conclusion</h2>
 
