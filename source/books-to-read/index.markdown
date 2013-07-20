@@ -9,6 +9,10 @@ footer: true
 
 Books I need to read:
 
+* Thank you for arguing - Jay Heinrichs
+* Crucial conversations
+* Crucial confrontations
+
 * The Goal
 * Confident Ruby - Avdi Grimm
 * Exceptional Ruby - Avdi Grimm
@@ -26,6 +30,8 @@ Books I need to write about:
 
 ## Other Reference Matterial ##
 
+* New peepcode play-by-play
+* Guy Steel's Talk: Growing a Language
 * Ruby Tapas
 * Rails casts
 * Ruby Rogues podcast
