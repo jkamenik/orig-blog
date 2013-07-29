@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Foundation - Random Software Inklings</title>
+  <meta name="author" content="John T. Kamenik">
+
+  
+  <meta name="description" content="Foundation is a UI library which aims to simplify design by starting with a responsive library. It is very similar to Twitter Bootstrap, but since it &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2013/07/24/foundation/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Random Software Inklings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
+<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Random Software Inklings</a></h1>
+  
+    <h2>Random documentation of things I have learned.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jkamenik.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://jkamenik.github.com/Resume">Resume</a></li>
+  <li><a href="/knowledge">Knowledge</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Foundation</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-24T20:34:00-04:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://foundation.zurb.com/">Foundation</a> is a UI library which aims to simplify design by starting with a responsive library.  It is very similar to Twitter Bootstrap, but since it uses SCSS it should fit better within Rails.</p>
+
+<p>The demo for what I have done is <a href="http://jkamenik.github.io/waterfall-foundation">here</a></p>
+
+<!-- more -->
+
+
+<p>It would be accurate to say that I have a little crush on this framework.  In my day to day I have to deal with Drupal Designers.  They are not bad people to be sure, and the designs they come up with are great.  But there is no structure to what they provide.  They are painting using waterfall colors on a still pond.  The stuff they come up with is amazing, but if you do anything but look at it all is lost.</p>
+
+<p>Foundation is an apt name because it offer an underlying structure to design.  It has opinions, but as a Rails guy I am used to that.  More importantly the opinions are those of designers, but with a structure that resonates with developers.  So not being a designer I can still develop a decent UI.</p>
+
+<h2>The downside</h2>
+
+<p>First the downside, it doesn&#8217;t support IE lower then 8 and only partially supports IE8.  That isn&#8217;t a huge issue for me, but it does make it difficult to use commercially.  Other then that I don&#8217;t see any issues.</p>
+
+<h2>The grid</h2>
+
+<p>Foundation uses a 12 column grid system to control the layout of elements.  12 is great measure because it divides by 2, 3, 4, and 6.  It also supports the nesting of grid rows within columns.</p>
+
+<h3>Large / Medium / Small</h3>
+
+<p>When defining columns you can give it a span by adding the column count like &#8220;large-9&#8221;.  Just so long as counts add to 12 everything works.  But what is awesome is that each column can be different based on screen size.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-6 medium-7 large-9&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This causes the div to be 6 columns when the screen is small, 7 for medium screens, and 9 for large screens.</p>
+
+<h3>Push / Pull</h3>
+
+<p>Add &#8220;push-X&#8221; cause a column to pad left by the number of columns.  &#8220;small-9 push-3&#8221; means the column is 9 wide and moved over by 3 columns, basically making it the last column even if in the html it is first.</p>
+
+<p>&#8220;pull-X&#8221; does the opposite and moves a column to the right.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-9 push-3&quot;</span><span class="nt">&gt;</span>Last on screen, first in HTML.<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-3 pull-9&quot;</span><span class="nt">&gt;</span>First on screen, last in HTML.<span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Show / Hide</h3>
+
+<p>Adding &#8220;show-for-X&#8221; will cause the div to be hidden unless the screen is the correct size.  There is a &#8220;hide-for-X&#8221; as well.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;show-for-small&quot;</span><span class="nt">&gt;</span>Shown only if small<span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Semantic HTML</h2>
+
+<p>Foundation uses semantic HTML in order achieve a responsive design.  And hence why IE7 and below are not supported and IE8 is only partially supported.  But semantic HTML plays very well with the mobile web and makes the HTML easier to code and maintain.</p>
+
+<h2>The Widgets</h2>
+
+<p>Along with the opinions come standardized UI widgets.  It isn&#8217;t on the same level as a GUI toolkit like ExtJS, but all the basic HTML behaviors are there plus a lot of other nice items.</p>
+
+<h3>Navigation</h3>
+
+<p>A &#8220;nav&#8221; element acts as a standard menu with dropdowns on a desktop.  In a mobile browser it becomes a set of clickable links that sweep left.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;top-bar&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;title-area&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- Title Area --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Top Bar Title <span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- Remove the class &quot;menu-icon&quot; to get rid of menu icon. Take out &quot;Menu&quot; to just have icon alone --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;toggle-topbar menu-icon&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;span&gt;</span>Menu<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">&quot;top-bar-section&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- Left Nav Section --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;left&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Main Item 1<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;divider&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/section&gt;</span>
+</span><span class='line'><span class="nt">&lt;/nav&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Panels / Flash</h3>
+
+<p>These can be used to display a &#8220;block&#8221; of text.  They have some standard highlights like &#8220;alert&#8221; which makes them good for flash messages.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!-- Content here --&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">data-alert</span> <span class="na">class=</span><span class="s">&quot;alert-box&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!-- Your content goes here --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">class=</span><span class="s">&quot;close&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;times;</span><span class="nt">&lt;/a&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Joyride</h3>
+
+<p>A joyride lets you highlight elements on the page with some descriptive text.  It is as simple creating a unordered list with the class &#8220;joyride-list&#8221;.</p>
+
+<h3>And many more</h3>
+
+<p>Look at the <a href="http://foundation.zurb.com/docs/components/kitchen-sink.html">kitchen sink</a> for a list of all the widgets that you get.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-24T20:34:00-04:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ui/'>UI</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2013/07/24/foundation/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2013/07/24/foundation/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/07/07/octopress-toc/" title="Previous Post: Octopress TOC">&laquo; Octopress TOC</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/24/foundation/">Foundation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/07/octopress-toc/">Octopress TOC</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/06/blog-changes/">Blog changes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/02/francis-alexander-kamenik/">Francis Alexander Kamenik</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/22/bunco-phase-1-dot-2/">Bunco Phase 1.2</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/francis/'>Francis (1)</a></li>
+<li class='category'><a href='/blog/categories/js/'>JS (1)</a></li>
+<li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
+<li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
+<li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
+<li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
+<li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
+<li class='category'><a href='/blog/categories/email/'>email (1)</a></li>
+<li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
+<li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (4)</a></li>
+<li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/opinion/'>opinion (3)</a></li>
+<li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
+<li class='category'><a href='/blog/categories/planning/'>planning (1)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (4)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>ruby (1)</a></li>
+<li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (4)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Twitter</h1>
+    <a class="twitter-timeline" href="https://twitter.com/jkamenik" data-widget-id="354049262578982914">Tweets by @jkamenik</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jkamenik',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - John T. Kamenik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'randomsoftwareinklings';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2013/07/24/foundation/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2013/07/24/foundation/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        // Put a TOC right before the entry content.
+        generateTOC('Table of Contents');
+    });
+  </script>
+
+
+</body>
+</html>

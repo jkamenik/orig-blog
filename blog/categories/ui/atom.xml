@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: UI | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/ui/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2013-07-28T20:18:44-04:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Foundation]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/07/24/foundation/"/>
+    <updated>2013-07-24T20:34:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/07/24/foundation</id>
+    <content type="html"><![CDATA[<p><a href="http://foundation.zurb.com/">Foundation</a> is a UI library which aims to simplify design by starting with a responsive library.  It is very similar to Twitter Bootstrap, but since it uses SCSS it should fit better within Rails.</p>
+
+<p>The demo for what I have done is <a href="http://jkamenik.github.io/waterfall-foundation">here</a></p>
+
+<!-- more -->
+
+
+<p>It would be accurate to say that I have a little crush on this framework.  In my day to day I have to deal with Drupal Designers.  They are not bad people to be sure, and the designs they come up with are great.  But there is no structure to what they provide.  They are painting using waterfall colors on a still pond.  The stuff they come up with is amazing, but if you do anything but look at it all is lost.</p>
+
+<p>Foundation is an apt name because it offer an underlying structure to design.  It has opinions, but as a Rails guy I am used to that.  More importantly the opinions are those of designers, but with a structure that resonates with developers.  So not being a designer I can still develop a decent UI.</p>
+
+<h2>The downside</h2>
+
+<p>First the downside, it doesn't support IE lower then 8 and only partially supports IE8.  That isn't a huge issue for me, but it does make it difficult to use commercially.  Other then that I don't see any issues.</p>
+
+<h2>The grid</h2>
+
+<p>Foundation uses a 12 column grid system to control the layout of elements.  12 is great measure because it divides by 2, 3, 4, and 6.  It also supports the nesting of grid rows within columns.</p>
+
+<h3>Large / Medium / Small</h3>
+
+<p>When defining columns you can give it a span by adding the column count like "large-9".  Just so long as counts add to 12 everything works.  But what is awesome is that each column can be different based on screen size.</p>
+
+<p>```html</p>
+
+<div class="small-6 medium-7 large-9"></div>
+
+
+<p>```</p>
+
+<p>This causes the div to be 6 columns when the screen is small, 7 for medium screens, and 9 for large screens.</p>
+
+<h3>Push / Pull</h3>
+
+<p>Add "push-X" cause a column to pad left by the number of columns.  "small-9 push-3" means the column is 9 wide and moved over by 3 columns, basically making it the last column even if in the html it is first.</p>
+
+<p>"pull-X" does the opposite and moves a column to the right.</p>
+
+<p>```html</p>
+
+<div class="small-9 push-3">Last on screen, first in HTML.</div>
+
+
+<div class="small-3 pull-9">First on screen, last in HTML.</div>
+
+
+<p>```</p>
+
+<h3>Show / Hide</h3>
+
+<p>Adding "show-for-X" will cause the div to be hidden unless the screen is the correct size.  There is a "hide-for-X" as well.</p>
+
+<p>```html</p>
+
+<div class="show-for-small">Shown only if small</div>
+
+
+<p>```</p>
+
+<h2>Semantic HTML</h2>
+
+<p>Foundation uses semantic HTML in order achieve a responsive design.  And hence why IE7 and below are not supported and IE8 is only partially supported.  But semantic HTML plays very well with the mobile web and makes the HTML easier to code and maintain.</p>
+
+<h2>The Widgets</h2>
+
+<p>Along with the opinions come standardized UI widgets.  It isn't on the same level as a GUI toolkit like ExtJS, but all the basic HTML behaviors are there plus a lot of other nice items.</p>
+
+<h3>Navigation</h3>
+
+<p>A "nav" element acts as a standard menu with dropdowns on a desktop.  In a mobile browser it becomes a set of clickable links that sweep left.</p>
+
+<p>```html
+<nav class="top-bar">
+  <ul class="title-area"></p>
+
+<pre><code>&lt;!-- Title Area --&gt;
+&lt;li class="name"&gt;
+  &lt;h1&gt;&lt;a href="#"&gt;Top Bar Title &lt;/a&gt;&lt;/h1&gt;
+&lt;/li&gt;
+&lt;!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone --&gt;
+&lt;li class="toggle-topbar menu-icon"&gt;&lt;a href="#"&gt;&lt;span&gt;Menu&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+</code></pre>
+
+<p>  </ul></p>
+
+<p>  <section class="top-bar-section"></p>
+
+<pre><code>&lt;!-- Left Nav Section --&gt;
+&lt;ul class="left"&gt;
+  &lt;li class="active"&gt;&lt;a href="#"&gt;Main Item 1&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="divider"&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>  </section>
+</nav>
+```</p>
+
+<h3>Panels / Flash</h3>
+
+<p>These can be used to display a "block" of text.  They have some standard highlights like "alert" which makes them good for flash messages.</p>
+
+<p>```html</p>
+
+<div class="panel">
+  <!-- Content here -->
+</div>
+
+
+
+
+<div data-alert class="alert-box">
+  <!-- Your content goes here -->
+  <a href="#" class="close">&times;</a>
+</div>
+
+
+<p>```</p>
+
+<h3>Joyride</h3>
+
+<p>A joyride lets you highlight elements on the page with some descriptive text.  It is as simple creating a unordered list with the class "joyride-list".</p>
+
+<h3>And many more</h3>
+
+<p>Look at the <a href="http://foundation.zurb.com/docs/components/kitchen-sink.html">kitchen sink</a> for a list of all the widgets that you get.</p>
+]]></content>
+  </entry>
+  
+</feed>

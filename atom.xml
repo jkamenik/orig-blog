@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-19T23:17:27-04:00</updated>
+  <updated>2013-07-28T20:18:44-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,147 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Foundation]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/07/24/foundation/"/>
+    <updated>2013-07-24T20:34:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/07/24/foundation</id>
+    <content type="html"><![CDATA[<p><a href="http://foundation.zurb.com/">Foundation</a> is a UI library which aims to simplify design by starting with a responsive library.  It is very similar to Twitter Bootstrap, but since it uses SCSS it should fit better within Rails.</p>
+
+<p>The demo for what I have done is <a href="http://jkamenik.github.io/waterfall-foundation">here</a></p>
+
+<!-- more -->
+
+
+<p>It would be accurate to say that I have a little crush on this framework.  In my day to day I have to deal with Drupal Designers.  They are not bad people to be sure, and the designs they come up with are great.  But there is no structure to what they provide.  They are painting using waterfall colors on a still pond.  The stuff they come up with is amazing, but if you do anything but look at it all is lost.</p>
+
+<p>Foundation is an apt name because it offer an underlying structure to design.  It has opinions, but as a Rails guy I am used to that.  More importantly the opinions are those of designers, but with a structure that resonates with developers.  So not being a designer I can still develop a decent UI.</p>
+
+<h2>The downside</h2>
+
+<p>First the downside, it doesn&#8217;t support IE lower then 8 and only partially supports IE8.  That isn&#8217;t a huge issue for me, but it does make it difficult to use commercially.  Other then that I don&#8217;t see any issues.</p>
+
+<h2>The grid</h2>
+
+<p>Foundation uses a 12 column grid system to control the layout of elements.  12 is great measure because it divides by 2, 3, 4, and 6.  It also supports the nesting of grid rows within columns.</p>
+
+<h3>Large / Medium / Small</h3>
+
+<p>When defining columns you can give it a span by adding the column count like &#8220;large-9&#8221;.  Just so long as counts add to 12 everything works.  But what is awesome is that each column can be different based on screen size.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-6 medium-7 large-9&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This causes the div to be 6 columns when the screen is small, 7 for medium screens, and 9 for large screens.</p>
+
+<h3>Push / Pull</h3>
+
+<p>Add &#8220;push-X&#8221; cause a column to pad left by the number of columns.  &#8220;small-9 push-3&#8221; means the column is 9 wide and moved over by 3 columns, basically making it the last column even if in the html it is first.</p>
+
+<p>&#8220;pull-X&#8221; does the opposite and moves a column to the right.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-9 push-3&quot;</span><span class="nt">&gt;</span>Last on screen, first in HTML.<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-3 pull-9&quot;</span><span class="nt">&gt;</span>First on screen, last in HTML.<span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Show / Hide</h3>
+
+<p>Adding &#8220;show-for-X&#8221; will cause the div to be hidden unless the screen is the correct size.  There is a &#8220;hide-for-X&#8221; as well.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;show-for-small&quot;</span><span class="nt">&gt;</span>Shown only if small<span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Semantic HTML</h2>
+
+<p>Foundation uses semantic HTML in order achieve a responsive design.  And hence why IE7 and below are not supported and IE8 is only partially supported.  But semantic HTML plays very well with the mobile web and makes the HTML easier to code and maintain.</p>
+
+<h2>The Widgets</h2>
+
+<p>Along with the opinions come standardized UI widgets.  It isn&#8217;t on the same level as a GUI toolkit like ExtJS, but all the basic HTML behaviors are there plus a lot of other nice items.</p>
+
+<h3>Navigation</h3>
+
+<p>A &#8220;nav&#8221; element acts as a standard menu with dropdowns on a desktop.  In a mobile browser it becomes a set of clickable links that sweep left.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;top-bar&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;title-area&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- Title Area --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Top Bar Title <span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- Remove the class &quot;menu-icon&quot; to get rid of menu icon. Take out &quot;Menu&quot; to just have icon alone --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;toggle-topbar menu-icon&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;span&gt;</span>Menu<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">&quot;top-bar-section&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- Left Nav Section --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;left&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Main Item 1<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;divider&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/section&gt;</span>
+</span><span class='line'><span class="nt">&lt;/nav&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Panels / Flash</h3>
+
+<p>These can be used to display a &#8220;block&#8221; of text.  They have some standard highlights like &#8220;alert&#8221; which makes them good for flash messages.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!-- Content here --&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">data-alert</span> <span class="na">class=</span><span class="s">&quot;alert-box&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!-- Your content goes here --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">class=</span><span class="s">&quot;close&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;times;</span><span class="nt">&lt;/a&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Joyride</h3>
+
+<p>A joyride lets you highlight elements on the page with some descriptive text.  It is as simple creating a unordered list with the class &#8220;joyride-list&#8221;.</p>
+
+<h3>And many more</h3>
+
+<p>Look at the <a href="http://foundation.zurb.com/docs/components/kitchen-sink.html">kitchen sink</a> for a list of all the widgets that you get.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopress TOC]]></title>
@@ -2001,245 +2142,6 @@ git> git stash pop
 <li><a href="http://www.biostat.jhsph.edu/~rpeng/biostat776/workflow.html">GIT <-> SVN workflow</a></li>
 <li><a href="http://www.viget.com/extend/effectively-using-git-with-subversion/">Effectively using GIT with SVN</a></li>
 </ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Learning Selenium]]></title>
-    <link href="http://jkamenik.github.com/blog/2010/11/18/learning-selenium/"/>
-    <updated>2010-11-18T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2010/11/18/learning-selenium</id>
-    <content type="html"><![CDATA[<h2>Background</h2>
-
-<p>My basic need is to find a platform where I can test FF, IE, and Safari on Windows, Linux, and OS X.  I use OS X as my platform, and Safari or Webkit as my environment.  I don&#8217;t like Windows or IE.  Linux is OK, but I like OS X because it just works the way I want.  And I find FF to be slow, and Firebug which is needed to debug we pages causes rendering changes and timing issues (most notably causing FF to crash).</p>
-
-<!--more-->
-
-
-<p>Ideally I want the testing environment:</p>
-
-<ol>
-<li>To be developed in Safari on OS X</li>
-<li>To be able to test both internal libraries and rendered UI</li>
-<li>To use unit tests to test internal libraries</li>
-<li>To use interactive tests to test rendered UI</li>
-<li>To use the unit/interactive tests as regression system moving forward</li>
-<li>To write the tests once on my browser of choice</li>
-<li>To run the tests on all combinations of browser and platform.</li>
-<li>To not be bogged down by the testing framework</li>
-<li>To be free, or very cheap</li>
-</ol>
-
-
-<p>From my research it looked like Selenium did basically exactly what I needed. And unfortunately was the only real option.  There were plenty of options for taking screen shots of public sites (which mine isn&#8217;t, yet) and comparing those between browsers.  And there are several options for unit testing javascript, but only Selenium did both and could be run on my own hardware.</p>
-
-<h2>Implementation</h2>
-
-<p>From my reading it looked like I wanted to use the IDE to create the tests, and remote controls to run the browsers.  Eventually I need to scale to Selenium Grid, but that is for later discussion.</p>
-
-<h3>Test code</h3>
-
-<p>This is the sample file that I created to test.</p>
-
-<div><script src='https://gist.github.com/1151478.js?file=code.html'></script>
-<noscript><pre><code>&lt;html&gt;
-&lt;body&gt;
-&lt;script&gt;
-Namespace = {
-  test: function(item){
-    return item == true;
-  }
-};
-
-function String(item){
-  if(!item.push &amp;&amp; typeof(item) === 'object'){
-    return item.name || '';
-  }
-  return ''+item; //yup this is faster then toString
-}
-
-function Int(item){
-  return parseInt(item,10);
-}
-
-function Array(item){
-  var type = typeof(item);
-
-  if(type === 'string'){
-    return item.split(&quot;\n&quot;);
-  } else if(type === 'object'){
-    if(item.push &amp;&amp; item.length &amp;&amp; item.concat){
-      return item;
-    }
-  }
-  return [item];
-}
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre></noscript></div>
-
-
-<h3>Using the IDE</h3>
-
-<p>It took a long time to understand this tool, since I had no background in Selenium.  The basic premiss is that each file is a single test case, which is a set of tests.  Each test is a grouping of three items: the action, the target, and the expected result.  It natively creates a 3 column HTML table, which it can also run, but personal preference is that use the IDE to export the basic test into a different language.</p>
-
-<p>I am a rails developer, and am familiar with rspec so I use the IDE to run the tests to make sure they work, but then I transfer it to rspec since it is a more expressive test framework.  The downside is that you have to use a Remote Control to run the test, which adds an extra level of complications.  We will get to the Remote Control later.</p>
-
-<p>A basic HTML test looks like this:</p>
-
-<div><script src='https://gist.github.com/1151478.js?file=test.html'></script>
-<noscript><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
-&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;&gt;
-&lt;head profile=&quot;http://selenium-ide.openqa.org/profiles/test-case&quot;&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
-&lt;link rel=&quot;selenium.base&quot; href=&quot;file:///Users/jkamenik/Desktop/sel_test.html&quot; /&gt;
-&lt;title&gt;Unit Testing&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;table cellpadding=&quot;1&quot; cellspacing=&quot;1&quot; border=&quot;1&quot;&gt;
-&lt;thead&gt;
-&lt;tr&gt;&lt;td rowspan=&quot;1&quot; colspan=&quot;3&quot;&gt;Unit Testing&lt;/td&gt;&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
- &lt;td&gt;open&lt;/td&gt;
- &lt;td&gt;file:///Users/jkamenik/Desktop/selenium/sel_test.html&lt;/td&gt;
- &lt;td&gt;test&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
- &lt;td&gt;verifyEval&lt;/td&gt;
- &lt;td&gt;this.browserbot.getUserWindow().Int(1)&lt;/td&gt;
- &lt;td&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
- &lt;td&gt;verifyEval&lt;/td&gt;
- &lt;td&gt;typeof(this.browserbot.getUserWindow().Int(1))&lt;/td&gt;
- &lt;td&gt;number&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre></noscript></div>
-
-
-<p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
-
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fbb991d6558></p>
-
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fbb991d5f40></p>
-
-<h2>Using RSpec</h2>
-
-<p>The IDE is a great way to test scripts live, but for any programmer it is going to be easier to use a testing framework doing it programmatically.  As a rails guy I prefer RSpec so that is what I use.</p>
-
-<h3>Installing</h3>
-
-<p>This package requires ruby-gems, rspec, and selenium-client.  I am going to assume you have ruby-gems installed already.  The others are installed like this:</p>
-
-<div><script src='https://gist.github.com/1151478.js?file=install.sh'></script>
-<noscript><pre><code>sudo gem install rspec 
-sudo gem install selenium-client</code></pre></noscript></div>
-
-
-<h3>Converting</h3>
-
-<p>When using Rspec the only real thing to remember is that there are no assert<em> or verify</em> methods.  The reason is that Rspec itself is a testing framework so it will have it own version of assert and verify (in this case should).</p>
-
-<p>The IDE has a great feature in that it converts the HTML test into a rspec test for you.  It isn&#8217;t a great format, but it is better then nothing and is a good place to start.</p>
-
-<div><script src='https://gist.github.com/1151478.js?file=selenium.rb'></script>
-<noscript><pre><code>require &quot;rubygems&quot; 
-gem &quot;rspec&quot; 
-gem &quot;selenium-client&quot; 
-require &quot;selenium/client&quot; 
-require &quot;selenium/rspec/spec_helper&quot; 
-require &quot;spec/test/unit&quot; 
-
-describe &quot;array_test&quot; do 
-attr_reader :selenium_driver 
-alias :page :selenium_driver 
-
-before(:all) do 
-  @verification_errors = [] 
-  @selenium_driver = Selenium::Client::Driver.new \ 
-    :host =&gt; &quot;localhost&quot;, 
-    :port =&gt; 4444, 
-    :browser =&gt; &quot;*chrome&quot;, 
-    :url =&gt; &quot;file:///Users/user/Desktop/selenium&quot;, 
-    :timeout_in_second =&gt; 60 
-end 
-
-before(:each) do 
-  @selenium_driver.start_new_browser_session 
-end 
-
-append_after(:each) do 
-  @selenium_driver.close_current_browser_session 
-  @verification_errors.should == [] 
-end 
-
-it &quot;test_array_test&quot; do 
-  page.open &quot;file:///Users/jkamenik/Desktop/selenium/index.html&quot; 
-
-  begin 
-    (&quot;1&quot;).should == page.get_eval(&quot;this.browserbot.getUserWindow().Array([1])&quot;) 
-  rescue ExpectationNotMetError 
-    @verification_errors &lt;&lt; $! 
-  end
-
-  begin 
-    (&quot;object&quot;).should == page.get_eval(&quot;typeof(this.browserbot.getUserWindow().Array(1))&quot;) 
-  rescue ExpectationNotMetError 
-    @verification_errors &lt;&lt; $! 
-  end 
-end 
-end
-</code></pre></noscript></div>
-
-
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fbb990e4168></p>
-
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fbb990e3b50></p>
-
-<h3>Remote Controls</h3>
-
-<p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
-
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fbb990e3538></p>
-
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fbb990e2f20></p>
-
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fbb990e2908></p>
-
-<h3>Putting it all together</h3>
-
-<p>By default RSpec provides no runner code and the code the IDE produces is not standalone.  This is not a problem since installing RSpec into a rails app installs script/spec.  I have copied the runner code here so make it easier.</p>
-
-<div><script src='https://gist.github.com/1151478.js?file=runner.rb'></script>
-<noscript><pre><code>#!/usr/bin/env ruby 
-if ARGV.any? {|arg| %w[--drb -X --generate-options -G --help -h --version -v].include?(arg)} 
-  require 'rubygems' unless ENV['NO_RUBYGEMS'] 
-end 
-require 'spec/autorun' 
-exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
-
-
-<p>I am going to assume the RSpec runner code is called spec and the test file is called test.rb.  To run this test from the command line do the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ruby</span> <span class="n">spec</span> <span class="nb">test</span><span class="o">.</span><span class="n">rb</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Assuming you followed all the steps the test should have opened Firefox, executed a page, run the tests, closed Firefox, and returned the results.  Now you can add more tests and have Selenium execute them.</p>
-
-<h2>Related Research</h2>
-
-<ol>
-<li>Using Selenium Grid</li>
-<li>Using Chrome, or IE</li>
-<li>Using a Grid to run the same test in all browsers on all OSs</li>
-</ol>
 
 ]]></content>
   </entry>
