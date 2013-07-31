@@ -4,7 +4,7 @@
   <title><![CDATA[Category: UI | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/ui/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-28T20:18:44-04:00</updated>
+  <updated>2013-07-30T20:55:06-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -140,6 +140,29 @@
 <h3>Joyride</h3>
 
 <p>A joyride lets you highlight elements on the page with some descriptive text.  It is as simple creating a unordered list with the class "joyride-list".</p>
+
+<p>```html</p>
+
+<ol class="joyride-list" data-joyride>
+  <li data-id="firstStop" data-text="Next">
+    <p>Hello and welcome to the Joyride documentation page.</p>
+  </li>
+  <li data-id="numero1" data-class="custom so-awesome" data-text="Next">
+    <h4>Stop #1</h4>
+    <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
+  </li>
+  <li data-id="numero2" data-button="Next" data-options="tipLocation:top;tipAnimation:fade">
+    <h4>Stop #2</h4>
+    <p>Get the details right by styling Joyride with a custom stylesheet!</p>
+  </li>
+  <li data-button="Next">
+    <h4>Stop #4</h4>
+    <p>It works as a modal too!</p>
+  </li>
+</ol>
+
+
+<p>```</p>
 
 <h3>And many more</h3>
 

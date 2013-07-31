@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-28T20:18:44-04:00</updated>
+  <updated>2013-07-30T20:55:06-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,213 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Screenplays]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/07/28/screenplays/"/>
+    <updated>2013-07-28T21:09:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/07/28/screenplays</id>
+    <content type="html"><![CDATA[<p>So part of my job has been to give screencasts of some of the projects I have been working on.  Having a Mac I can use iMovie to pretty much do everything, but I struggled with the structure and timing of the screencasts.</p>
+
+<p>The issue was that I know pretty much everything about the feature I implemented, so I would just go at it.  I would often get confused, start over, or go off on a tangent.  By the end everything took longer then it should, and wasn&#8217;t as good as it should have been.  Over all very frustrating.</p>
+
+<p>I don&#8217;t know why I didn&#8217;t think about this sooner and why this isn&#8217;t the first thing people tell when you start doing screencasts, but start with a screenplay.  The movie industry has decades of experience and they start each movie with a pitch and a screenplay.</p>
+
+<!-- more -->
+
+
+<p>Think of a screenplay like a wireframe for your video.  Everything about them is about making things simple to understand.  Below is a simplified version of <a href="http://2012.scriptfrenzy.org/howtoformatascreenplay">the screenplay format</a> applied specifically to screencasts.</p>
+
+<p>I have a sample Google doc file <a href="https://docs.google.com/document/d/1tstVIrAOQlfjjttxyjK_igDmrrIFf4IYuHhNJQljOQY/edit?usp=sharing">here</a>.</p>
+
+<h2>Page layout</h2>
+
+<ol>
+<li>Page size
+
+<ol>
+<li>8.5&#8221; x 11&#8221;</li>
+</ol>
+</li>
+<li>Margins
+
+<ol>
+<li>Left: 1.5 in</li>
+<li>Top/Bottom/Right: 1 in</li>
+</ol>
+</li>
+<li>Font
+
+<ol>
+<li>Courier</li>
+<li>12 point</li>
+<li>no bold</li>
+<li>no italics</li>
+</ol>
+</li>
+<li>Single space between
+
+<ol>
+<li>Character name and dialog</li>
+<li>Character name and parenthetical</li>
+<li>Parenthetical and dialog</li>
+</ol>
+</li>
+<li>Double space between
+
+<ol>
+<li>everything else</li>
+</ol>
+</li>
+</ol>
+
+
+<h2>Structure</h2>
+
+<h3>Title page</h3>
+
+<ol>
+<li>Title of the script
+
+<ol>
+<li>Center of the page</li>
+<li>Left aligned</li>
+</ol>
+</li>
+<li>By line
+
+<ol>
+<li>Immediately after Title</li>
+</ol>
+</li>
+</ol>
+
+
+<h3>Slug line</h3>
+
+<ol>
+<li>All Caps</li>
+<li>Left aligned</li>
+<li>Describes the screen</li>
+<li>Separate parts with &#8220;-&#8221;</li>
+<li>For screencasts
+
+<ol>
+<li>omit the internal/external indicator (you are always in a computer)</li>
+<li>omit the time of day indictor</li>
+<li>Add a Website / Program indicator</li>
+<li>Add an off screen indicator (O.S.), this either needs to be prior to recording or will be removed post production</li>
+</ol>
+</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GOOGLE PLUS - LOGIN - OFF SCREEN
+</span><span class='line'>
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>GOOGLE PLUS - ADD FRIEND TO CIRCLE</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Action</h3>
+
+<ol>
+<li>Optional</li>
+<li>Immediately after Slug line</li>
+<li>Describes setup of screen (work performed off screen, prior to recording)</li>
+<li>Left aligned</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GOOGLE PLUS - ADD A FRIEND TO CIRCLE
+</span><span class='line'>
+</span><span class='line'>Two accounts exist.  Account 1 is logged in.
+</span><span class='line'>
+</span><span class='line'>Search for account 2.</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Character name</h3>
+
+<ol>
+<li>Above parenthetical or dialog - Anytime the person speaking changes</li>
+<li>All Caps</li>
+<li>4 tabs in (2&#8221;)</li>
+<li>For screencasts
+
+<ol>
+<li>Use PRESENTER X (omit the X if only one presenter)</li>
+</ol>
+</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>    JOHN
+</span><span class='line'>    
+</span><span class='line'>  (doing something)
+</span><span class='line'>  
+</span><span class='line'>And talking
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    JANE
+</span><span class='line'>    
+</span><span class='line'>Just talking</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Parenthetical</h3>
+
+<ol>
+<li>Immediately after character name</li>
+<li>Used to show actions performed while talking</li>
+<li>3 tabs in (1.5&#8221;)</li>
+<li>For screencasts
+
+<ol>
+<li>Use generic terms like &#8220;highlight&#8221;, and &#8220;submit form&#8221; instead of very specific &#8220;move mouse to&#8221; and &#8220;click submit button&#8221;</li>
+</ol>
+</li>
+</ol>
+
+
+<h3>Dialog</h3>
+
+<ol>
+<li>Immediately after character name or parenthetical</li>
+<li>What the character says</li>
+<li>No quotes</li>
+<li>Present tense</li>
+<li>Only explain what isn&#8217;t covered by the video
+
+<ol>
+<li>For example it is fine to use Jargon like &#8220;goto google&#8221; because in the video you will be opening the browser, going to the URL bar, and typing in &#8220;http://google.com&#8221;.</li>
+</ol>
+</li>
+<li>2 tabs in (1&#8221;)</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Foundation]]></title>
@@ -147,6 +354,43 @@
 <h3>Joyride</h3>
 
 <p>A joyride lets you highlight elements on the page with some descriptive text.  It is as simple creating a unordered list with the class &#8220;joyride-list&#8221;.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;ol</span> <span class="na">class=</span><span class="s">&quot;joyride-list&quot;</span> <span class="na">data-joyride</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;firstStop&quot;</span> <span class="na">data-text=</span><span class="s">&quot;Next&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;p&gt;</span>Hello and welcome to the Joyride documentation page.<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;numero1&quot;</span> <span class="na">data-class=</span><span class="s">&quot;custom so-awesome&quot;</span> <span class="na">data-text=</span><span class="s">&quot;Next&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h4&gt;</span>Stop #1<span class="nt">&lt;/h4&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;p&gt;</span>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;numero2&quot;</span> <span class="na">data-button=</span><span class="s">&quot;Next&quot;</span> <span class="na">data-options=</span><span class="s">&quot;tipLocation:top;tipAnimation:fade&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h4&gt;</span>Stop #2<span class="nt">&lt;/h4&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;p&gt;</span>Get the details right by styling Joyride with a custom stylesheet!<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-button=</span><span class="s">&quot;Next&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h4&gt;</span>Stop #4<span class="nt">&lt;/h4&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;p&gt;</span>It works as a modal too!<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ol&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>And many more</h3>
 
@@ -1922,227 +2166,6 @@ YAHOO.tool.TestRunner.add(new YAHOO.tool.TestCase({
 <p>Nobody is comfortable being scrutinized. Do not set up your office so that you are looking into your employees&#8217; cubes, and don&#8217;t wonder around aimlessly, and never under any circumstances hover. By doing this you are showing your employees that the most important thing is to look busy (a function of the keyboard and finger), not to solve problems (a function of the brain). At the point where your employees feel scrutinized they will work just hard enough to not get fired, and will partake in CYA games.</p>
 
 <p>The best example is Office Space the movie. Little more needs to be said.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[GIT with SVN]]></title>
-    <link href="http://jkamenik.github.com/blog/2010/12/04/git-with-svn/"/>
-    <updated>2010-12-04T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2010/12/04/git-with-svn</id>
-    <content type="html"><![CDATA[<p>Normally, I would just use GIT without a bridge to another control system, but many companies use SVN.  There are just so many benefits to using GIT that, for me, I am going to use it if there is a bridge to repository type the company uses.  I certainly don&#8217;t hate SVN or CVS or Perforce, but GIT allows me to work the way that I know I am most productive; which is commit early, commit often.</p>
-
-<p>What I mean by commit early, commit often is that I commit even if I only have part of the solution. As I find the other parts of the solution I commit those as well. That way when I am 2 or 3 days into a fix I already have the commit messages saved in GIT, so I don&#8217;t have to remember what I did for those 2 or 3 days. When the solution is shippable only then do I push it up to the company&#8217;s repository.</p>
-
-<!--more-->
-
-
-<h2>Benefits of GIT include:</h2>
-
-<ol>
-<li>Being able to share non production ready code (Peer to Peer)</li>
-<li>Being able to have many local branches</li>
-<li>Being able to logically group commits (via local branches) and push all at once</li>
-<li>Fantastic branch switching/merging
-
-<ol>
-<li>Rarely will you ever have to fix a merge conflict yourself</li>
-</ol>
-</li>
-<li>Rebase as well as merge
-
-<ol>
-<li>Rebase is SVNs style of linear commits</li>
-<li>Merge is non-linear and tries to keep commits sequentially ordered by date.  So if two branches are merged and both were actively worked on then the commits are intermixed.  (makes a lot more sense in practice then in writing)</li>
-</ol>
-</li>
-</ol>
-
-
-<p>With GIT&#8217;s power comes a little bit more complexity, and here I will detail the method that I have developed over months of fits and starts.  That way you can experience the benefits of using GIT for day to day work, but still use SVN when dealing with corporate.</p>
-
-<h2>Settings up the SVN Bridge</h2>
-
-<p>You can have GIT manage an entire SVN repository, branches and all. However, for GIT to do this it must checkout every revision of the SVN repo. This can be very painful when there are a lot of commits. Instead I recommend only managing a single branch starting a specific revision near HEAD. You will lose history older then that revision, but it does save a lot of time for large SVN repositories.</p>
-
-<p>For the below example I am going to assume we have a standard SVN repository at http://example.com/svn, the latest revision is 400, and the SVN username is test.</p>
-
-<p>Find the latest revision of the repository:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>svn log http://example.com/svn/trunk | head
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The latest revision will start with an &#8220;r&#8221; and be within the first 5 lines.</p>
-
-<p>Setting up a git repo:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git svn init --username<span class="o">=</span><span class="nb">test </span>http://example.com/svn/trunk dev
-</span><span class='line'>git svn fetch -r 400
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you have a local GIT repo in dev that is synced to SVN trunk at revision 400. And when you <code>git svn dcommit</code> the user <code>test</code> will be used.</p>
-
-<h2>Always work in a branch</h2>
-
-<p>In my company before anything is allowed to be checked into SVN it must go through a peer review.  In any given day I might work on 2 or 3 bugs/tasks.  For each, I create a GIT branch with the bug/task ID and work there.  When I am done I use <code>git log -p</code> to list the diffs that I submit for review. Then I move on to the next item, while the fix is being reviewed.  When the first bug/task is reviewed and accepted I jump back to master, rebase it, jump to the branch, rebase master, jump back to master and merge the branch, and finally svn dcommit everything.  After I mark the bug/task complete I also delete the branch. If the code is not accepted then I still have a branch where I can make the required corrections and repeat the process.</p>
-
-<p>It might sound complicated, but it really isn&#8217;t. The only reason for all this rebasing is so that GIT&#8217;s native merge tools deal with SVN merge conflicts. I am not sure why, but they are far better then what the SVN bridge can do, and will ultimately lead to few headaches for you.</p>
-
-<p>In code it looks like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git&gt; git svn rebase
-</span><span class='line'>git&gt; git checkout -b task1
-</span><span class='line'>... work on task 1
-</span><span class='line'>git&gt; git log -p -n X &gt; task1.diff
-</span><span class='line'>... create diff of all <span class="o">(</span>X<span class="o">)</span> changes needed <span class="k">for </span>task1
-</span><span class='line'>... email the diff <span class="k">for </span>review
-</span><span class='line'>git&gt; git checkout master
-</span><span class='line'>git&gt; git svn rebase
-</span><span class='line'>git&gt; git checkout -b task2
-</span><span class='line'>... work on task 2
-</span><span class='line'>... when task 1 is approved commit what you have <span class="k">for </span>task 2 and dcommit task1
-</span><span class='line'>... <span class="k">return </span>to task 2 when task 1 is committed
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This style also works well if your boss comes over at the 11th hour and assigns you a new emergency assignment.  When you are done with the emergency switching gears is as easy as switching branches.</p>
-
-<h2>DCommitting your changes</h2>
-
-<p>As states above I use the checkout, rebase, checkout, rebase, checkout, merge, dcommit style.  This seems cumbersome until you understand the purpose.</p>
-
-<p>From any branch always checkout into master.  This allows master to stay pure of your changes and makes its less likely that git svn will fail.</p>
-
-<p>Once master is up-to-date checkout the branch again and rebase the master changes into the branch.  Fixing any rebase conflicts there might be.  By fixing them on the branch we keep master clean so we are using git&#8217;s rebase/merge capabilities, not the SVN bridge&#8217;s.  There are times this step can be skipped, but once you have to deal with your first rebase conflict from the bridge you will wish you had branched.</p>
-
-<p>Now that the branch holds the latest code to be dcommitted to SVN: checkout master, merge the branch, and dcommit master.  You could rebase the changes from the branch if you prefer, it really makes no difference because your changes are on top of SVN now either way.  Once done all of master&#8217;s log messages will be rewritten to what is in SVN.</p>
-
-<p>All together it looks like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git&gt; git checkout master
-</span><span class='line'>git&gt; git svn rebase
-</span><span class='line'>git&gt; git checkout task1
-</span><span class='line'>git&gt; git rebase master
-</span><span class='line'>... SVN needs your changes to be rebased so rebase master
-</span><span class='line'>... by rebasing onto to a branch it is easier to deal with rebase failures
-</span><span class='line'>... fix any rebase issues
-</span><span class='line'>git&gt; git checkout master
-</span><span class='line'>git&gt; git merge task1
-</span><span class='line'>... could merge or rebase, doesn<span class="s1">&#39;t matter here</span>
-</span><span class='line'><span class="s1">git&gt; git svn dcommit</span>
-</span><span class='line'><span class="s1">... mark the task closed</span>
-</span><span class='line'><span class="s1">git&gt; git brach -D task1</span>
-</span><span class='line'><span class="s1">... svn doesn&#39;</span>t always mark the branch merged properly so use -D instead of -d
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Pro Tips</h2>
-
-<h3>Different user names</h3>
-
-<p>Use a different username for SVN and GIT.  That way it is easy to see in the log what is committed to SVN since the bridge will rewrite the commit log from what SVN says.</p>
-
-<ul>
-<li>For SVN I use jkamenik.</li>
-<li>For GIT I use jkamenik at gmail dot com.</li>
-</ul>
-
-
-<p>Commits that are in SVN also have the SVN revision number in the log message, but I find it easier to use usernames since it is at the top of the log message.</p>
-
-<h3>Setup Aliases</h3>
-
-<p>Git allows more commands to be added via aliases. An alias can be a shortening of a git command: <code>st = status</code>. Or it can be a shell command that git will execute <code>test = !sh -c 'echo "it works!"'</code> (notice the leading !).</p>
-
-<p>Here is the alias part of my <code>~/.gitconfig</code> file looks like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span><span class="nb">alias</span><span class="o">]</span>
-</span><span class='line'>  <span class="c"># Old SVN aliases</span>
-</span><span class='line'>  <span class="nv">ci</span> <span class="o">=</span> commit
-</span><span class='line'>  <span class="nv">co</span> <span class="o">=</span> checkout
-</span><span class='line'>  <span class="nv">st</span> <span class="o">=</span> status
-</span><span class='line'>  <span class="nv">stat</span> <span class="o">=</span> status
-</span><span class='line'>  <span class="c"># stuff I find useful</span>
-</span><span class='line'>  <span class="nv">br</span> <span class="o">=</span> branch
-</span><span class='line'>  <span class="nv">df</span> <span class="o">=</span> diff
-</span><span class='line'>  rm-all <span class="o">=</span> !git st | grep deleted | awk <span class="s1">&#39;{print $3}&#39;</span> | xargs git rm
-</span><span class='line'>  add-all <span class="o">=</span> !git st | grep modified | awk <span class="s1">&#39;{print $3}&#39;</span> | xargs git add
-</span><span class='line'>  st-br <span class="o">=</span> <span class="s2">&quot;!f(){ git co master &amp;&amp; git svn rebase &amp;&amp; git co -b $1 }; `f`&quot;</span>
-</span><span class='line'>  up-br <span class="o">=</span> <span class="s2">&quot;!f(){ git co master &amp;&amp; git svn rebase &amp;&amp; git co $1 }; `f`&quot;</span>
-</span><span class='line'>  co-br <span class="o">=</span> <span class="s2">&quot;!f(){ git up-br $1 &amp;&amp; git co master &amp;&amp; git merge $1 &amp;&amp; git svn dcommit }; `f`&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice that <code>st-br</code>, <code>up-br</code>, and <code>co-br</code> are basically all the set of commands I noted above in single command style.</p>
-
-<h3>Stashing changes</h3>
-
-<p>The stash is a hidden place that git can keep changes that are not yet ready to commit.  This is very useful if you get switched to another task and really don&#8217;t have time to fully vet a change on the current task.  You can stash the outstanding change and later replay them.</p>
-
-<p><code>git stash</code> keeps a queue of changes so you can stash more then one thing, but you can only replay them top down.</p>
-
-<p>&#8220;` bash
-git> git stash
-&#8230; hides all modified files
-git> git stash list
-&#8230; lists all stashes
-git> git stash apply
-&#8230; applies the top stash, but does not remove it
-git> git stash pop
-&#8230; applies the top stash, and remove it</p>
-
-<h2>Resources</h2>
-
-<ul>
-<li><a href="http://www.biostat.jhsph.edu/~rpeng/biostat776/workflow.html">GIT <-> SVN workflow</a></li>
-<li><a href="http://www.viget.com/extend/effectively-using-git-with-subversion/">Effectively using GIT with SVN</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
