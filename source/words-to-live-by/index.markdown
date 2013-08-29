@@ -26,4 +26,10 @@ Obviously this literally means "don't hold rigidly to protocol or formal manners
 
 Some ceremony has a place.  I for instance like [Scrum](http://en.wikipedia.org/wiki/Scrum_(software_development)).  Here ceremony has a purpose.  A Scrum is 15 minutes in length regardless of team size, so to ensure everything runs smoothly ceremony must be defined.
 
-Other types of ceremony like "Not wearing white after labor day." or being required to wear slacks and a tie to an office and worthless.
+Other types of ceremony like "Not wearing white after labor day." or being required to wear slacks and a tie to an office are worthless; in my opinion.
+
+## You can take a horse to water, but you can't make them drink ##
+
+A slight modification that makes more sense to me: "You can take a boy to college, but you can't make him think."
+
+Basically, you can do a lot (or even everything) for something or somebody else, but there is a point where they need to decide to move forward.
