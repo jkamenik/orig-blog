@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Testing - Random Software Inklings</title>
+  <meta name="author" content="John T. Kamenik">
+
+  
+  <meta name="description" content="Testing Aug 1st, 2013 This page is about how I test. It is certainly not total correct, but I do welcome comments on ways to improve. Rules for &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jkamenik.github.com/testing/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Random Software Inklings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
+<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Random Software Inklings</a></h1>
+  
+    <h2>Random documentation of things I have learned.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jkamenik.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://jkamenik.github.com/Resume">Resume</a></li>
+  <li><a href="/knowledge">Knowledge</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Testing</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T19:52:00-04:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time></p>
+  </header>
+  
+  <p>This page is about how I test.  It is certainly not total correct, but I do welcome comments on ways to improve.</p>
+
+<h2>Rules for testing</h2>
+
+<p>I used to be one that believed that everything had to be tested.  I still believe that, but now I know that different things need to be tested differently.  I have come up with some guidelines that I generally use.</p>
+
+<ol>
+<li><p>The goal of testing is to know when something is &#8220;done&#8221;.</p></li>
+<li><p>Don&#8217;t test the functionality of gems, but do test the integration of a gem.</p></li>
+<li>If testing something is difficult then you designed the &#8220;thing&#8221; wrong.
+
+<ol>
+<li>Check for standard patters, or</li>
+<li>Drop to a lower level test.</li>
+</ol>
+</li>
+<li>Only stub things you own.
+
+<ol>
+<li>For things you don&#8217;t own, memoize (<a href="https://github.com/vcr/vcr">VCR</a> is good for http request memoization)</li>
+</ol>
+</li>
+<li>Don&#8217;t write code until there is a failing test</li>
+<li><a href="http://www.youtube.com/watch?v=T8J0j2xJFgQ">Coding &#8220;confidently&#8221;</a> can ease the test burden</li>
+<li>For a customer / Product manager requested features use Cucumber
+
+<ol>
+<li>Define the idea of the test ahead of time, and get buy-in before testing.</li>
+<li>Only write features of interest for the customer.
+
+<ol>
+<li>For feature that are a requirement, but not of interest for to your customers, use Rspec feature tests</li>
+</ol>
+</li>
+<li>Those high level phrases become your steps.</li>
+<li>If cucumber is confused then so will your customer.</li>
+</ol>
+</li>
+<li>For uninterested customers start with feature testing in Rspec
+
+<ol>
+<li>The same tools are used (capybara), but it is faster in both terms of time and in terms of coding</li>
+</ol>
+</li>
+</ol>
+
+
+<h3>Traversing tests</h3>
+
+<ol>
+<li>Start with integration/acceptance testing</li>
+<li>Each failed step is an opportunity to drill into a unit test</li>
+<li>Move down when tests failure no long talk about the code at hand</li>
+<li>When a test passes move sideways to another test in the same area.</li>
+<li>When all tests pass in an area move back up</li>
+<li>&#8220;Done&#8221; is when all acceptance tests pass</li>
+</ol>
+
+
+<h2>The Testing Stack</h2>
+
+<p>Everything here is based on a Ruby on Rails app.  Currently 3.x Rails.  4.x will likely change things</p>
+
+<ol>
+<li>Rspec</li>
+<li>Cucumber</li>
+<li>Capybara</li>
+<li>Capybara Webkit</li>
+<li>Factory Girl</li>
+<li>Timecop</li>
+<li>VCR</li>
+<li>Database cleaner</li>
+</ol>
+
+
+<h3>Rspec</h3>
+
+<p>Everyone has their opinions on testing.  I know MiniTest and use it when a project that I submit to uses it, but my projects use Rspec.</p>
+
+<h3>Cucumber</h3>
+
+<p>Ok, so let me just get it out there: Cucumber is evil.  Don&#8217;t get me wrong I like cucumber, but I have gotten myself into so much trouble using cucumber.  Granted the issue was that was using cucumber to write specs, but nothing in the cucumber world made it seems like that was a bad idea.</p>
+
+<h2>The debugging stack</h2>
+
+<p>As you are testing inevitably you will run into an error that tests can&#8217;t explain.  Here are the tools that I use.</p>
+
+<ol>
+<li>Pry Rails</li>
+<li>Better Errors</li>
+<li>Letter Opener</li>
+<li>Exception Notification</li>
+</ol>
+
+
+<h3>Why no debugger???</h3>
+
+<p>My experience with debuggers has always been that they are for programmers that don&#8217;t first test their code!  I have been coding for over a decade and find that debug print statements are more reliable and consistent, unless you working in assembly.  Even embedded systems with no file system have syslog clients.</p>
+
+<h3>Pry Rails</h3>
+
+<p>Basically just replaces <code>rails console</code> with <a href="https://github.com/pry/pry">Pry</a>.  Pry makes it easier and cleaner to drive into objects, but I always have to remember to only include it <code>development</code> and not <code>test</code>.</p>
+
+<h3>Better Errors</h3>
+
+<p>Replaces the standard error screen that is displayed when an exception is thrown with a better look screen.</p>
+
+<h3>Letter Opener</h3>
+
+<p>Opens email messages in a browser window.  This makes it easier to see what the end email is going to look like and it doesn&#8217;t involve an email server.</p>
+
+<h3>Exception Notification</h3>
+
+<p>This is a MUST have for production!  But it sends a full stack trace email if your app fails in production.  Now you will know about site failures and can debug them before you get a support ticket.</p>
+
+  
+    <footer>
+      <p class="meta">
+        
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T19:52:00-04:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/testing/index.html" data-via="jkamenik" data-counturl="http://jkamenik.github.com/testing/index.html" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/29/using-keynote-for-mockups/">Using Keynote for Mockups</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/28/screenplays/">Screenplays</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/24/foundation/">Foundation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/07/octopress-toc/">Octopress TOC</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/06/blog-changes/">Blog changes</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/francis/'>Francis (1)</a></li>
+<li class='category'><a href='/blog/categories/js/'>JS (1)</a></li>
+<li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
+<li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
+<li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
+<li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
+<li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
+<li class='category'><a href='/blog/categories/email/'>email (1)</a></li>
+<li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
+<li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (6)</a></li>
+<li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
+<li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/opinion/'>opinion (3)</a></li>
+<li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
+<li class='category'><a href='/blog/categories/planning/'>planning (1)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (4)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>ruby (1)</a></li>
+<li class='category'><a href='/blog/categories/screencast/'>screencast (1)</a></li>
+<li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (4)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui mockup (1)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Twitter</h1>
+    <a class="twitter-timeline" href="https://twitter.com/jkamenik" data-widget-id="354049262578982914">Tweets by @jkamenik</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jkamenik',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - John T. Kamenik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'randomsoftwareinklings';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/testing/index.html';
+        var disqus_url = 'http://jkamenik.github.com/testing/index.html';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        // Put a TOC right before the entry content.
+        generateTOC('Table of Contents');
+    });
+  </script>
+
+
+</body>
+</html>

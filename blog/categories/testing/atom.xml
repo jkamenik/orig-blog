@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-07-30T20:55:06-04:00</updated>
+  <updated>2013-08-29T08:58:13-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -510,9 +510,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fa201a36ab0></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fd7d3229c48></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fa201a363a8></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fd7d3228b18></p>
 
 <h2>Using RSpec</h2>
 
@@ -581,19 +581,19 @@ end
 </code></pre></noscript></div>
 </p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fa201a349b8></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fd7d3226e58></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fa201a34120></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fd7d32266b0></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fa201a33ab8></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fd7d3226048></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fa201a333b0></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fd7d34baa48></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fa201a32cd0></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fd7d34ba188></p>
 
 <h3>Putting it all together</h3>
 
