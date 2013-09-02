@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-08-29T08:58:13-04:00</updated>
+  <updated>2013-09-01T21:29:17-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Technical Debt Calculator]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/09/01/technical-debt-calculator/"/>
+    <updated>2013-09-01T20:40:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/09/01/technical-debt-calculator</id>
+    <content type="html"><![CDATA[<p>All projects have some amount of Technical Debt.  And for projects I manage I am tired of keeping that knowledge in my brain.  My idea, and an example of UI mocking, is to create a technical debt calculator which can store the choices made on a project and map how those choice interfere with other choices.</p>
+
+<p>The term Technical Debt refers to &#8220;any work that needs to be performed before a particular job can be complete.&#8221;  That is true, but I don&#8217;t like the wording.  Instead I am going to define it as &#8220;any choice that makes future progress more difficult or impossible&#8221;.</p>
+
+<p>A project is defined by the choices.  Good or bad, every choice adds debt that must be juggled.  In fact, when a person is &#8220;in the know&#8221; that is referring to the fact that they know most-if-not-all the technical debt of a given project.  I find those people to be useful as a well of knowledge, but not as forward thinkers.</p>
+
+<p>There is something about keeping all the Technical Debt knowledge that makes you adverse to change.  It isn&#8217;t technical debt that kills projects per se it is the keepers of technical debt that resist change that do.</p>
+
+<!-- more -->
+
+
+<p>My drive for this project is to not become a keeper-of-technical-debt on any project, and to communicate the debt clearly.  Often times when a project starts the time from talk to fully formed featured is hours or days.  1 - 3 years in and the same amount of effort is 1 to 2 days.  And on large projects that have taken several direct changes the time can be 1 to 2 weeks.  The only change being the number of previous choices.</p>
+
+<h2>The good choices</h2>
+
+<p>My calculator is meant only to track the bad choices or old choices.  There are some &#8220;good&#8221; choices that will slow forward progress, but ultimately prevent larger issues.  Here is a short list of something that will add time to the project but should NOT be considered technical debt:</p>
+
+<ol>
+<li>TDD/BDD</li>
+<li>Agile methods</li>
+<li>Using existing frameworks</li>
+<li>QA</li>
+<li>Code reviews</li>
+<li>Local builds</li>
+<li>Continuous integration</li>
+<li>Saying &#8220;no&#8221;</li>
+<li>Having confidence and a direction</li>
+</ol>
+
+
+<h2>Existing State</h2>
+
+<p>I spend a little bit of time with pen and paper taking notes and drawling prototypes.  In the future I will expand on these ideas, but for how here they are in their raw form.</p>
+
+<p><a href="http://jkamenik.github.com/images/tech-debt-calc/tech-debt-calc1.png">First set of designs</a></p>
+
+<p><a href="http://jkamenik.github.com/images/tech-debt-calc/tech-debt-calc2.png">Schema Notes</a></p>
+
+<p><a href="http://jkamenik.github.com/images/tech-debt-calc/tech-debt-calc3.png">First redesign</a></p>
+
+<p><a href="http://jkamenik.github.com/images/tech-debt-calc/tech-debt-calc4.png">First redesign cont.</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Keynote for Mockups]]></title>
@@ -2181,68 +2230,6 @@ YAHOO.tool.TestRunner.add(new YAHOO.tool.TestCase({
 <p>Though Selenium is more automated that comes at the cost of being more complicated then testing should be. If I were a team of programmers then sure setting up and maintaining Selenium Remote controls would be a small part of the overall effort, but since I am not a team of programmers I think it is overkill.</p>
 
 <p>What I really need is an easy to run, easy to write, repeatable, unit testing framework in JS. I do the leg work on pointing my various browsers at the html and reviewing the results. When things get big enough that I need to setup a continuous integration server, or I have a QA department, then I will give Selenium another go. For now YUI test is the way to go.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Dealing with Email overload]]></title>
-    <link href="http://jkamenik.github.com/blog/2010/12/12/dealing-with-email-overload/"/>
-    <updated>2010-12-12T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2010/12/12/dealing-with-email-overload</id>
-    <content type="html"><![CDATA[<p>This isn&#8217;t strictly software related, but a lot of us have to deal with the horror that is email. Email is not a good solution to any problem, but it is ubiquitous so it is used for all things: personal correspondence, commit tracking, defect notification, task notification, etc&#8230; Email is all to often used as a mechanism to pass-the-buck.</p>
-
-<p>The only way to deal with this email overload is to set boundaries on email usage. A lot of people will find these boundaries annoying, if not unworkable. Just stick with it and lead by example. Eventually, in a time of high stress, you will be able to get to important messages fast and they will be left floundering.</p>
-
-<!--more-->
-
-
-<h2>My results</h2>
-
-<p>I am putting the summary first in hopes that you might actually try some of these suggestions. On average I get 50 to 200 work related emails a day. In any given day (saturday and sunday included) I will need to respond to 5 to 10 of them. That means that I get between 40 and 195 junk emails that pass (and should pass) my junk mail filters.</p>
-
-<p>By focusing on making sure my inbox only includes import emails I have reduced my inbox to 3 to 5 message each check (and I check twice a day). On busy days I only ever check my inbox, relying on others to contact me via a different medium if they really need me. When there is a less busy day I go through the other inbox and deal with those messages.</p>
-
-<p>At the time I am writing this (on sunday) I have 1 email in my inbox and 91 emails in my other inbox that were all sent saturday. A quick read of the 1 email and I will have to spend 5 minutes reviewing code, but the rest can wait until monday.</p>
-
-<h2>Use the right messaging system</h2>
-
-<p>Use email for messages that do not need an immediate response. Since there is no message size limit, make sure you use the most of it. Write emails that are well detailed and specific. If at any point a message can be answered with &#8220;Ok&#8221; or some other monosyllabic word then email was not the correct choice.</p>
-
-<p>Use Instant Messages (IM,IRC,etc&#8230;) for conversations that need semi immediate responses, and a possible record. Many IM packages can log conversations for later viewing, which is useful when you forget things. There are message length and formatting restrictions so this forces the messages to be brief and specific.</p>
-
-<p>Use Phone, Skype, or face to face contact when a response is needed immediately.</p>
-
-<p>Use Twitter, or some other global message posting service to track commits, continuous integration fails, defects, etc&#8230;</p>
-
-<p>Use a wiki, or blog to track generic instructions or documentation.</p>
-
-<h2>Check email twice a day (only)</h2>
-
-<p>The easiest way to train people not to use email as a crutch is not use it as one yourself. Only check email twice a day, and give a concerted effort to reduce that to once a day within a month, and once a week within 6 months. Setup the other messaging systems so that email is used only for what it needs to be. And when people step out of line, correct them.</p>
-
-<p>Email should not be the first thing that you check in the morning, as you should not be working out of email. It should also not be the last thing you check as it will disrupt your already stressful commute/home life. Instead check email 2 hours after the start of the day, and 2 hours before the end of the day. If you work a 9-to-5 that means once at 11am and once at 3pm.</p>
-
-<p>The day you start doing this, tell the people that send you the most email and the ones that you will most affect by the change, and no one else. You are not trying to be sneaky, but if you blast an email to everyone then you are going to make it a big deal; which it is not. The others will learn over time.</p>
-
-<p>When someone tells you that you need to check your email and read their message do it, but only check their email, ignore all other messages.</p>
-
-<h2>Don&#8217;t use Inbox as an archive</h2>
-
-<p>Once you are finished reading an email, either deal with the email and delete it or archive it. Create a separate archive folder and move emails there if you need to save them. Your goal is aways to reduce the inbox to zero</p>
-
-<h2>Create an other inbox</h2>
-
-<p>Create a filter that will dump any messages where you are not the direct recipient into a different folder. This should be the first filter you create, but the last filter that is applied to any message. Create as many other filters and folders as you can to move useless messages round. The goal is to remove any message that you do not need to act on so that what is left is just what is important. The trash can is a good folder to dump things that are truly useless.</p>
-
-<h2>Use the server&#8217;s filtering mechanism</h2>
-
-<p>When possible have server do all the filtering that way you can use multiple email clients and will not be dependent on leaving an email client on. All Exchange servers and many online email services can do server filtering. When using Outlook, be careful, the ease of creating filters is sometimes offset by the fact that it lies about what filters can be saved to the server. Though harder, since MS didn&#8217;t spend much time on the server-side features of Exchange, it is better to build the filters on the server directly.</p>
-
-<h2>Reduce the inbox to zero (in one sitting)</h2>
-
-<p>The goal is always to reduce your inbox to zero. Once all the filters are in place, the only thing left to actually deal with all the important emails (at least that is the hope). When dealing with email decide if the email should be dealt with, deferred, or archived.</p>
-
-<p>If time is really an issue then find the messages to archive and defer first, and move them. That way what is left is just the stuff to deal with now.</p>
 ]]></content>
   </entry>
   
