@@ -32,4 +32,25 @@ Other types of ceremony like "Not wearing white after labor day." or being requi
 
 A slight modification that makes more sense to me: "You can take a boy to college, but you can't make him think."
 
-Basically, you can do a lot (or even everything) for something or somebody else, but there is a point where they need to decide to move forward.
+Basically, you can do a lot (or even everything) for something or somebody else, but there is a point where they need to decide to move forward on their own.
+
+## Do it for yourself/pride ##
+
+There is an old adage where a son asks his father "But why do you finish backside of the furniture?  No one ever sees it, no one would ever know."
+
+To which the father replies "I see it and I would know."
+
+Software is exactly like that!  Most of the time no one is ever going to see exactly what was done.  But it is still inappropriate to cut corners.
+
+## Do no harm ##
+
+Put another way "Broken gets fixed, sloppy lives forever."  Doing something haphazardly, for any reason, is wrong.  When you go to do anything it is your job to make sure that you are **NOT** doing something worse.
+
+In other words it is your job to make sure that you are designing things that are rock solid.
+
+## Always leave it better then you found it ##
+
+Open source (at least good open source) is built on the principle that you don't/can't know everything.  Share your source, get judged, and learn.  Source gets better because the person on the other is trying to make things better.
+
+Everyone should strive to make the code that they work with better.
+
