@@ -1,7 +1,9 @@
 ---
 layout: post
 title: "Francis Alexander Kamenik"
+subtitle: Updated
 date: 2012-12-02 17:20
+updated: 2013-09-20 12:00
 comments: true
 categories: 
   - fatherhood
@@ -86,7 +88,7 @@ In our case we had a general plan and almost nothing worked out as we wanted.  I
 
 There are many guesses as to why this is, but basically once born they sleep all day and are awake at night.  Francis was born in the middle of the day, and was nearly impossible to wake up for the first 24 hours.  His bladder and bowels worked fine, so the doctors were not concerned.  In fact, almost a week later and it is still almost impossible to wake Francis after a good feeding during the day, and impossible to get him to sleep after a good feeding during the night.
 
-Right now the only things we can do is keep playing with him during the day (to the point of annoyance), and ignore him at night.  By "ignore" all I mean is we can't make eye contact, talk to him, pet him, or talk to him.  We still pat him to burp him, shush, and bouce him to aid in sleeping, but nothing else.  Easier said then done, but we persist.
+Right now the only things we can do is keep playing with him during the day (to the point of annoyance), and ignore him at night.  By "ignore" all I mean is we can't make eye contact, talk to him, pet him, or talk to him (yes I said it twice).  We still pat him to burp him, shush, and bounce him to aid in sleeping, but nothing else.  Easier said then done, but we persist.
 
 ### Breastfeeding is hard
 
@@ -133,3 +135,32 @@ Basically what happens (at least for us) is you start forgetting the details, pa
 An infant eats every 2 hours to 3 hours during the day, and 2 to 5 hours during the night.  And they pee and poop between feedings.  You would think that 12 diapers / day is about average, but it isn't.  As adults we have learned to urinate and defecate during the same bathroom trip.  the same is not of babies.  For them they will urinate and defecate as two separate acts, and to prevent diaper rash you have to change them between each act.  That doesn't even account for the partial pee/poop, in which they start pee or poop as soon as you take the diaper off.  And in a lot of cases they will pee or poop as soon as you get the diaper back on; and in some cases do it 3 or 4 times in a single changing.
 
 24 to 30 diapers / day is closer to accurate.
+
+
+## Why leave the comment below? ##
+
+So a number of people have asked me why I left the comment below.  It is rude, and it is hurtful to have someone try to sully the birth of my child with "yet more opinions".
+
+In fact, this type of comment is EXACTLY what I was talking about in the "What we have learned" section.  Just for fun I have turned my post and her comment into a conversation.  Hopefully it shows how ridiculous the comment is, and why I think it is important to leave up.
+
+*me:* Opinions suck! They lead to a lot of mis-information.
+
+*jane:* No **your** opinions suck.  Mine opinions are actually FACT!
+
+*me:* Turns out that Epidurals are sometimes necessary for hard deliveries.
+
+*jane:* No, they **are** selfish!  With my first child I had a beautiful natural birth.  With the second I **had** to have a epidural and there were nothing but problems.  As you can see clearly, it was the epidurals fault.  But I am not downing epidurals.
+
+*me:* Breastfeeding is hard.  Frankie wants to do it, but has such a bad overbite that he can't lock.  We have had repeated visits from the Lactation consultant and every nurse on the floor has tried to help us, but still nothing.  He is loosing weight and all we want is to get something in him.  Everyone tells us that nipple confusion can happen, but for christ sake lets get at least a little food into Frankie.
+
+*jane:* Babies want to breastfeed, and I also had some trouble.  I had to things like pull out my nipple before each feeding.  Clearly you guys are lazy and stupid!  You need to try harder.  Also, your are wrong nipple confusion **CAN** happen!
+
+*me:* I didn't say nipple confusion doesn't happen.  What I was saying was that we were told that nipple confusion was instantaneous.  Put your baby on the bottle once and that is all-she-wrote.  That is not the case with Frankie, but never mind you aren't listening anyway.
+
+*jane:* Also, circumcised boys **don't** breastfeed so you are double stupid!
+
+*me:* Wait, what?  I never said one or the other that I circumcised Frankie.
+
+*jane:* Well it doesn't matter.  From the way you talk it is clear that you did.  I read part of your above story, judged your entire life, and walked through all the bad choices you made (entirely within my mind).  I started writing this comment to educate you, so that your child won't be a serial killer.  Because "scientific evidence" shows that **ALL** serial killers were bottle fed!
+
+*me:* (eyes glazed over)
