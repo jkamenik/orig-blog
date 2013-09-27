@@ -14,24 +14,23 @@ Books I need to read:
 * Crucial confrontations
 
 * The Goal
-* Confident Ruby - Avdi Grimm
-* Exceptional Ruby - Avdi Grimm
 * [Getting Real](http://gettingreal.37signals.com/) - 37 Signals
 * [Rework](http://37signals.com/rework) - 37 Signals
 * [Remote](http://37signals.com/remote) - 37 Signals
 
-Books I need to write about:
+Books I need to take notes on:
 
 * The Phonenix Project
 * Rails receipies
 * Rails Anitpatterns
-
-
+* Confident Ruby - Avdi Grimm
+* Exceptional Ruby - Avdi Grimm
 
 ## Other Reference Matterial ##
 
 * New peepcode play-by-play
-* Guy Steel's Talk: Growing a Language
-* Ruby Tapas
-* Rails casts
-* Ruby Rogues podcast
+* [Guy Steel's Talk: Growing a Language](http://youtu.be/_ahvzDzKdB0)
+* [Ruby Tapas](http://www.rubytapas.com/)
+* [RailsCasts](http://railscasts.com/)
+* [Ruby Rogues podcast](http://rubyrogues.com/)
+    * [Picks](http://rubyrogues.com/picks/)
