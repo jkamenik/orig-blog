@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>RBAC in Ruby - Random Software Inklings</title>
+  <meta name="author" content="John T. Kamenik">
+
+  
+  <meta name="description" content="RBAC stands for Role Based Access Control. It is basically a means to programmitically configure access rights without hardcoding. The full details &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Random Software Inklings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
+<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Random Software Inklings</a></h1>
+  
+    <h2>Random documentation of things I have learned.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jkamenik.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://jkamenik.github.com/Resume">Resume</a></li>
+  <li><a href="/knowledge">Knowledge</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">RBAC in Ruby</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-10T15:07:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>RBAC stands for <em>Role Based Access Control</em>.  It is basically a means to programmitically configure access rights without hardcoding.</p>
+
+<p>The full details are <a href="http://en.wikipedia.org/wiki/Role-based_access_control">here</a>, but to be honest I don&#8217;t fully understand it as writen.  What I understand of it is from trial and error.</p>
+
+<p>This entry is an attempt to codify that understanding and apply it using the ruby language.</p>
+
+<!-- more -->
+
+
+<h2>Basics</h2>
+
+<p>The inputs to the policy are:</p>
+
+<ol>
+<li>User or Actor</li>
+<li>Action being performed</li>
+<li>Resource being acted on</li>
+</ol>
+
+
+<pre>
+    +-------------------------------------------------------+
+    | +-------+                                +----------+ |
+    | |       |            +------+            |          | |
+    | |  User |+---------->|Action|+---------->| Resource | |
+    | |       |            +------+            |          | |
+    | +-------+                                +----------+ |
+    +-------------------------------------------------------+
+                               +
+                               |
+                               v
+                            +------+
+                            |Policy|
+                            +------+
+                               +
+                               |
+                               v
+                          +---------+
+                          |Yes or No|
+                          +---------+
+</pre>
+
+
+<h2>Policy</h2>
+
+<p>The policy is where the business logic goes.  It can be as simple as a set of Ruby classes that simply return values, or it can be as complicated as ActiveDirectory.</p>
+
+<p>The players are:</p>
+
+<ol>
+<li>Role - collection of permissions bound to a user</li>
+<li>Permission - an answer which is limited to a resource and action</li>
+</ol>
+
+
+<p>Here is the basic flow of a permission:</p>
+
+<pre>
+    +------+            +------+             +------------+
+    | User |+---------->| Role |+----------->| Permission |
+    +------+            +------+             |------------|
+              Has many            Has many   | Resource   |
+                                             | Action     |
+                                             | Allowed?   |
+                                             +------------+
+</pre>
+
+
+<p>A user can have 1 or more roles.  Each role can have 1 or more permissions.  Each permission associates an action on a resource with an answer.  Either the user is explicitly allowed or explicitly not allowed to access the Resource.</p>
+
+<p><em>Note:</em> I have purposely kept the data model simple.  In more complicated setups there can be several levels of permissions, permissions can have filters, and/or permissions can be directly bound to a user (instead of being bound to a role).  These complications are often introduced to deal with edge cases which are outside the scope of this article.</p>
+
+<h3>Policy logic sample code</h3>
+
+<p>Once the actors are known the logic is easy.  Simply filter in only the permission on a user for the resource and action in question then &#8220;and&#8221; all permissions together.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Policy</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># returns true if the user *can* perform action on resource, false otherwise</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">allowed?</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">reduce_permissions</span> <span class="n">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># returns an array of filtered permissions</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">perm</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">array</span><span class="p">,</span><span class="n">role</span><span class="o">|</span>
+</span><span class='line'>            <span class="n">array</span><span class="o">.</span><span class="n">concat</span> <span class="n">role</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">.</span><span class="n">compact</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_permissions</span><span class="p">(</span><span class="n">perm_array</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">implicit_allow</span> <span class="k">if</span> <span class="n">perm_array</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">perm_array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span><span class="ss">:&amp;</span><span class="o">&amp;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># &quot;and&quot;, for &quot;or&quot; use &quot;:||&quot;</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_function</span>
+</span><span class='line'>        <span class="ss">:&amp;</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># default behavior is NOT to give access</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">implicit_allow</span>
+</span><span class='line'>        <span class="kp">false</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-10T15:07:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/28/tdc-prototype/" title="Previous Post: TDC Prototype">&laquo; TDC Prototype</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/10/rbac-in-ruby/">RBAC in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/28/tdc-prototype/">TDC Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/10/automator-workflow/">Automator - Start work - workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/01/technical-debt-calculator/">Technical Debt Calculator</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/29/using-keynote-for-mockups/">Using Keynote for Mockups</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/francis/'>Francis (1)</a></li>
+<li class='category'><a href='/blog/categories/js/'>JS (1)</a></li>
+<li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
+<li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
+<li class='category'><a href='/blog/categories/cat1/'>cat1 (1)</a></li>
+<li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
+<li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
+<li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
+<li class='category'><a href='/blog/categories/email/'>email (1)</a></li>
+<li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
+<li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (7)</a></li>
+<li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
+<li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/opinion/'>opinion (3)</a></li>
+<li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
+<li class='category'><a href='/blog/categories/planning/'>planning (3)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (4)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/screencast/'>screencast (1)</a></li>
+<li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
+<li class='category'><a href='/blog/categories/technical-debt-calculator/'>technical-debt-calculator (2)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (4)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui mockup (1)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui-mockup (2)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Twitter</h1>
+    <a class="twitter-timeline" href="https://twitter.com/jkamenik" data-widget-id="354049262578982914">Tweets by @jkamenik</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jkamenik',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - John T. Kamenik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'randomsoftwareinklings';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        // Put a TOC right before the entry content.
+        generateTOC('Table of Contents');
+    });
+  </script>
+
+
+</body>
+</html>

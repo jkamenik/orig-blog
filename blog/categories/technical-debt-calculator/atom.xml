@@ -4,7 +4,7 @@
   <title><![CDATA[Category: technical-debt-calculator | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/technical-debt-calculator/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-09-27T10:22:44-04:00</updated>
+  <updated>2014-01-11T07:15:19-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[TDC Prototype]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/09/28/tdc-prototype/"/>
+    <updated>2013-09-28T14:58:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/09/28/tdc-prototype</id>
+    <content type="html"><![CDATA[<p>In a <a href="{%%20post_url%202013-09-01-technical-debt-calculator%20%}">previous post</a> I talked about creating a Technical Debt Calculator.  And in an <a href="{%%20post_url%202012-08-14-using-keynote-for-mockups%20%}">even earlier</a> post I talked about using Keynote to mockup UIs before coding.  Here I revisit the TDC with a Keynote mockup.</p>
+
+<!-- more -->
+
+
+<h2>Working prototype</h2>
+
+<p>The <a href="/assets/Technical%20Debt%20Calculator.pdf">working prototype</a> is a clickable PDF.  You will need Adobe Acrobat Reader or a Mac computer.  From there just download the PDF and play with it.</p>
+
+<p>I used concepts that I gained from working with <a href="http://keynotopia.com/">Keynotopia</a>.  Keynotopdia is an awesome library, which you should own, but at a minimum you should check out their tutorials <a href="">here</a>.</p>
+
+<p>I did not use any assets from their library because their License doesn't allow me to share the Keynote files if I do.  However, I wanted to allow people to download my base library and hopefully help me improve my design.  The Keynote file can be found <a href="/assets/Technical%20Debt%20Calculator.key">here</a>.</p>
+
+<p>Let me know what you think, in the comments below.  In a later post I will talk about my findings.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Technical Debt Calculator]]></title>
@@ -52,13 +74,13 @@
 
 <p>I spend a little bit of time with pen and paper taking notes and drawling prototypes.  In the future I will expand on these ideas, but for how here they are in their raw form.</p>
 
-<p><a href="/images/tech-debt-calc/tech-debt-calc1.png">First set of designs</a></p>
+<p><a href="{{%20root_url%20}}/images/tech-debt-calc/tech-debt-calc1.png">First set of designs</a></p>
 
-<p><a href="/images/tech-debt-calc/tech-debt-calc2.png">Schema Notes</a></p>
+<p><a href="{{%20root_url%20}}/images/tech-debt-calc/tech-debt-calc2.png">Schema Notes</a></p>
 
-<p><a href="/images/tech-debt-calc/tech-debt-calc3.png">First redesign</a></p>
+<p><a href="{{%20root_url%20}}/images/tech-debt-calc/tech-debt-calc3.png">First redesign</a></p>
 
-<p><a href="/images/tech-debt-calc/tech-debt-calc4.png">First redesign cont.</a></p>
+<p><a href="{{%20root_url%20}}/images/tech-debt-calc/tech-debt-calc4.png">First redesign cont.</a></p>
 ]]></content>
   </entry>
   

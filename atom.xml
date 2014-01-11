@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-09-27T10:22:44-04:00</updated>
+  <updated>2014-01-11T07:15:19-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,178 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RBAC in Ruby]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/"/>
+    <updated>2014-01-10T15:07:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby</id>
+    <content type="html"><![CDATA[<p>RBAC stands for <em>Role Based Access Control</em>.  It is basically a means to programmitically configure access rights without hardcoding.</p>
+
+<p>The full details are <a href="http://en.wikipedia.org/wiki/Role-based_access_control">here</a>, but to be honest I don&#8217;t fully understand it as writen.  What I understand of it is from trial and error.</p>
+
+<p>This entry is an attempt to codify that understanding and apply it using the ruby language.</p>
+
+<!-- more -->
+
+
+<h2>Basics</h2>
+
+<p>The inputs to the policy are:</p>
+
+<ol>
+<li>User or Actor</li>
+<li>Action being performed</li>
+<li>Resource being acted on</li>
+</ol>
+
+
+<pre>
+    +-------------------------------------------------------+
+    | +-------+                                +----------+ |
+    | |       |            +------+            |          | |
+    | |  User |+---------->|Action|+---------->| Resource | |
+    | |       |            +------+            |          | |
+    | +-------+                                +----------+ |
+    +-------------------------------------------------------+
+                               +
+                               |
+                               v
+                            +------+
+                            |Policy|
+                            +------+
+                               +
+                               |
+                               v
+                          +---------+
+                          |Yes or No|
+                          +---------+
+</pre>
+
+
+<h2>Policy</h2>
+
+<p>The policy is where the business logic goes.  It can be as simple as a set of Ruby classes that simply return values, or it can be as complicated as ActiveDirectory.</p>
+
+<p>The players are:</p>
+
+<ol>
+<li>Role - collection of permissions bound to a user</li>
+<li>Permission - an answer which is limited to a resource and action</li>
+</ol>
+
+
+<p>Here is the basic flow of a permission:</p>
+
+<pre>
+    +------+            +------+             +------------+
+    | User |+---------->| Role |+----------->| Permission |
+    +------+            +------+             |------------|
+              Has many            Has many   | Resource   |
+                                             | Action     |
+                                             | Allowed?   |
+                                             +------------+
+</pre>
+
+
+<p>A user can have 1 or more roles.  Each role can have 1 or more permissions.  Each permission associates an action on a resource with an answer.  Either the user is explicitly allowed or explicitly not allowed to access the Resource.</p>
+
+<p><em>Note:</em> I have purposely kept the data model simple.  In more complicated setups there can be several levels of permissions, permissions can have filters, and/or permissions can be directly bound to a user (instead of being bound to a role).  These complications are often introduced to deal with edge cases which are outside the scope of this article.</p>
+
+<h3>Policy logic sample code</h3>
+
+<p>Once the actors are known the logic is easy.  Simply filter in only the permission on a user for the resource and action in question then &#8220;and&#8221; all permissions together.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Policy</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># returns true if the user *can* perform action on resource, false otherwise</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">allowed?</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">reduce_permissions</span> <span class="n">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># returns an array of filtered permissions</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">perm</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">array</span><span class="p">,</span><span class="n">role</span><span class="o">|</span>
+</span><span class='line'>            <span class="n">array</span><span class="o">.</span><span class="n">concat</span> <span class="n">role</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">.</span><span class="n">compact</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_permissions</span><span class="p">(</span><span class="n">perm_array</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">implicit_allow</span> <span class="k">if</span> <span class="n">perm_array</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">perm_array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span><span class="ss">:&amp;</span><span class="o">&amp;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># &quot;and&quot;, for &quot;or&quot; use &quot;:||&quot;</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_function</span>
+</span><span class='line'>        <span class="ss">:&amp;</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># default behavior is NOT to give access</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">implicit_allow</span>
+</span><span class='line'>        <span class="kp">false</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[TDC Prototype]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/09/28/tdc-prototype/"/>
+    <updated>2013-09-28T14:58:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/09/28/tdc-prototype</id>
+    <content type="html"><![CDATA[<p>In a <a href="http://jkamenik.github.com/blog/2013/09/01/technical-debt-calculator/">previous post</a> I talked about creating a Technical Debt Calculator.  And in an <a href="#">even earlier</a> post I talked about using Keynote to mockup UIs before coding.  Here I revisit the TDC with a Keynote mockup.</p>
+
+<!-- more -->
+
+
+<h2>Working prototype</h2>
+
+<p>The <a href="http://jkamenik.github.com/assets/Technical%20Debt%20Calculator.pdf">working prototype</a> is a clickable PDF.  You will need Adobe Acrobat Reader or a Mac computer.  From there just download the PDF and play with it.</p>
+
+<p>I used concepts that I gained from working with <a href="http://keynotopia.com/">Keynotopia</a>.  Keynotopdia is an awesome library, which you should own, but at a minimum you should check out their tutorials <a href="">here</a>.</p>
+
+<p>I did not use any assets from their library because their License doesn&#8217;t allow me to share the Keynote files if I do.  However, I wanted to allow people to download my base library and hopefully help me improve my design.  The Keynote file can be found <a href="http://jkamenik.github.com/assets/Technical%20Debt%20Calculator.key">here</a>.</p>
+
+<p>Let me know what you think, in the comments below.  In a later post I will talk about my findings.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Automator - Start work - workflow]]></title>
@@ -2139,129 +2311,6 @@ Test.new.baz # Instance method
 <p>When a module is <code>included</code> it can register a callback which is passed the class that is doing the including. And calling <code>extend</code> on the base and passing a submodule will cause it to put those methods at the class level. This causes a chain reaction of loading both instance and class methods using a single <code>include</code>.</p>
 
 <p><strong>Pro Tip</strong>: It is possible to cause the same behavior using <code>extend</code> by using the <code>extended</code> callback; however, this is not common and <code>include 'x'</code> reads better then <code>extend 'y'</code>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The 3N Rule for deployment]]></title>
-    <link href="http://jkamenik.github.com/blog/2011/08/16/3n-rule-for-deployment/"/>
-    <updated>2011-08-16T00:00:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2011/08/16/3n-rule-for-deployment</id>
-    <content type="html"><![CDATA[<p>As a programmer I am lazy, but in a productive way.  It is not that I don&#8217;t do anything.  It is that I only do things a set number of times.  I have a simple rule, which I call the &#8220;3N rule&#8221;, which states &#8220;I will doing something once, script it the second time, and use the script from then on&#8221;.  Therefore, if I have 3 to N devices to manage then I have a script that takes minimal input and replicates the change on all devices.</p>
-
-<!-- more -->
-
-
-<p>I also have a 3N rule for programming, but that is a matter for another time.</p>
-
-<p>By using a script I eliminate a lot of the human error and also increase my productivity because computers are, now days, faster at responding to stimuli then I am.  But computers are &#8220;swift idiots&#8221; so for this to work the environment has got to be controlled.  I recommend doing the following:</p>
-
-<ol>
-<li>Use VMs</li>
-<li>Run headless, enable SSH</li>
-<li>Use <a href="http://sourceforge.net/apps/mediawiki/clusterssh/index.php?title=Main_Page">ClusterSSH</a> or <a href="http://code.google.com/p/csshx/">csshX</a> for learning what to script</li>
-<li>Use <a href="https://github.com/capistrano/capistrano/wiki">Capistrano</a> or <a href="http://docs.fabfile.org/en/1.2.0/index.html">Fabric</a> for automating change</li>
-</ol>
-
-
-<p>By using a VM and running headless you remove the temptation to sit at a physical terminal. It also eliminates the fear associated with screwing something up as it is trivial to snapshot a machine and restore its state.</p>
-
-<p>By using SSH and ClusterSSH you enable yourself to start thinking about the cluster as a whole, and more importantly start acting on the cluster as a whole. If some of the servers get out of sync then it makes management more difficult, so by using ClusterSSH you eliminate that problem.</p>
-
-<p>By using Capistrano, or its like, then you eliminate the human error entirely. This is just good policy. Also, a benefit of a deployment script is that it is self documenting (assuming you know how to read).</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Problems with Agile Implementation]]></title>
-    <link href="http://jkamenik.github.com/blog/2011/01/10/problems-with-agile-implementation/"/>
-    <updated>2011-01-10T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2011/01/10/problems-with-agile-implementation</id>
-    <content type="html"><![CDATA[<p>I really like agile programming. It keeps me close to the action, and makes me have to think about my next moves. It also keeps me informed as to what is going on around me. But in my many years of using agile I realize that, though the process itself is very nice, its implementations can tend not to be.</p>
-
-<!--more-->
-
-
-<p>Problem don&#8217;t arise from agile itself, but who and how it was implemented. If the implementer&#8217;s goals do not match the <a href="http://en.wikipedia.org/wiki/Agile_software_development">Agile Manifesto</a> there is little chance of success. I have used <a href="http://en.wikipedia.org/wiki/Scrum_(development)">scrum</a> many times and the most common problems I see are:</p>
-
-<ol>
-<li>Agile as Micromanagement</li>
-<li>Agile as a Whip</li>
-<li>Agile as an Excuse</li>
-</ol>
-
-
-<h3>Agile as Micromanagement</h3>
-
-<h4>It looks like:</h4>
-
-<ol>
-<li>Having to break task down into hourly segments of work</li>
-<li>Having to break task that logically have to be done by a single person</li>
-<li>Having to account for ALL time taken, even time not related to code like attending meetings</li>
-</ol>
-
-
-<h4>Agile tenet misused:</h4>
-
-<ol>
-<li>Individuals and interactions over process and tools</li>
-<li>Working software over comprehensive documentation</li>
-</ol>
-
-
-<p>This happens when a manager (<a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a>) is the Scrum Master or when the Product Owner has say over implementation specifics. It is a confusion of roles, which in turn leads to a confusion of goals, which in turn leads to over documentation.</p>
-
-<h3>Agile as a Whip</h3>
-
-<h4>It looks like:</h4>
-
-<ol>
-<li>Filtering a burn-down on an individual basis</li>
-<li>Placing more in the sprint then can be done (but still requiring it all to be done)</li>
-<li>Associating points with people (publicly)</li>
-<li>Associating number of tasks done with effort</li>
-<li>Associating points with hours</li>
-<li>Basically anything where measured output is more important then people</li>
-</ol>
-
-
-<h4>Agile tenet misused:</h4>
-
-<ol>
-<li>Individuals and interactions over process and tools</li>
-</ol>
-
-
-<p>Anytime you associate numbers with people you have created a <a href="http://en.wikipedia.org/wiki/Crab_mentality">crab mentality</a>. Their focus will stop being on software, but on making their numbers better. Those that are better at number games will succeed, those that are better at software will fail.</p>
-
-<p>Anytime you put your people under undo pressure then simple mistakes are made. This is going to later erode confidence in the team. It is going to happen like this: &#8220;you missed a comma in a Javascript file which causes it not to work in IE. That was such a simple mistake to have tested for that I am not sure you are testing any of your code.&#8221; The problem was caused by 4 hours of sleep in 72 hours of coding at the end of an over-extended sprint. The programmer was nearly delirious. It is shocking it was the only mistake, not that it was a simple mistake!</p>
-
-<p>Unfortunately I have seen this situation start innocent enough, with comments like &#8220;we don&#8217;t want to over work the staff&#8221; or &#8220;we want to make sure they always have something to do&#8221; or &#8220;we want them working on the correct things&#8221;. If the &#8220;we&#8221; in question is management (<a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a>) then there is probably already micromanagement going on, and Agile is being used as whip to solve the problems created by the bad implementation.</p>
-
-<h3>Agile as an Excuse.</h3>
-
-<h4>It looks like:</h4>
-
-<ol>
-<li>&#8220;You said it would take XXX. It took YYY. You need to make up the difference out of your own time&#8221;</li>
-<li>&#8220;We cannot slip these date, and you have already pared back the release N sprints ago. You need to put in extra effort&#8221;</li>
-<li>&#8220;Agile is about being agile. Even though we are mid sprint we are radically changing direction, but we are not canceling the sprint or doing sprint planning. We are just swapping out some tasks for others.&#8221;</li>
-<li>&#8220;You picked the language. It is now your problem to bring this project to conclusion and under budget.&#8221;</li>
-</ol>
-
-
-<h4>Agile tenet misused:</h4>
-
-<ol>
-<li>Individuals and interactions over process and tools</li>
-<li>Responding to change over following a plan</li>
-</ol>
-
-
-<p>These are all excuses I have heard. Each time given by a person in <a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a> (managers) because they are ignoring changes in the field (military term). Every choice has a set of outcomes: some good, some bad. The attempt with agile is not to mitigate bad outcomes, but to allow those outcomes to contribute to the overall direction.</p>
-
-<p>Sometimes the bad outcome will be that something took to long, or that one language/tool was not the correct choice given the problem set. If for every problem that happens the developer has to take their own time, or face embarrassment, to solve the problem then they will stop making choices. Not just choices that might have bad outcomes, but choices altogether. At which point someone in a <a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a> will start making more choices then they should.</p>
 ]]></content>
   </entry>
   

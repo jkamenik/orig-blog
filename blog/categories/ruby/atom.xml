@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2013-09-27T10:22:44-04:00</updated>
+  <updated>2014-01-11T07:15:19-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RBAC in Ruby]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/"/>
+    <updated>2014-01-10T15:07:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby</id>
+    <content type="html"><![CDATA[<p>RBAC stands for <em>Role Based Access Control</em>.  It is basically a means to programmitically configure access rights without hardcoding.</p>
+
+<p>The full details are <a href="http://en.wikipedia.org/wiki/Role-based_access_control">here</a>, but to be honest I don't fully understand it as writen.  What I understand of it is from trial and error.</p>
+
+<p>This entry is an attempt to codify that understanding and apply it using the ruby language.</p>
+
+<!-- more -->
+
+
+<h2>Basics</h2>
+
+<p>The inputs to the policy are:</p>
+
+<ol>
+<li>User or Actor</li>
+<li>Action being performed</li>
+<li>Resource being acted on</li>
+</ol>
+
+
+<pre>
+    +-------------------------------------------------------+
+    | +-------+                                +----------+ |
+    | |       |            +------+            |          | |
+    | |  User |+---------->|Action|+---------->| Resource | |
+    | |       |            +------+            |          | |
+    | +-------+                                +----------+ |
+    +-------------------------------------------------------+
+                               +
+                               |
+                               v
+                            +------+
+                            |Policy|
+                            +------+
+                               +
+                               |
+                               v
+                          +---------+
+                          |Yes or No|
+                          +---------+
+</pre>
+
+
+<h2>Policy</h2>
+
+<p>The policy is where the business logic goes.  It can be as simple as a set of Ruby classes that simply return values, or it can be as complicated as ActiveDirectory.</p>
+
+<p>The players are:</p>
+
+<ol>
+<li>Role - collection of permissions bound to a user</li>
+<li>Permission - an answer which is limited to a resource and action</li>
+</ol>
+
+
+<p>Here is the basic flow of a permission:</p>
+
+<pre>
+    +------+            +------+             +------------+
+    | User |+---------->| Role |+----------->| Permission |
+    +------+            +------+             |------------|
+              Has many            Has many   | Resource   |
+                                             | Action     |
+                                             | Allowed?   |
+                                             +------------+
+</pre>
+
+
+<p>A user can have 1 or more roles.  Each role can have 1 or more permissions.  Each permission associates an action on a resource with an answer.  Either the user is explicitly allowed or explicitly not allowed to access the Resource.</p>
+
+<p><em>Note:</em> I have purposely kept the data model simple.  In more complicated setups there can be several levels of permissions, permissions can have filters, and/or permissions can be directly bound to a user (instead of being bound to a role).  These complications are often introduced to deal with edge cases which are outside the scope of this article.</p>
+
+<h3>Policy logic sample code</h3>
+
+<p>Once the actors are known the logic is easy.  Simply filter in only the permission on a user for the resource and action in question then "and" all permissions together.</p>
+
+<p>```ruby
+class Policy</p>
+
+<pre><code># returns true if the user *can* perform action on resource, false otherwise
+def allowed?(user,action,resource)
+    reduce_permissions list_permissions(user,action,resource)
+end
+</code></pre>
+
+<p>private</p>
+
+<pre><code># returns an array of filtered permissions
+def list_permissions(user,action,resource)
+    perm = user.roles.inject([]) do |array,role|
+        array.concat role.permissions.for(resource).with(action).compact
+    end
+end
+
+def reduce_permissions(perm_array)
+    return implicit_allow if perm_array.empty?
+
+    perm_array.reduce(true,:&amp;&amp;)
+end
+
+# "and", for "or" use ":||"
+def reduce_function
+    :&amp;&amp;
+end
+
+# default behavior is NOT to give access
+def implicit_allow
+    false
+end
+</code></pre>
+
+<p>end
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ruby module instance and class methods]]></title>
