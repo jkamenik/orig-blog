@@ -12,6 +12,8 @@ Books I need to read:
 * Thank you for arguing - Jay Heinrichs
 * Crucial conversations
 * Crucial confrontations
+* Patterns of Enterprise Application Architecture
+* The Total Money Makeover
 
 * The Goal
 * [Getting Real](http://gettingreal.37signals.com/) - 37 Signals
