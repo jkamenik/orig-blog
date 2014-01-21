@@ -9,7 +9,7 @@
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="My last blog entry was when my son was born. A perfect reason for a blog entry, but I had fully intended to keep blogging and just didn&#8217;t find &hellip;">
+  <meta name="description" content="The Comcast 30 day challenge fails, except in challenging my nerves! I feel angry and scammed, but instead of ranting I am just going to give the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,47 +69,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/06/blog-changes/">Blog Changes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-06T10:58:00-04:00" pubdate data-updated="true">Jul 6<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My last blog entry was when my son was born.  A perfect reason for a blog entry, but I had fully intended to keep blogging and just didn&#8217;t find the time.  Turns out the issue isn&#8217;t really that I don&#8217;t have the time, but that I don&#8217;t have the time write the really involved articles.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/06/blog-changes/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
   
   
     <article>
@@ -501,6 +460,56 @@
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/09/factory-girl-automatic-tests/">Factory Girl Automatic Tests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-09T00:00:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like <code>Given /^(\d+) blog exists$/</code> and <code>Given /^the following blogs exist:$/</code> I started to come up with generic functions that would build those steps.</p>
+
+<p>Stupid me for not checking that factory girl already does something like that. All you have to do is include factory girl&#8217;s <a href="http://github.com/thoughtbot/factory_girl/blob/master/lib/factory_girl/step_definitions.rb">step_definition</a> file:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">requie</span> <span class="s1">&#39;factory_girl/step_definitions&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you start using FactoryGirl correctly there are a world of new features that can make your steps both cleaner and more concise. Here are some tips I have found via trial and error.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/03/09/factory-girl-automatic-tests/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -522,10 +531,6 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2014/01/21/inbox-zero-draft/">Inbox Zero / Cultivating Spam</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2014/01/10/rbac-in-ruby/">RBAC in Ruby</a>
       </li>
     
@@ -537,6 +542,10 @@
         <a href="/blog/2013/09/10/automator-workflow/">Automator - Start work - workflow</a>
       </li>
     
+      <li class="post">
+        <a href="/blog/2013/09/01/technical-debt-calculator/">Technical Debt Calculator</a>
+      </li>
+    
   </ul>
 </section>
 <section>
@@ -546,7 +555,7 @@
 <li class='category'><a href='/blog/categories/js/'>JS (1)</a></li>
 <li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
 <li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
-<li class='category'><a href='/blog/categories/cat1/'>cat1 (2)</a></li>
+<li class='category'><a href='/blog/categories/cat1/'>cat1 (1)</a></li>
 <li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
 <li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
 <li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
