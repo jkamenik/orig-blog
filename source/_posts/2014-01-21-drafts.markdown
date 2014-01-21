@@ -44,6 +44,17 @@ task :new_post, :title do |t, args|
 end
 ```
 
+I also had to update `rake push` to regenerate the full site before deployment.  This is because preview works on the same directly that is copied to production.  And since you can preview unpublished posts they will be visible in production, unless you run `rake generate` first.
+
+```ruby Rakefile
+# around line 254
+multitask :push do
+  # add the generate rake task first
+  Rake::Task[:generate].invoke
+  # code omitted
+end
+```
+
 Additionally I want to know visually when a page is a draft.  For that I add "Draft: " to the title.
 
 ```html _includes/article.html

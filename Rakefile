@@ -252,6 +252,7 @@ end
 
 desc "deploy public directory to github pages"
 multitask :push do
+  Rake::Task[:generate].invoke
   puts "## Deploying branch to Github Pages "
   (Dir["#{deploy_dir}/*"]).each { |f| rm_rf(f) }
   Rake::Task[:copydot].invoke(public_dir, deploy_dir)
