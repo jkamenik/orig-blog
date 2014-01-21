@@ -4,7 +4,7 @@
   <title><![CDATA[Category: howto | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/howto/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-01-11T07:15:19-05:00</updated>
+  <updated>2014-01-21T12:22:33-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Drafts]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/01/21/drafts/"/>
+    <updated>2014-01-21T11:38:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/01/21/drafts</id>
+    <content type="html"><![CDATA[<p>Jekyll supports unpublished posts, but Octopress does not make it clear.  This is how I fixed that for my own blog.</p>
+
+<!-- more -->
+
+
+<p>Octopress actually does support "published: false" in the front matter.  And because it based on Jekyll it means that those posts will be available in "preview" but will be ignored when the site is generated/published.</p>
+
+<p>My main care is that I know what I can do with a post in 3 to 4 months.  So I added the the published flag to the generated frontmatter of every new post.</p>
+
+<p>```ruby Rakefile</p>
+
+<h1>around line 93, for me</h1>
+
+<p>task :new_post, :title do |t, args|
+  # code omitted
+  open(filename, 'w') do |post|</p>
+
+<pre><code>post.puts "---"
+post.puts "layout: post"
+post.puts "title: \"#{title.gsub(/&amp;/,'&amp;amp;')}\""
+post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
+post.puts "comments: true"
+post.puts "toc: false"
+# add published flag to the template
+post.puts "published: false"
+post.puts "categories: "
+post.puts "  - cat1"
+post.puts "---"
+post.puts
+post.puts "Summary"
+post.puts
+post.puts "&lt;!-- more --&gt;"
+post.puts
+post.puts "Post text"
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Additionally I want to know visually when a page is a draft.  For that I add "Draft: " to the title.</p>
+
+<p>```html _includes/article.html
+</p>
+
+<h1>in the <header> tag</h1>
+
+<p>{% if index %}
+  # add {% if post.published == false %}Draft: {% endif %}
+  <h1 class="entry-title"><a href="{{ root_url }}{{ post.url }}">{% if post.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h1>
+{% else %}
+  # add {% if page.published == false %}Draft: {% endif %}
+  <h1 class="entry-title">{% if page.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
+{% endif %}
+
+```</p>
+
+<p>Now you will see "Draft: " in front of any unpublished posts.</p>
+
+<h2>Manual management</h2>
+
+<p>A few additional things I like to do, but I haven't automated yet are:</p>
+
+<ol>
+<li>Add "-draft" to the file name.</li>
+<li>Change the publish date to the day I publish the article
+
+<ol>
+<li>This involves changing the file name as well as the front matter</li>
+</ol>
+</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RBAC in Ruby]]></title>
@@ -496,136 +577,97 @@ Just talking
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[JS Unit Testing using YUI]]></title>
-    <link href="http://jkamenik.github.com/blog/2010/12/15/js-unit-testing-using-yui/"/>
-    <updated>2010-12-15T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2010/12/15/js-unit-testing-using-yui</id>
-    <content type="html"><![CDATA[<p>Ok, Selenium was a partial success that you can read about <a href="http://randomsoftwareinklings.blogspot.com/2010/11/learning-selenium.html">here</a>, but it really was harder then I wanted it to be and it required a lot of setup for only a little bit of testing. I noticed that a project that I use a lot ExtJS uses a modified version of YUI Test. So I converted my Selenium test example to YUI Test.</p>
+    <title type="html"><![CDATA[Octopress TOC]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/07/07/octopress-toc/"/>
+    <updated>2013-07-07T14:35:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/07/07/octopress-toc</id>
+    <content type="html"><![CDATA[<p>I wanted to add a Table Of Contents (TOC) to some of my longer blog entries.  Here is how I did it.</p>
 
 <!-- more -->
 
 
-<p>My initial impression was confusion because you have to download the entire YUI 2 suite just get to get the <a href="http://developer.yahoo.com/yui/yuitest/">test tools</a>. Also, when you download the entire suite they are many different copies of the same file in various stages of minification. But following the documentation I boiled down exactly what I needed and threw away the rest. I put all the code for my test <a href="https://github.com/jkamenik/yui-test-example">here</a> so you can follow along.</p>
+<p>Full credit it due to a google search which turned up this <a href="https://github.com/bmc/brizzled/blob/master/source/_posts/2012-02-04-generating-a-table-of-contents-in-octopress.markdown">https://github.com/bmc/brizzled/blob/master/source/_posts/2012-02-04-generating-a-table-of-contents-in-octopress.markdown</a>.</p>
 
-<p>You will need the following files from the YUI archive:</p>
+<p>I followed it to get an idea of what I wanted, but diverged a lot.  What I wanted was:</p>
 
-<ul>
-<li>build/logger/assets/logger.css</li>
-<li>build/logger/logger.js</li>
-<li>build/yuiloader-dom-event/yuiloader-dom-event.js</li>
-<li>build/yuitest/assets/testlogger.css</li>
-<li>build/yuitest/yuitest.js</li>
-</ul>
+<ol>
+<li>The TOC to be driven by a <code>toc: true</code> in the YML front matter of any page</li>
+<li>The TOC to be the first item in the sidebar.</li>
+<li>The TOC to contain only the h2 tags and below (Ignoring the H1 page title)</li>
+</ol>
 
 
-<p>Create an HTML file that includes the css and js files:
-<div><script src='https://gist.github.com/1151464.js?file=index-header.html'></script>
-<noscript><pre><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;logger.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;testlogger.css&quot;&gt;
+<h2>1. Add JS TOC code</h2>
 
-&lt;!-- Test runner code --&gt;
-&lt;script src=&quot;yahoo-dom-event.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;logger.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;yuitest.js&quot;&gt;&lt;/script&gt;</code></pre></noscript></div>
-</p>
+<p>Download the <a href="http://fuelyourcoding.com/scripts/toc/">jQuery TOC plugin</a> and move the js file into javascripts directory.</p>
 
-<p>The HTML will also need to instantiate the test logger and run the test runner global. I bound the test run to a button so I could control when it ran:
-<div><script src='https://gist.github.com/1151464.js?file=index-body.html'></script>
-<noscript><pre><code>&lt;body&gt;
-    &lt;input onclick=&quot;javascript:runAllTests()&quot; type=&quot;button&quot; value=&quot;Run Tests&quot; /&gt;
-    
-    &lt;script&gt;
-        new YAHOO.tool.TestLogger();
-        
-        function runAllTests(){
-            YAHOO.tool.TestRunner.run();
-        }
-    &lt;/script&gt;
-&lt;/body&gt;</code></pre></noscript></div>
-</p>
+<p>Add the following code to the head.</p>
 
-<p>Now that we have a <code>YAHOO.tool.TestRunner</code> we need to add a test that can be run.  Instantiate a <code>new YAHOO.tool.TestCase</code> and add it to the TestRunner. All a TestCase needs is a name and a bunch of functions that start with "test". Everything else is automatic. Below is a simplified version of the <a href="https://github.com/jkamenik/yui-test-example/blob/master/test.js">full file</a>.
-<div><script src='https://gist.github.com/1151464.js?file=test.js'></script>
-<noscript><pre><code>var assert = YAHOO.util.Assert;
+<p>```html _includes/custom/head.html</p>
 
-YAHOO.tool.TestRunner.add(new YAHOO.tool.TestCase({
-  name: 'Tests for string',
-  
-  test_true: function(){
-    var test = String(true);
-    assert.isString(test);
-    assert.areEqual('true',test);
-  }
-});</code></pre></noscript></div>
-</p>
-
-<h2>Conclusion</h2>
-
-<p>Though Selenium is more automated that comes at the cost of being more complicated then testing should be. If I were a team of programmers then sure setting up and maintaining Selenium Remote controls would be a small part of the overall effort, but since I am not a team of programmers I think it is overkill.</p>
-
-<p>What I really need is an easy to run, easy to write, repeatable, unit testing framework in JS. I do the leg work on pointing my various browsers at the html and reviewing the results. When things get big enough that I need to setup a continuous integration server, or I have a QA department, then I will give Selenium another go. For now YUI test is the way to go.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Dealing with Email overload]]></title>
-    <link href="http://jkamenik.github.com/blog/2010/12/12/dealing-with-email-overload/"/>
-    <updated>2010-12-12T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2010/12/12/dealing-with-email-overload</id>
-    <content type="html"><![CDATA[<p>This isn't strictly software related, but a lot of us have to deal with the horror that is email. Email is not a good solution to any problem, but it is ubiquitous so it is used for all things: personal correspondence, commit tracking, defect notification, task notification, etc... Email is all to often used as a mechanism to pass-the-buck.</p>
-
-<p>The only way to deal with this email overload is to set boundaries on email usage. A lot of people will find these boundaries annoying, if not unworkable. Just stick with it and lead by example. Eventually, in a time of high stress, you will be able to get to important messages fast and they will be left floundering.</p>
-
-<!--more-->
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
 
-<h2>My results</h2>
+<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
 
-<p>I am putting the summary first in hopes that you might actually try some of these suggestions. On average I get 50 to 200 work related emails a day. In any given day (saturday and sunday included) I will need to respond to 5 to 10 of them. That means that I get between 40 and 195 junk emails that pass (and should pass) my junk mail filters.</p>
 
-<p>By focusing on making sure my inbox only includes import emails I have reduced my inbox to 3 to 5 message each check (and I check twice a day). On busy days I only ever check my inbox, relying on others to contact me via a different medium if they really need me. When there is a less busy day I go through the other inbox and deal with those messages.</p>
+<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
 
-<p>At the time I am writing this (on sunday) I have 1 email in my inbox and 91 emails in my other inbox that were all sent saturday. A quick read of the 1 email and I will have to spend 5 minutes reviewing code, but the rest can wait until monday.</p>
 
-<h2>Use the right messaging system</h2>
+<p>```</p>
 
-<p>Use email for messages that do not need an immediate response. Since there is no message size limit, make sure you use the most of it. Write emails that are well detailed and specific. If at any point a message can be answered with "Ok" or some other monosyllabic word then email was not the correct choice.</p>
+<p>This downloads jQuery from a CDN, loads the TOC plugin and will eventually load our driver code.</p>
 
-<p>Use Instant Messages (IM,IRC,etc...) for conversations that need semi immediate responses, and a possible record. Many IM packages can log conversations for later viewing, which is useful when you forget things. There are message length and formatting restrictions so this forces the messages to be brief and specific.</p>
+<h2>2. Write the driver and trigger code</h2>
 
-<p>Use Phone, Skype, or face to face contact when a response is needed immediately.</p>
+<p>Create the driver code:</p>
 
-<p>Use Twitter, or some other global message posting service to track commits, continuous integration fails, defects, etc...</p>
+<p>```javascript javascripts/generate-toc.js
+function generateTOC(heading) {
+  var container = jQuery("<section></section>");
+  var div = jQuery("<ul id='toc'></ul>");
+  var content = jQuery('.sidebar');</p>
 
-<p>Use a wiki, or blog to track generic instructions or documentation.</p>
+<p>  if (heading != undefined &amp;&amp; heading != null) {</p>
 
-<h2>Check email twice a day (only)</h2>
+<pre><code>container.append('&lt;h1 class="tocHeading"&gt;' + heading + '&lt;/h1&gt;');
+</code></pre>
 
-<p>The easiest way to train people not to use email as a crutch is not use it as one yourself. Only check email twice a day, and give a concerted effort to reduce that to once a day within a month, and once a week within 6 months. Setup the other messaging systems so that email is used only for what it needs to be. And when people step out of line, correct them.</p>
+<p>  }</p>
 
-<p>Email should not be the first thing that you check in the morning, as you should not be working out of email. It should also not be the last thing you check as it will disrupt your already stressful commute/home life. Instead check email 2 hours after the start of the day, and 2 hours before the end of the day. If you work a 9-to-5 that means once at 11am and once at 3pm.</p>
+<p>  div.tableOfContents("#content",{startLevel: 2});
+  container.append(div);
+  content.prepend(container);
+}
+```</p>
 
-<p>The day you start doing this, tell the people that send you the most email and the ones that you will most affect by the change, and no one else. You are not trying to be sneaky, but if you blast an email to everyone then you are going to make it a big deal; which it is not. The others will learn over time.</p>
+<p>Adjust the footer to trigger the TOC is needed:</p>
 
-<p>When someone tells you that you need to check your email and read their message do it, but only check their email, ignore all other messages.</p>
+<p>```html _includes/custom/after_footer.html
 
-<h2>Don't use Inbox as an archive</h2>
+```</p>
 
-<p>Once you are finished reading an email, either deal with the email and delete it or archive it. Create a separate archive folder and move emails there if you need to save them. Your goal is aways to reduce the inbox to zero</p>
+<p>The <code>page</code> variable is the YML front mater hash so we can check for <code>toc</code> to ensure the trigger code is only included on pages that want a TOC.</p>
 
-<h2>Create an other inbox</h2>
+<h2>3. Adjust the generators</h2>
 
-<p>Create a filter that will dump any messages where you are not the direct recipient into a different folder. This should be the first filter you create, but the last filter that is applied to any message. Create as many other filters and folders as you can to move useless messages round. The goal is to remove any message that you do not need to act on so that what is left is just what is important. The trash can is a good folder to dump things that are truly useless.</p>
+<p><code>rake new_post</code> and <code>rake new_page</code> generate a stub page with some YML head matter so it make sense for me to adjust the generators to include <code>toc</code>.</p>
 
-<h2>Use the server's filtering mechanism</h2>
+<p>Just add something like this to the <code>Rakefile</code>:</p>
 
-<p>When possible have server do all the filtering that way you can use multiple email clients and will not be dependent on leaving an email client on. All Exchange servers and many online email services can do server filtering. When using Outlook, be careful, the ease of creating filters is sometimes offset by the fact that it lies about what filters can be saved to the server. Though harder, since MS didn't spend much time on the server-side features of Exchange, it is better to build the filters on the server directly.</p>
+<p>```ruby
+task :new_post ... do
+  ...
+  open(...) do |post|</p>
 
-<h2>Reduce the inbox to zero (in one sitting)</h2>
+<pre><code>...
+post.puts "toc: false"
+...
+</code></pre>
 
-<p>The goal is always to reduce your inbox to zero. Once all the filters are in place, the only thing left to actually deal with all the important emails (at least that is the hope). When dealing with email decide if the email should be dealt with, deferred, or archived.</p>
-
-<p>If time is really an issue then find the messages to archive and defer first, and move them. That way what is left is just the stuff to deal with now.</p>
+<p>  end
+end
+```</p>
 ]]></content>
   </entry>
   

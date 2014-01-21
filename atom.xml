@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-01-11T07:15:19-05:00</updated>
+  <updated>2014-01-21T12:22:33-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,230 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Drafts]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/01/21/drafts/"/>
+    <updated>2014-01-21T11:38:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/01/21/drafts</id>
+    <content type="html"><![CDATA[<p>Jekyll supports unpublished posts, but Octopress does not make it clear.  This is how I fixed that for my own blog.</p>
+
+<!-- more -->
+
+
+<p>Octopress actually does support &#8220;published: false&#8221; in the front matter.  And because it based on Jekyll it means that those posts will be available in &#8220;preview&#8221; but will be ignored when the site is generated/published.</p>
+
+<p>My main care is that I know what I can do with a post in 3 to 4 months.  So I added the the published flag to the generated frontmatter of every new post.</p>
+
+<figure class='code'><figcaption><span>Rakefile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># around line 93, for me</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:new_post</span><span class="p">,</span> <span class="ss">:title</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1"># code omitted</span>
+</span><span class='line'>  <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;---&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;layout: post&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;title: </span><span class="se">\&quot;</span><span class="si">#{</span><span class="n">title</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/&amp;/</span><span class="p">,</span><span class="s1">&#39;&amp;amp;&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;date: </span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-%d %H:%M&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;comments: true&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;toc: false&quot;</span>
+</span><span class='line'>    <span class="c1"># add published flag to the template</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;published: false&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;categories: &quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;  - cat1&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;---&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;Summary&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;&lt;!-- more --&gt;&quot;</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span>
+</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;Post text&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Additionally I want to know visually when a page is a draft.  For that I add &#8220;Draft: &#8221; to the title.</p>
+
+<figure class='code'><figcaption><span>_includes/article.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>
+</span><span class='line'># in the <span class="nt">&lt;header&gt;</span> tag
+</span><span class='line'>{% if index %}
+</span><span class='line'>  # add {% if post.published == false %}Draft: {% endif %}
+</span><span class='line'>  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;entry-title&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ root_url }}{{ post.url }}&quot;</span><span class="nt">&gt;</span>{% if post.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class='line'>{% else %}
+</span><span class='line'>  # add {% if page.published == false %}Draft: {% endif %}
+</span><span class='line'>  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;entry-title&quot;</span><span class="nt">&gt;</span>{% if page.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>{% endif %}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you will see &#8220;Draft: &#8221; in front of any unpublished posts.</p>
+
+<h2>Manual management</h2>
+
+<p>A few additional things I like to do, but I haven&#8217;t automated yet are:</p>
+
+<ol>
+<li>Add &#8220;-draft&#8221; to the file name.</li>
+<li>Change the publish date to the day I publish the article
+
+<ol>
+<li>This involves changing the file name as well as the front matter</li>
+</ol>
+</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Inbox Zero / Cultivating Spam]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/01/21/inbox-zero-draft/"/>
+    <updated>2014-01-21T08:40:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/01/21/inbox-zero-draft</id>
+    <content type="html"><![CDATA[<p>This comes from the world of GTD (I think) and is a good stragety for anyone that &#8220;lives&#8221; out of email.  I try to live out of email as little as possible, but part of my job requires it.  So I have modified a system that works well with <a href="http://gmail.com">Gmail</a>.</p>
+
+<!-- more -->
+
+
+<p>Gmail has a whole app store, and I have tried a great many apps that help reduce the inbox.  Ultimately <a href="https://mailstrom.co/">Mailstrom</a> was one of the best.  I don&#8217;t use it partly because my wife and came to an agreement that we would not take on any subscriptions until we have paid off our dept, and party because I am so anal about cultivating email anyway that there was very little left for it to actually move.</p>
+
+<h1>Step 0: Getting over the fear of missing out</h1>
+
+<p>Facebook, Newsletter writers, and almost every company prays on your innate fear of &#8220;missing out&#8221;.  This fear (or any fear) causes you remain &#8220;hands-on&#8221; when things should be automated.  It drives your to &#8220;want&#8221; to read emails, read or watch news stories, or &#8220;play&#8221; on facebook even though none of those things can improve your life.</p>
+
+<p>Before getting started automating your email you have to mentally get over the fact that you <strong>will</strong> miss out on somethings.  The fact is that you are already missing out of a lot of things.</p>
+
+<p>Here are common fears and how to over come them:</p>
+
+<ol>
+<li>What if I miss an email about X event (where is X is a wedding, family reunion, etc&#8230;)!
+
+<ol>
+<li>Fear not, by filtering your emails you are <strong>more</strong> likely to see these message, not less likely!</li>
+</ol>
+</li>
+<li>What if my child is in trouble!
+
+<ol>
+<li>There will <strong>never</strong> be a case where a person in trouble pulls out their phone and crafts a heartfelt email.  It just doesn&#8217;t happen.  If it is an email, then it is <strong>not</strong> an emergency.</li>
+</ol>
+</li>
+<li>What if my boss asigns me work that needs to be done immediately, and I get fired!
+
+<ol>
+<li>If you are a personal assistant then you &#8220;live&#8221; in email and pre-processing the email will make it more likely that you find these requrests quickly.</li>
+<li>If you are not a personal assisitant then there is no reasonable expectation for you to live in email.  A pre-filter that emails your boss back saying &#8220;I check email at 8am, if this is something that needs to be done before mid day tomorrow please contact me directly&#8221; is enough.
+
+<ol>
+<li>As a good employee your job is to remove ambigouity to ensure a respectful and transparent work enviornment.  And no boss is going to mandate &#8220;email&#8221; if there is clear communication.</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+
+
+<h1>Step 1: Create some folders</h1>
+
+<p>Nothing should ever be done from your inbox, unless the total time to read, process and act on the email is &lt; 2minutes.  If it is more then then 2 minutes then you need to place it in a folder (Gmail calls them labels) and move on.  Once the inbox is reduced to 0 messages then you can get started on the folders.</p>
+
+<p>I recomend the following labels:</p>
+
+<ol>
+<li>&#8220;1 Today&#8221;</li>
+<li>&#8220;1 Tomorrow&#8221;</li>
+<li>&#8220;1 Next week&#8221;</li>
+<li>&#8220;Keep / Amazon&#8221; / Any other store you want to automatically filter into</li>
+<li>&#8220;Newsletters&#8221;</li>
+</ol>
+
+
+<h1>Step 2: Pre-filtering emails</h1>
+
+<p>Maintaining a good set of pre-filters is essential.</p>
+
+<h1>Step 3: Process your inbox</h1>
+
+<h2>Marking Spam</h2>
+
+<p>Most email is spam.  In fact, most of what people consider &#8220;real&#8221; email is actually spam.  Here are my rules for determining spam, and isolating.</p>
+
+<p>Automatic spam is an email that matches any of these:</p>
+
+<ol>
+<li>Asks for something: money, information, etc&#8230;</li>
+<li>Is a known scam: Nigerian prince with money, Court Summins, FBI&#8230;</li>
+</ol>
+
+
+<p>Normal spam is an any email that violates these filters:</p>
+
+<ol>
+<li>Is from a company not a person</li>
+<li>Is not in response to a request made by you</li>
+<li>Is not pre-filtered</li>
+</ol>
+
+
+<h1>Step 4: Cultivate Spam</h1>
+
+<p>With the libral use the &#8220;junk&#8221; button comes the probability that some &#8220;good&#8221; email will be marked spam.  This is not something to be scared of.  This is something to enjoy.</p>
+
+<p>The same way that farmers setup fields to make things like weeding easier the same is true of email.  If you didn&#8217;t follow the above steps then you will find that Gmail cannot help you, just a farm that does not plant rows finds that they cannot use</p>
+
+<p>To isolate spam:</p>
+
+<ol>
+<li>Use the &#8220;junk&#8221; mail filter very librally
+
+<ol>
+<li>When in doubt, it is junk</li>
+</ol>
+</li>
+<li>Review the spam folder once a week
+
+<ol>
+<li>If you cannot determine from the &#8220;to&#8221; and &#8220;subject&#8221; if it is spam or not, then it is spam.</li>
+<li>If you cannot create a filter for the email then it is spam.</li>
+</ol>
+</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RBAC in Ruby]]></title>
@@ -1025,6 +1249,173 @@
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Comcast Fail]]></title>
+    <link href="http://jkamenik.github.com/blog/2013/06/12/comcast-fail/"/>
+    <updated>2013-06-12T20:20:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2013/06/12/comcast-fail</id>
+    <content type="html"><![CDATA[<p>The Comcast 30 day challenge fails, except in challenging my nerves!</p>
+
+<p>I feel angry and scammed, but instead of ranting I am just going to give the timeline with some commentaries.</p>
+
+<!-- more -->
+
+
+<p>Everything below is factually accurate, but for libel reasons I will be leaving out the name of persons involved, as well as specific locations.  The place where initial contact was made will be known as &#8220;the mall&#8221;, the sales agent as &#8220;A&#8221;, the installation tech as &#8220;the tech&#8221;, Comcast support will be known as &#8220;S1&#8221; and &#8220;S2&#8221;, and the equipment recovery support will be known as &#8220;R1&#8221; and &#8220;R2&#8221;.</p>
+
+<p><code>My commentary will have this format.</code></p>
+
+<h3>Final Outcome</h3>
+
+<p>Lets start with the final outcome, which was effectively a 3 hour no-op.  There is a lot of anger because we feel duped, but no money changed hands, and I was able to reset my previous service provider without incident.  There is loss of recorded programs on the DVR, but that is the only loss I have suffered.</p>
+
+<p>I suffered 2 days (of the free 30) with the wrong services and a constant set of &#8220;we can&#8217;t help you.  Talk to some one else&#8221; answers.  During that time the internet (though not the correct server) had several outages.</p>
+
+<h3>Timeline</h3>
+
+<h4>November - June - Worry sets in</h4>
+
+<p>Worrying about money and the cost all subscription services.  Verizon isn&#8217;t horrible at $116 / month for very stable internet and some HD channels, but other then mortgage and utilities it our single greatest monthly expense.  We don&#8217;t have movie channels because we have both NetFlix and Amazon Prime.</p>
+
+<p>I am out of contract with Verizon so my cost could jump at any time, but at least I am not locked into a 2 year contract.  Doing online research has not yielded any options that are better.</p>
+
+<h4>Early June - Small changes</h4>
+
+<p>Cancel NetFlix since we barely watch it and have amazon which offers streaming video as well.</p>
+
+<h4>June 5th, 2013 - Sign up</h4>
+
+<p>Wednesday was a rough day and we decided to go to the mall to eat dinner.  After dinner we walked the mall and ended up in a Big Box store.  We were looking at the $199 Chromebook when <strong>A</strong> approached us.</p>
+
+<p><code>Yes we are a emotional eaters.</code></p>
+
+<p><strong>A</strong> was quite nice and we have been looking for a cheaper service anyway.  He tells us about the &#8220;$400 per year challenge&#8221; where comcast can save you over $400 a year with the same or better service.  After discussing what we have, he tells us about the package he has for $72 / month for 1 year.  The package is:</p>
+
+<ul>
+<li>Digital Preferred Plus TV</li>
+<li>50mb / s Internet</li>
+<li>HBO, Showtime and Max</li>
+</ul>
+
+
+<p><code>Sounds too good to be true.  We are sceptical.</code></p>
+
+<p><strong>A</strong> then says that we don&#8217;t have to pay for anything now and we get to try it for 30 days for free.  We sign up for installation Tuesday afternoon.  He takes the form and returns with the brochure which he writes on.</p>
+
+<p><code>What the hell.  If it works, great.  If not it isn't going to cost us anything.</code></p>
+
+<p>On the drive home we get a text from <strong>A</strong> asking when we wanted the installation.</p>
+
+<p><code>Now I am on guard.  This seems like all the old problems I have had with Comcast.  Memories of bad service, and bad support come flooding back.</code></p>
+
+<h4>June 10th, 2013 - Red flags</h4>
+
+<p>We get a welcome package from Comcast and it has nothing in it that remotely looks like what we were told about.  The advertised packages were triple play and much more then we are willing to pay.</p>
+
+<p><code>Red flag 1.</code></p>
+
+<p>Later that night I get my confirmation call.  The call says that the install will &#8220;arrive between 8am and 10am&#8221;.</p>
+
+<p><code>Red flag 2.</code></p>
+
+<h4>June 11th, 2013 - The install</h4>
+
+<p><code>I work from home.  So I am always there during the day.  I rearrange things so that I won't need the internet.</code></p>
+
+<p>Around 8:30am the tech arrives.  He walks around the yard examining things then comes to the door.  He asks if I have ever had Comcast.  &#8220;Not at this address&#8221;.  He tells me that there is no line to the house so he going to have to check some things.  He comes back a few minutes later and says that the only option is to run a cable over the driveway, and across the yard and later they will run an underground line.  I have to sign a waiver because it is a tripping hazard.</p>
+
+<p><code>I figured he was going to try to take the cable directly through a wall like happened at another house.  So I am happy to sign the waiver.</code></p>
+
+<p><code>Remember that they schedule an appointment to bury the line.  It comes up later.</code></p>
+
+<p>Tech runs the outside line and connects it to the line that already goes into the house.  Then comes in saying &#8220;I have a DVR, digital receiver, and cable modem where do you want them&#8221;.  I say &#8220;The DVR in the living room, the modem in the laundry room.&#8221;  He asks &#8220;where is the other TV?&#8221;</p>
+
+<p><code>Red flag 3.  I anly have 1 TV, and **A** knew that.</code></p>
+
+<p>Tech says &#8220;You should call your sales guy.  Service order says I have to install 2 TVs.&#8221;  <strong>A</strong> warned me to txt him before calling in case he was with a client.  So that is that what I do.  Meanwhile the tech installs the cable box, which has to update.  Then he goes about installing the modem.</p>
+
+<p><code>Awesome, soon I get my internet back.  I have been working without it, using my phone for email and other things that require me to be connected.  Soon I will be able to push what I have done to github.</code></p>
+
+<p>Tech installs the cable modem and needs a computer to activate it.  He uses a spare machine I have.  It installs a bunch of packages like always, which I can&#8217;t risk infecting my work computer.</p>
+
+<p><code>I hate that Comcast has this as a requirement, but at least I have a work around.  Verizon had a similar policy, but I was in the middle of moving and didn't have a computer so their tech used a verizon laptop to complete the installation.  No such luck with Comcast so it was a good thing I had a spare laptop.</code></p>
+
+<p>Immediately after configuring internet I check my work machine.  It is able to connect, but can&#8217;t get online.  After 5 min of debugging it suddenly works.</p>
+
+<p><code>Checking the modem logs the next day I found that the DHCP server kept crashing, which explains why machine was on Wifi but couldn't talk to anything.</code></p>
+
+<p>Checking speedtest.net I find that I am only getting 20mb /s down.  I tell the tech it should be 50mb.  He says &#8220;you need to call your sales guy.&#8221;</p>
+
+<p>He then heads back to check the cable box.  Asks &#8220;what service do you have&#8221;?  &#8220;Digital Perferred Plus&#8221;.  His response &#8220;Oh well that&#8217;s not what is enabled on this box.  You should call your sales man and get this correct.  There is nothing I can do.  I could call support but they might not be able to help, but it would cost you.&#8221;</p>
+
+<p><code>Wait what!?!  Support at comcast costs money now, and they can't help you with problems?</code></p>
+
+<p>I haven&#8217;t gotten a response back from <strong>A</strong> so I give him an actual call.  The phone goes to voice mail and the voice says &#8220;the user has not setup their voicemail, goodbye&#8221;.</p>
+
+<p><code>Red flag 4.  Holy hell!  A salesman that can't be reach and Comcast unable to help.  F'</code></p>
+
+<p>About 10 minutes later I get a call back and explain the situation.  The tech is doing cleanup so he is still here.  <strong>A</strong> tells me to have him take back the spare tuner and he will correct service tomorrow.</p>
+
+<p><code>Not what I want to hear, but at least things will be corrected soon.</code></p>
+
+<h4>June 12th, 2013 - The fail</h4>
+
+<p><strong>7:30ish</strong> - I start work and try speedtest.net again.  Still 20mb.  <strong>A</strong> must not be at work yet.</p>
+
+<p><strong>10:50ish</strong> - The internet goes out for about 10 minutes.  Great.  <strong>A</strong> corrected my account.  <code>or so I thought</code></p>
+
+<p><strong>11am</strong> - Internet comes back so I check speedtest.net.  Still 20mb.  <code>WTF?!? Less then one day in and I am already have network outages?</code></p>
+
+<p><strong>11:03am</strong> - I txt <strong>A</strong> &#8220;Any word on getting my package corrected?&#8221;.  I then go about figuring out why the Internet went out.  From the modem logs it appears the DHCP (needed for computer to talk to the internet) crashed.  The time wasn&#8217;t exactly right, but modem timestamp might not be accurate so that is my best guess.</p>
+
+<p><strong>4:10pm</strong> - I txt <strong>A</strong> &#8220;4pm and still word nor is the service working correctly&#8221;.  Then realize my mistaken and txt &#8220;Still no word*&#8221;</p>
+
+<p><strong>6:50pm</strong> - I call Comcast back on a number they called me from after the appointment.  Turns out that is just the survey line and they can&#8217;t transfer me.  They give me an alternate number, but that is the best they can do.</p>
+
+<p><strong>6:52pm</strong> - I Comcast at the number provided.  A few menus later and a short wait I am talking to retainment agent <strong>S1</strong> about canceling service.  I explain the situation and she wants to see if she can correct my service before canceling.  I am on hold for about 10minutes when she comes back to tell me that I have to talk to my sales person.</p>
+
+<p><code>Now I am thinking that I need to talk to the sales person to cancel.  Crap!</code></p>
+
+<p>&#8220;I can&#8217;t get ahold of him.  Just cancel the service.&#8221;  <strong>S1</strong> says &#8220;sorry for all the problem we can certainly cancel your account.  Since you are in the 30day window there will be no charge.&#8221;</p>
+
+<p>A short wait later <strong>S1</strong> says &#8220;You service is now canceled.  Do you have any questions at this time?&#8221;  &#8220;Are you going to send me a box so that I can return the equipment.&#8221;  She says &#8220;No, but I can redirect you to a recovery agent.&#8221;</p>
+
+<p><code>Crap.  I have been on the phone for more then an hour and now I have to talk to someone else.</code></p>
+
+<p>Another short wait and now I am talking to <strong>R1</strong>.  For verification reasons I have tell her all my account details.  Then she says &#8220;I am sorry, but we cannot collect your equipment Comcast has you down for a service call in 2 weeks so until that is finished there is nothing I can do&#8221;</p>
+
+<p>&#8220;What?&#8221; I say.  &#8220;I literally just got done canceling and was redirected here.&#8221;</p>
+
+<p><strong>R1</strong> says &#8220;I am sorry sir, but we are not Comcast.  We are a 3rd party.  You need to call Comcast.&#8221;</p>
+
+<p>&#8220;Fine, please transfer me back.&#8221;</p>
+
+<p>&#8220;I am sorry sir I cannot do that.  You have to call them back yourself.&#8221;  So I hung up.</p>
+
+<p><code>Now I question if Comcast is a company or a loose collection of people whose job it is to bounce you around like ping pong balls.  Have I even been talking to Comcast?</code></p>
+
+<p><strong>7:15pm</strong> - I call Comcast back, wait again, and go through the same verification as before.  Now I am with <strong>S2</strong> who just like <strong>S1</strong> attempts correct my service and will not help until she does.  I give her all the details.  She says &#8220;Sir that is not a package that we offer.  What I can do is waive the DVR for a year and give you HBO and your cost is only $89.99 / month&#8221;.</p>
+
+<p><code>Oh hell no.  I was sold $72 all in, no contract, including 3 movie channels.  Now I am being switched to a waived DRV (read contract required) and less for more?</code></p>
+
+<p>I say &#8220;No that is worse then I was sold.  But I already canceled the service and at recovery they told me they could collect because I had an outstanding appointment.&#8221;</p>
+
+<p><strong>S2</strong> says &#8220;Let me check&#8230;  I see they have an appointment in 2 weeks to bury a line, but&#8221;  I cut her off &#8220;but since I canceled there isn&#8217;t a need to bury a line.  Can you please cancel that appointment so I can have my equipment collected?&#8221;</p>
+
+<p><code>I shouldn't have cut her off, but it has been almost 2 hours of being bounced around and no one can help me completely and accurately.  I need to start being clear and not giving openings because I still have to make dinner.</code></p>
+
+<p><strong>S2</strong> says &#8220;Ok sir.  We can cancel that appointment.  If that is all I can transfer you back to recovery.  Have a nice day.&#8221;</p>
+
+<p>A short wait, and re-verification of my account later I am talking to <strong>R2</strong>.  She ask when I would like someone to pickup the stuff.  So I schedule it and hang up.</p>
+
+<p><strong>7:30pm</strong> - I disconnect the Comcast line to the house and reconnect the Verizon line.  I then pull out all the Comcast parts and replace them with my Verizon equipment.  I leave the Comcast DVR because we taped a several things yesterday that we want to watch and collections isn&#8217;t for several days.</p>
+
+<p><code>When we tried the DVR later it was bricked by corporate.  Nothing worked.  So those shows are lost to us now.  Thank god for online streaming.</code></p>
+
+<p><strong>7:42pm</strong> - I text <strong>A</strong> &#8220;No worries.  Several calls to support later.  Comcast is canceled&#8221;.  I then start writing this blog.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Francis Alexander Kamenik]]></title>
     <link href="http://jkamenik.github.com/blog/2012/12/02/francis-alexander-kamenik/"/>
     <updated>2012-12-02T17:20:00-05:00</updated>
@@ -1853,464 +2244,6 @@ close I get to my ultimate goal, and how long it takes to get there.</p>
 <p>What I mean about being concise is only add information if it is relevant.  &#8220;Because it is always done this way&#8221; is not relevant, no matter what you might think.  So unless you have specific experience keep it to yourself.  Also, raise any relevant questions, and take any relevant advice.</p>
 
 <p>By eliminating the work conversation waste you can and should spend time talking about personal things.  I have always been a huge fan of eating lunch away from the office with co-workers.  It is the best to respect people and be respected.  And by humanizing, barriers can be eliminated.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Factory Girl Automatic Tests]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/03/09/factory-girl-automatic-tests/"/>
-    <updated>2012-03-09T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/03/09/factory-girl-automatic-tests</id>
-    <content type="html"><![CDATA[<p>Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like <code>Given /^(\d+) blog exists$/</code> and <code>Given /^the following blogs exist:$/</code> I started to come up with generic functions that would build those steps.</p>
-
-<p>Stupid me for not checking that factory girl already does something like that. All you have to do is include factory girl&#8217;s <a href="http://github.com/thoughtbot/factory_girl/blob/master/lib/factory_girl/step_definitions.rb">step_definition</a> file:</p>
-
-<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">requie</span> <span class="s1">&#39;factory_girl/step_definitions&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you start using FactoryGirl correctly there are a world of new features that can make your steps both cleaner and more concise. Here are some tips I have found via trial and error.</p>
-
-<!-- more -->
-
-
-<h1>Tip 1: Do not reinvent the wheel</h1>
-
-<p>Factory girl will create steps for all factories that you have register.</p>
-
-<figure class='code'><figcaption><span>example_steps.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Showing example steps
-</span><span class='line'>  Given the following blogs exist:
-</span><span class='line'>    | name       |
-</span><span class='line'>    | first blog |
-</span><span class='line'>  Given a blog exists with a name of &quot;first blog&quot;
-</span><span class='line'>  Given a blog exists
-</span><span class='line'>  Given 41 blogs exist
-</span><span class='line'>  Given 14 blogs exist with a description of &quot;Test&quot;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Tip 2: Use association, Do not add more steps then are needed</h1>
-
-<p>Factory girlassociation are automatically created before the factory is created and they are automatically linked. It only supports the <strong>belongs_to</strong> behavior, so keep that in mind.</p>
-
-<p>Using the &#8221;<strong>Given the following XXX exist</strong>&#8221; step you can define attributes, on the theassociation, in the table. If we leave the association out then a default is created. If we define an attribute then it will be found or created using that attribute.</p>
-
-<p>Lets say you have a product and it can belog to a category. You do not need to create a category.</p>
-
-<figure class='code'><figcaption><span>product_category.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Category</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:category</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">factory</span> <span class="ss">:category</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Foo&#39;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">factory</span> <span class="ss">:product</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">association</span> <span class="ss">:category</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Bar&#39;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>product_category.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Bad
-</span><span class='line'> Given a category exists with a name of &quot;Foo&quot;
-</span><span class='line'> Given a product exists with a category of &quot;Foo&quot;
-</span><span class='line'>
-</span><span class='line'>Scenario: Good
-</span><span class='line'>  Given the following products exist:
-</span><span class='line'>    | name | category  |
-</span><span class='line'>    | Foo  | name: Bar |
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Tip 3: Attaching files via CarrierWave</span></h1>
-
-<p>Since cucumber is a text file it doesn&#8217;t make much sense for you to define full files in steps. It also doesn&#8217;t really make sense to embed full file paths in the tests. Instead, you can use a Transient attribute and some code so that in cucumber you define a file name and in the factory it converts to an actual file.</p>
-
-<figure class='code'><figcaption><span>file_product.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">mount_uploader</span> <span class="ss">:file</span><span class="p">,</span> <span class="no">FileUploader</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">factory</span> <span class="ss">:product</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">ignore</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">file_name</span> <span class="s1">&#39;small_image.png&#39;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">file</span> <span class="p">{</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;path/to/files&quot;</span><span class="p">,</span><span class="n">file_name</span><span class="p">))</span> <span class="k">unless</span> <span class="n">file_name</span><span class="o">.</span><span class="n">blank?</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>file_product.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Products
-</span><span class='line'>  Given a product exists
-</span><span class='line'>    # 1 product with an included file whose file_name was &quot;small_image.png&quot;
-</span><span class='line'>  Given the following products exist:
-</span><span class='line'>    | name      | file name     |
-</span><span class='line'>    | No image  |               |
-</span><span class='line'>    | Big image | big_image.png |
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Tip 4: Fixing a circular dependency between two models</span></h1>
-
-<p>Lets say you have a Store model and User model. And a User can both work at and own a Store. If you put associations in both the User and the Store model then each will try to create the other, infinitely. We can reuse the transient method as before to break the circle.</p>
-
-<p>The trick is to avoid defining an association in both factories, but instead use a transient attribute in one factory to simulate the behavior of an association. Also, since transient attributes are not likely to have the same level of sophistication as the associations you should use the association to define the more complex of the two models.</p>
-
-<figure class='code'><figcaption><span>user_store.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:store</span>
-</span><span class='line'>  <span class="n">has_many</span>   <span class="ss">:stores</span><span class="p">,</span> <span class="ss">:foreign_key</span> <span class="o">=&gt;</span> <span class="s1">&#39;owner_id&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Store</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:owner</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;User&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">factory</span> <span class="ss">:user</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;John Doe&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">ignore</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">store_name</span> <span class="kp">nil</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">store</span> <span class="p">{</span><span class="no">Store</span><span class="o">.</span><span class="n">find_or_create_by_name</span><span class="p">(</span><span class="n">store_name</span> <span class="o">||</span> <span class="s1">&#39;Test store&#39;</span><span class="p">)}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">factory</span> <span class="ss">:store</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Test store&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">association</span> <span class="ss">:owner</span><span class="p">,</span> <span class="ss">:factory</span> <span class="o">=&gt;</span> <span class="ss">:user</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>user_store.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: 2 users named &#39;John Doe&#39;, and 2 stores named &quot;Test store&quot;
-</span><span class='line'>  Given a user exists
-</span><span class='line'>  Given a store exists
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>Scenario: 2 users both working at the same store
-</span><span class='line'>  Given the following users exist:
-</span><span class='line'>    | name     | store name |
-</span><span class='line'>    | John Doe | Test store |
-</span><span class='line'>    | Jane Doe | Test store |
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>Scenario: 2 stores both owned by the same person
-</span><span class='line'>  Given the following stores exist:
-</span><span class='line'>    | name     | owner          |
-</span><span class='line'>    | MD Store | name: John Doe |
-</span><span class='line'>    | CA Store | name: John Doe |
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Tip 5: Fixing a circular dependency between the same model</span></h1>
-
-<p>Let say you have a Category model, and that model can belong to another Category (a tree) then you cannot use an association or you get the same infinite recursion issue as before. Here we can use a transient attribute along with an <strong>after_create</strong> hook to simulate the behavior we want.</p>
-
-<figure class='code'><figcaption><span>category.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Category</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">acts_as_nested_set</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">factory</span> <span class="ss">:category</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;Foo&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">ignore</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">parent</span> <span class="kp">nil</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">after_create</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="p">,</span><span class="n">attributes</span><span class="o">|</span>
-</span><span class='line'>      <span class="k">unless</span> <span class="n">attributes</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">blank?</span>
-</span><span class='line'>        <span class="n">parent</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">attributes</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">category</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>category.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>Scenario: Has no parents
-</span><span class='line'>  Given the following categories exist:
-</span><span class='line'>    | name |
-</span><span class='line'>    | Foo  |
-</span><span class='line'>    | Bar  |
-</span><span class='line'>    | Baz  |
-</span><span class='line'>
-</span><span class='line'>Scenario: Nested tree
-</span><span class='line'>  Given the following categories exist:
-</span><span class='line'>    | name | parent |
-</span><span class='line'>    | Foo  |        |
-</span><span class='line'>    | Bar  | Foo    |
-</span><span class='line'>    | Baz  | Bar    |
-</span><span class='line'>
-</span><span class='line'>  # + Foo
-</span><span class='line'>  # |+ Bar
-</span><span class='line'>  #  |- Baz
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CI server using Firefox]]></title>
-    <link href="http://jkamenik.github.com/blog/2011/11/30/ci-server-using-firefox/"/>
-    <updated>2011-11-30T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2011/11/30/ci-server-using-firefox</id>
-    <content type="html"><![CDATA[<p>If you are like me, you always setup a CI to ensure things that you already finished are not broken by things you are currently doing. And if you are like me, you use <a href="http://github.com/jnicklas/capybara">capybara</a>, <a href="http://github.com/lanej/selenium-webdriver">selenium-webdriver</a>, and <a href="http://www.mozilla.org/en-US/firefox/new/">firefox</a> to actually test the results in a browser. The rub comes when the CI server (running headless) needs to run firefox, which needs a screen.</p>
-
-<p>Virtual Frame Buffer (xvfb) is a great package. All it does is provide an X11 interface in memory instead of requiring a screen. Below I detail what I do on Ubuntu, but it should work the same on any Linux distro.</p>
-
-<!-- more -->
-
-
-<h3>Installing Firefox</h3>
-
-<div><script src='https://gist.github.com/1409172.js?file=install_firefox.sh'></script>
-<noscript><pre><code>$ sudo apt-get install firefox</code></pre></noscript></div>
-
-
-<h3>Testing Firefox</h3>
-
-<div><script src='https://gist.github.com/1409172.js?file=test_firefox.sh'></script>
-<noscript><pre><code>$ echo $DISPLAY
-localhost:10.0
-$ firefox</code></pre></noscript></div>
-
-
-<p>Once firefox is installed it can be tested on a X11-forwarded ssh connection. X11-forwarding has to be enabled on the server and client and can be tested by checking <code>DISPLAY</code>.</p>
-
-<h3>Installing Xvfb</h3>
-
-<div><script src='https://gist.github.com/1409172.js?file=install_xvfb.sh'></script>
-<noscript><pre><code>$ sudo apt-get install xvfb
-...Lots of stuff...</code></pre></noscript></div>
-
-
-<h3>Testing Firefox again</h3>
-
-<div><script src='https://gist.github.com/1409172.js?file=test_firefox_again.sh'></script>
-<noscript><pre><code>$ sudo apt-get install imagemagick
-$ Xvfb :1 &amp;
-$ export DISPLAY=:1
-$ firefox http://google.com
-...from another terminal...
-$ export DISPLAY=:1
-$ import -window root example.png
-...from another terminal...
-$ killall firefox
-$ firefox example.png</code></pre></noscript></div>
-
-
-<p>The easiest way to test is to use image magick to take a screen shot of the VFB and save it to an image that can be opened in Firefox. If the image opens and it looks like a firefox browser is running on the google page then you did it correctly.</p>
-
-<h3>Create a xvfb startup script</h3>
-
-<div><script src='https://gist.github.com/1409172.js?file=xvfb.sh'></script>
-<noscript><pre><code>/usr/bin/Xvfb :1 &amp;</code></pre></noscript></div>
-
-
-<p>On ubuntu no start script is provided, but a simple one put in <code>/etc/init.d/xvfb</code> is enough.</p>
-
-<h3>Getting the CI server to use the VFB</h3>
-
-<p>At this point getting a CI server to use Xvfb will depend on how it is started. If you use the Xvfb startup script then the display is <code>:1</code>. All you have to do is <code>export DISPLAY=:1</code> before the CI server starts.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ruby module instance and class methods]]></title>
-    <link href="http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods/"/>
-    <updated>2011-11-21T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2011/11/21/ruby-module-instance-and-class-methods</id>
-    <content type="html"><![CDATA[<p>A very common idiom especially when code starts to become complicated is to put functions in modules and mix in that behavior to several classes. And a common expansion is to have a single <code>include</code> add both instance and class methods.</p>
-
-<!-- more -->
-
-
-<p>Here is how to do it:</p>
-
-<div><script src='https://gist.github.com/1384045.js?file=include.rb'></script>
-<noscript><pre><code>module Foo
-  def self.included(base)
-    base.extend ClassMethods
-  end
-
-  module ClassMethods
-    def bar
-    end
-  end
-
-  def baz
-  end
-end
-
-class Test
-  include Foo
-end
-
-Test.bar     # class method
-Test.new.bar # No method error
-Test.baz     # No method error
-Test.new.baz # Instance method
-</code></pre></noscript></div>
-
-
-<p><code>include</code> is used to add a module&#8217;s instance methods as instance methods to the including class, but it doesn&#8217;t traverse sub modules. <code>extend</code> is used to add a module&#8217;s instance methods as class methods to a class.</p>
-
-<p>When a module is <code>included</code> it can register a callback which is passed the class that is doing the including. And calling <code>extend</code> on the base and passing a submodule will cause it to put those methods at the class level. This causes a chain reaction of loading both instance and class methods using a single <code>include</code>.</p>
-
-<p><strong>Pro Tip</strong>: It is possible to cause the same behavior using <code>extend</code> by using the <code>extended</code> callback; however, this is not common and <code>include 'x'</code> reads better then <code>extend 'y'</code>.</p>
 ]]></content>
   </entry>
   

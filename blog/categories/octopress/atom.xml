@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-01-11T07:15:19-05:00</updated>
+  <updated>2014-01-21T12:22:33-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Drafts]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/01/21/drafts/"/>
+    <updated>2014-01-21T11:38:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/01/21/drafts</id>
+    <content type="html"><![CDATA[<p>Jekyll supports unpublished posts, but Octopress does not make it clear.  This is how I fixed that for my own blog.</p>
+
+<!-- more -->
+
+
+<p>Octopress actually does support "published: false" in the front matter.  And because it based on Jekyll it means that those posts will be available in "preview" but will be ignored when the site is generated/published.</p>
+
+<p>My main care is that I know what I can do with a post in 3 to 4 months.  So I added the the published flag to the generated frontmatter of every new post.</p>
+
+<p>```ruby Rakefile</p>
+
+<h1>around line 93, for me</h1>
+
+<p>task :new_post, :title do |t, args|
+  # code omitted
+  open(filename, 'w') do |post|</p>
+
+<pre><code>post.puts "---"
+post.puts "layout: post"
+post.puts "title: \"#{title.gsub(/&amp;/,'&amp;amp;')}\""
+post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
+post.puts "comments: true"
+post.puts "toc: false"
+# add published flag to the template
+post.puts "published: false"
+post.puts "categories: "
+post.puts "  - cat1"
+post.puts "---"
+post.puts
+post.puts "Summary"
+post.puts
+post.puts "&lt;!-- more --&gt;"
+post.puts
+post.puts "Post text"
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Additionally I want to know visually when a page is a draft.  For that I add "Draft: " to the title.</p>
+
+<p>```html _includes/article.html
+</p>
+
+<h1>in the <header> tag</h1>
+
+<p>{% if index %}
+  # add {% if post.published == false %}Draft: {% endif %}
+  <h1 class="entry-title"><a href="{{ root_url }}{{ post.url }}">{% if post.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h1>
+{% else %}
+  # add {% if page.published == false %}Draft: {% endif %}
+  <h1 class="entry-title">{% if page.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
+{% endif %}
+
+```</p>
+
+<p>Now you will see "Draft: " in front of any unpublished posts.</p>
+
+<h2>Manual management</h2>
+
+<p>A few additional things I like to do, but I haven't automated yet are:</p>
+
+<ol>
+<li>Add "-draft" to the file name.</li>
+<li>Change the publish date to the day I publish the article
+
+<ol>
+<li>This involves changing the file name as well as the front matter</li>
+</ol>
+</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopress TOC]]></title>
