@@ -7,6 +7,7 @@ toc: true
 categories:
   - octopress
   - js
+  - howto
 ---
 
 I wanted to add a Table Of Contents (TOC) to some of my longer blog entries.  Here is how I did it.
