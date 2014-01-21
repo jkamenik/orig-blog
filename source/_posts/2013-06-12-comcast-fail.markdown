@@ -28,7 +28,7 @@ I suffered 2 days (of the free 30) with the wrong services and a constant set of
 
 #### November - June - Worry sets in ####
 
-Worry about money and the cost all subscription services.  Verizon isn't horrible at $116 / month for very stable internet and some HD channels, but other then mortgage and utilities it our single greatest monthly expense.  We don't have movie channels because we have both NetFlix and Amazon Prime.
+Worrying about money and the cost all subscription services.  Verizon isn't horrible at $116 / month for very stable internet and some HD channels, but other then mortgage and utilities it our single greatest monthly expense.  We don't have movie channels because we have both NetFlix and Amazon Prime.
 
 I am out of contract with Verizon so my cost could jump at any time, but at least I am not locked into a 2 year contract.  Doing online research has not yielded any options that are better.
 
@@ -38,7 +38,7 @@ Cancel NetFlix since we barely watch it and have amazon which offers streaming v
 
 #### June 5th, 2013 - Sign up ####
 
-Wednesday was a rough day and we decided to eat go to the mall to eat dinner.  After dinner we walked the mall and ended up in a Best Buy.  We were looking at the $199 Chromebook when **A** approached us.
+Wednesday was a rough day and we decided to go to the mall to eat dinner.  After dinner we walked the mall and ended up in a Big Box store.  We were looking at the $199 Chromebook when **A** approached us.
 
 `Yes we are a emotional eaters.`
 
@@ -72,13 +72,13 @@ Later that night I get my confirmation call.  The call says that the install wil
 
 `I work from home.  So I am always there during the day.  I rearrange things so that I won't need the internet.`
 
-Around 8:30am the tech arrives.  He walks around the yard examining things then comes to the door.  He asks if I have ever had Comcast.  "Not at this address".  He tells me that there is no line to the house so he going to have to check some things.  He comes back a few minutes later and says that the only option is to run a cable over the drive, and across the yard and later they will run an underground line.  I have to sign a waiver because it is a tripping hazard.
+Around 8:30am the tech arrives.  He walks around the yard examining things then comes to the door.  He asks if I have ever had Comcast.  "Not at this address".  He tells me that there is no line to the house so he going to have to check some things.  He comes back a few minutes later and says that the only option is to run a cable over the driveway, and across the yard and later they will run an underground line.  I have to sign a waiver because it is a tripping hazard.
 
 `I figured he was going to try to take the cable directly through a wall like happened at another house.  So I am happy to sign the waiver.`
 
 `Remember that they schedule an appointment to bury the line.  It comes up later.`
 
-Tech runs the outside line and connects it to the line that already goes into the house.  Then comes in "I DVR, digital receiver, and cable modem where do you want them".  "The DVR in the living room, the modem in the laundry room."  He asks "where is the other TV?"
+Tech runs the outside line and connects it to the line that already goes into the house.  Then comes in saying "I have a DVR, digital receiver, and cable modem where do you want them".  I say "The DVR in the living room, the modem in the laundry room."  He asks "where is the other TV?"
 
 `Red flag 3.  I anly have 1 TV, and **A** knew that.`
 
@@ -132,9 +132,15 @@ A short wait later **S1** says "You service is now canceled.  Do you have any qu
 
 `Crap.  I have been on the phone for more then an hour and now I have to talk to someone else.`
 
-Another short wait and now I am talking to **R1**.  For verification reasons I have tell her all my account details.  Then she says "I am sorry, but we cannot collect your equipment Comcast has you down for a service call in 2 weeks so until that is finished there is nothing I can do"  "What?  I literally just got done canceling and was redirected here."
+Another short wait and now I am talking to **R1**.  For verification reasons I have tell her all my account details.  Then she says "I am sorry, but we cannot collect your equipment Comcast has you down for a service call in 2 weeks so until that is finished there is nothing I can do"  
 
-**R1** says "I am sorry sir, but we are not Comcast.  We are a 3rd party.  You need to call Comcast."  "Fine, please transfer me back."  "I am sorry sir I cannot do that.  You have to call them back yourself."  So I hung up.
+"What?" I say.  "I literally just got done canceling and was redirected here."
+
+**R1** says "I am sorry sir, but we are not Comcast.  We are a 3rd party.  You need to call Comcast."
+
+"Fine, please transfer me back."
+
+"I am sorry sir I cannot do that.  You have to call them back yourself."  So I hung up.
 
 `Now I question if Comcast is a company or a loose collection of people whose job it is to bounce you around like ping pong balls.  Have I even been talking to Comcast?`
 
