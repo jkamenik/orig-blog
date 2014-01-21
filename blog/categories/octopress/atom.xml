@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-01-21T12:33:45-05:00</updated>
+  <updated>2014-01-21T12:40:37-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -55,6 +55,19 @@ post.puts "Post text"
 </code></pre>
 
 <p>  end
+end
+```</p>
+
+<p>I also had to update <code>rake push</code> to regenerate the full site before deployment.  This is because preview works on the same directly that is copied to production.  And since you can preview unpublished posts they will be visible in production, unless you run <code>rake generate</code> first.</p>
+
+<p>```ruby Rakefile</p>
+
+<h1>around line 254</h1>
+
+<p>multitask :push do
+  # add the generate rake task first
+  Rake::Task[:generate].invoke
+  # code omitted
 end
 ```</p>
 

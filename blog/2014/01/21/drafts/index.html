@@ -153,6 +153,23 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>I also had to update <code>rake push</code> to regenerate the full site before deployment.  This is because preview works on the same directly that is copied to production.  And since you can preview unpublished posts they will be visible in production, unless you run <code>rake generate</code> first.</p>
+
+<figure class='code'><figcaption><span>Rakefile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># around line 254</span>
+</span><span class='line'><span class="n">multitask</span> <span class="ss">:push</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># add the generate rake task first</span>
+</span><span class='line'>  <span class="no">Rake</span><span class="o">::</span><span class="no">Task</span><span class="o">[</span><span class="ss">:generate</span><span class="o">].</span><span class="n">invoke</span>
+</span><span class='line'>  <span class="c1"># code omitted</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>Additionally I want to know visually when a page is a draft.  For that I add &#8220;Draft: &#8221; to the title.</p>
 
 <figure class='code'><figcaption><span>_includes/article.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

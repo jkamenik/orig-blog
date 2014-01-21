@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-01-21T12:33:45-05:00</updated>
+  <updated>2014-01-21T12:40:37-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -72,6 +72,23 @@
 </span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span>
 </span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;Post text&quot;</span>
 </span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I also had to update <code>rake push</code> to regenerate the full site before deployment.  This is because preview works on the same directly that is copied to production.  And since you can preview unpublished posts they will be visible in production, unless you run <code>rake generate</code> first.</p>
+
+<figure class='code'><figcaption><span>Rakefile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># around line 254</span>
+</span><span class='line'><span class="n">multitask</span> <span class="ss">:push</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># add the generate rake task first</span>
+</span><span class='line'>  <span class="no">Rake</span><span class="o">::</span><span class="no">Task</span><span class="o">[</span><span class="ss">:generate</span><span class="o">].</span><span class="n">invoke</span>
+</span><span class='line'>  <span class="c1"># code omitted</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
