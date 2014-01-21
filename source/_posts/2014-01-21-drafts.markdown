@@ -1,0 +1,60 @@
+---
+layout: post
+title: "Drafts"
+date: 2014-01-21 11:38
+comments: true
+toc: false
+published: true
+categories: 
+  - howto
+  - octopress
+---
+
+Jekyll supports unpublished posts, but Octopress does not make it clear.  This is how I fixed that for my own blog.
+
+<!-- more -->
+
+Octopress actually does support "published: false" in the front matter.  And because it based on Jekyll it means that those posts will be available in "preview" but will be ignored when the site is generated/published.
+
+My main care is that I know what I can do with a post in 3 to 4 months.  So I added the the published flag to the generated frontmatter of every new post.
+
+```ruby Rakefile
+# around line 93, for me
+task :new_post, :title do |t, args|
+  # code omitted
+  open(filename, 'w') do |post|
+    post.puts "---"
+    post.puts "layout: post"
+    post.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
+    post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
+    post.puts "comments: true"
+    post.puts "toc: false"
+    # add published flag to the template
+    post.puts "published: false"
+    post.puts "categories: "
+    post.puts "  - cat1"
+    post.puts "---"
+    post.puts
+    post.puts "Summary"
+    post.puts
+    post.puts "<!-- more -->"
+    post.puts
+    post.puts "Post text"
+  end
+end
+```
+
+Additionally I want to know visually when a page is a draft.  For that I add "Draft: " to the title.
+
+```html _includes/article.html
+{% raw %}
+# in the <header> tag
+{% if index %}
+  # add {% if post.published == false %}Draft: {% endif %}
+  <h1 class="entry-title"><a href="{{ root_url }}{{ post.url }}">{% if post.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h1>
+{% else %}
+  # add {% if page.published == false %}Draft: {% endif %}
+  <h1 class="entry-title">{% if page.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
+{% endif %}
+{% endraw %}
+```
