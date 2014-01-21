@@ -58,3 +58,14 @@ Additionally I want to know visually when a page is a draft.  For that I add "Dr
 {% endif %}
 {% endraw %}
 ```
+
+Now you will see "Draft: " in front of any unpublished posts.
+
+Manual management
+-----------------
+
+A few additional things I like to do, but I haven't automated yet are:
+
+1. Add "-draft" to the file name.
+1. Change the publish date to the day I publish the article
+    1. This involves changing the file name as well as the front matter
