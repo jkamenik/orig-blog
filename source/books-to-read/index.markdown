@@ -9,11 +9,13 @@ footer: true
 
 Books I need to read:
 
+* [So Good They Can't Ignore You: Why Skills Trump Passion in the Quest for Work You Love](http://www.amazon.com/gp/product/1455509124/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1455509124&linkCode=as2&tag=chamaxwoo-20)
 * Thank you for arguing - Jay Heinrichs
 * Crucial conversations
 * Crucial confrontations
 * Patterns of Enterprise Application Architecture
 * The Total Money Makeover
+* Rich Habits - The Daily Success Habits of Wealthy Individuals
 
 * The Goal
 * [Getting Real](http://gettingreal.37signals.com/) - 37 Signals
