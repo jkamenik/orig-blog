@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: antipattern | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/antipattern/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2014-01-30T19:56:18-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Killing the Crunch Mode Antipattern]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/01/30/killing-the-crunch-mode-antipattern/"/>
+    <updated>2014-01-30T19:45:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/01/30/killing-the-crunch-mode-antipattern</id>
+    <content type="html"><![CDATA[<p>I have tried to write this article for years, but could never find the right words.  Thankfully Chad Fowler has found those words in his article <a href="http://chadfowler.com/blog/2014/01/22/the-crunch-mode-antipattern/">Killing the Cruch Mode Antipattern</a>.</p>
+
+<!-- more -->
+
+]]></content>
+  </entry>
+  
+</feed>
