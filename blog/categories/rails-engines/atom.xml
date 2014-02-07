@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails engines | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/rails-engines/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2014-02-07T14:39:28-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Controller Test in Rails Engines]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/02/07/controller-test-in-rails-engines/"/>
+    <updated>2014-02-07T14:13:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/02/07/controller-test-in-rails-engines</id>
+    <content type="html"><![CDATA[<p>Testing a controller that your engine provides is tricky.  But with rspec the easiest way I have found is to follow these 3 steps:</p>
+
+<ol>
+<li>Add <code>type: controller</code> to the describe block</li>
+<li>Add <code>routes { Your::Engine.routes }</code> block to the top of the tests</li>
+<li>Add <code>controller</code> block to the top</li>
+</ol>
+
+
+<!-- more -->
+
+
+<p>For example</p>
+
+<p>```ruby
+describe YourGem::UserController, type: :controller do</p>
+
+<pre><code>routes { YourGem::Engine.routes }
+controller do
+  # override controller behaviors here
+  def current_user
+      @user ||= create :user
+  end
+end
+
+describe 'GET index' do
+    it 'should work' do
+        get :index
+        expect(response).to be_success
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Adding <code>type: controller</code> forces Rspec to treat this as a "controller" test.  And it will mix in the "controller" object, and REST helpers (get, post, put, patch, delete).</p>
+
+<p>Adding <code>routes {...}</code> sets up default routing for the REST helpers, so they can find your controller.  If that is too heavy handed you can pass <code>use_route</code> (see below).</p>
+
+<p>Adding the <code>controller</code> block forces rspec to create an annoyomous controller double.  I use this to provide default function that the <code>ApplicationController</code> from the host app would provide; like <code>current_user</code>.</p>
+
+<h2>use_route</h2>
+
+<p>Instead of <code>routes {...}</code> you could provide the <code>use_route</code> param to the REST helpers.  The value is a symbol that constantizes to your Gem's namespace.  You need to provide it every helper (which is why I prefer the <code>routes</code> block).</p>
+
+<p>```ruby
+describe YourGem::UserController, type: :controller do</p>
+
+<pre><code>controller do
+  # override controller behaviors here
+end
+
+describe 'GET index' do
+    it 'should work' do
+        get :index, use_route: :your_gem
+        expect(response).to be_success
+    end
+end
+
+describe 'GET show' do
+    it 'should work' do
+        get :show, use_route: :your_gem, id: 1
+        expect(response).to be_success
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+]]></content>
+  </entry>
+  
+</feed>
