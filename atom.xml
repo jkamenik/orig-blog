@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-02-07T14:39:28-05:00</updated>
+  <updated>2014-02-12T10:20:40-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[B'More on Rails Meetup - Feb 11, 2014]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/02/12/bmore-on-rails-meetup/"/>
+    <updated>2014-02-12T09:09:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/02/12/bmore-on-rails-meetup</id>
+    <content type="html"><![CDATA[<p>Last night I attended the B&#8217;More on rails meetup group&#8217;s monthly presentation.  Always a group crowd.  Always good pizza.  And always good talks.</p>
+
+<p>Last nights talks where about Polymer and the JVM.</p>
+
+<!-- more -->
+
+
+<h2>Polymer</h2>
+
+<p>Presented by Chris Strom</p>
+
+<p>Before the meeting started we still only had 1 presentor, so Chris whipped together a <a href="http://en.wikipedia.org/wiki/Lightning_talk">lightning talk</a> on Polymer.  He has been blogging about it for some time, and is in the process of writing a book on Polymer.</p>
+
+<p>Polymer is horizontal in scope.  Instead of taking over the entire rendered page like Angular, jQuery, or Backbone, it isolates itself to sub page elements utilizing <a href="http://www.w3.org/TR/shadow-dom/">Shadow Dom</a>.</p>
+
+<p>The simpliest way to think about a Shawdow DOM is like an HTML namespace.  Programming languages have long had namespaces to isolate parts of code and keep things maintainable.  HTML has never had this, so reusable components have been a real headache.</p>
+
+<p>HTML 5 is trying to change that with a lot of advanced techniques, and Polymer is wrapping that in an easier to use library for programmers.</p>
+
+<h2>The JVM</h2>
+
+<p>Presented by Gary Trakhman</p>
+
+<p>The sides are <a href="https://github.com/gtrak/jvmrubyists">here</a></p>
+
+<p>It is nice to see new presentors.  I am not sure if he is new to the group, but I have not seen him present before, so props for that.</p>
+
+<p>The talk itself was an overview of many concepts about the Java Virtual Machine (JVM), but not really about the Java programming language, and not deep in any one area.  Gary (as well as most of us in the Ruby community) find the Java language too verbose to be useful.  There were some Java examples just to give a comparison to Ruby, but his main examples were using Closure.</p>
+
+<p>The JVM uses a Just In Time (JIT) compiler to take bytecode and translate it into platform specific instructions.  The instructions for Linux are different from Windows are different from BSD, but the bytecode is universal.  Java, JRuby, and Closure are just programming languages that produce bytecode.</p>
+
+<p>After the presentation Gary went into a live demo using a Closure console to execute code in real time.  The console simply starts a JVM, pipes it bytecode, and then prints the results in the terminal.  With the JVM running he also open the visiual profiler - which is provided in the Java Development Kit - so we could see the performace metics of the running code.</p>
+
+<h2>Sponsors</h2>
+
+<ul>
+<li><a href="http://www.mdlogix.com/">MDLogix</a> hosted the event</li>
+<li><a href="http://www.smartlogicsolutions.com/">SmartLogic</a> provided the pizza</li>
+<li><a href="http://www.inthebackforty.com/">Back Forty</a> - Honorable mention</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Controller Test in Rails Engines]]></title>
@@ -2147,54 +2196,6 @@ close I get to my ultimate goal, and how long it takes to get there.</p>
 <li>Now open http://myhost.dev in IE and it will work</li>
 </ol>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The problem with Best Practices]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/05/20/the-problem-with-best-practices/"/>
-    <updated>2012-05-20T00:00:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/05/20/the-problem-with-best-practices</id>
-    <content type="html"><![CDATA[<p>I hate the term &#8220;Best Practices&#8221; for two important reasons.  First, in an attempt to be concise the eliminate the most import information: the reasoning.  They are often just the call-to-action statement. and they are often passed down as policy.  Some best practices are good practices (for example pre-flight checklist) when applied to the correct situation.  But without the reasoning statement, it is hard to tell if the practice can be applied to other situations.  If I had to apply a pre-flight checklist before starting to code then I would waste a huge amount of time.</p>
-
-<!-- more -->
-
-
-<p>Second, best practices eliminate critical thinking.  With a misnomer like &#8220;Best Practices&#8221; it is not surprising that they are not questions.  And in most situation questioning a &#8220;Best Practice&#8221; is taken as an affront to the person/department that introduced the Best Practice.  I am not sure why this is, because very rarely is a Best Practice the best practice for every situation.  But since they defy questioning once instituted they become technical dept when they outlive their usefulness.</p>
-
-<p>Instead of &#8220;Best Practices&#8221; I prefer &#8220;Pro Tips.&#8221;  But the name itself is not as important as to how it is presented.  In order for me to consider a &#8220;Pro Tip&#8221; it must have three parts: a list of benefits, a list of drawbacks, and description of behavior.</p>
-
-<h2>A best practice: Always backup your work using git</h2>
-
-<p>I do not think that any software engineer is going to argue that backing up work is a good thing.  But by phasing it this way the problem because that &#8220;git&#8221; becomes an afterthought and therefore an annoyance.</p>
-
-<h2>A Pro Tip: Use git as a journal</h2>
-
-<p>Using git as a backup mechanism is a good thing.  But it is better to use git to journal what you are doing.  So instead of work for an entire day, committing everything at a single time, and then pushing everything at once you should do a single complete thing, and commit that.  Usually commits happend every 5 to 10 minutes, but they are generally self contained.</p>
-
-<p>Benefits:</p>
-
-<ol>
-<li>Your work is backed up</li>
-<li>You and others can see your train of thought</li>
-<li>You can return of any point and attempt other options</li>
-<li>You eliminate the fear of trying new things</li>
-<li>Focused work</li>
-</ol>
-
-
-<p>Drawbacks:</p>
-
-<ol>
-<li>You have to know git to make the most of it</li>
-<li>You have to take the time to make smaller commits</li>
-<li>You have to push more often</li>
-<li>You might have to start branching in order to keep organized</li>
-<li>Difficult for messy thinkers (tinkerers)</li>
-</ol>
-
-
-<p>See: a pro tip is a bit longer, and more detailed, but at the same time it is more convincing.  The reader can then choose when and how to try the tip, and also is free to adapt the tip to their given situation.  For example: a developer is going to use git differently then a designer; but git could be useful for both.</p>
 ]]></content>
   </entry>
   

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: b'more | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/b-more/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2014-02-12T10:20:40-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[B'More on Rails Meetup - Feb 11, 2014]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/02/12/bmore-on-rails-meetup/"/>
+    <updated>2014-02-12T09:09:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/02/12/bmore-on-rails-meetup</id>
+    <content type="html"><![CDATA[<p>Last night I attended the B'More on rails meetup group's monthly presentation.  Always a group crowd.  Always good pizza.  And always good talks.</p>
+
+<p>Last nights talks where about Polymer and the JVM.</p>
+
+<!-- more -->
+
+
+<h2>Polymer</h2>
+
+<p>Presented by Chris Strom</p>
+
+<p>Before the meeting started we still only had 1 presentor, so Chris whipped together a <a href="http://en.wikipedia.org/wiki/Lightning_talk">lightning talk</a> on Polymer.  He has been blogging about it for some time, and is in the process of writing a book on Polymer.</p>
+
+<p>Polymer is horizontal in scope.  Instead of taking over the entire rendered page like Angular, jQuery, or Backbone, it isolates itself to sub page elements utilizing <a href="http://www.w3.org/TR/shadow-dom/">Shadow Dom</a>.</p>
+
+<p>The simpliest way to think about a Shawdow DOM is like an HTML namespace.  Programming languages have long had namespaces to isolate parts of code and keep things maintainable.  HTML has never had this, so reusable components have been a real headache.</p>
+
+<p>HTML 5 is trying to change that with a lot of advanced techniques, and Polymer is wrapping that in an easier to use library for programmers.</p>
+
+<h2>The JVM</h2>
+
+<p>Presented by Gary Trakhman</p>
+
+<p>The sides are <a href="https://github.com/gtrak/jvmrubyists">here</a></p>
+
+<p>It is nice to see new presentors.  I am not sure if he is new to the group, but I have not seen him present before, so props for that.</p>
+
+<p>The talk itself was an overview of many concepts about the Java Virtual Machine (JVM), but not really about the Java programming language, and not deep in any one area.  Gary (as well as most of us in the Ruby community) find the Java language too verbose to be useful.  There were some Java examples just to give a comparison to Ruby, but his main examples were using Closure.</p>
+
+<p>The JVM uses a Just In Time (JIT) compiler to take bytecode and translate it into platform specific instructions.  The instructions for Linux are different from Windows are different from BSD, but the bytecode is universal.  Java, JRuby, and Closure are just programming languages that produce bytecode.</p>
+
+<p>After the presentation Gary went into a live demo using a Closure console to execute code in real time.  The console simply starts a JVM, pipes it bytecode, and then prints the results in the terminal.  With the JVM running he also open the visiual profiler - which is provided in the Java Development Kit - so we could see the performace metics of the running code.</p>
+
+<h2>Sponsors</h2>
+
+<ul>
+<li><a href="http://www.mdlogix.com/">MDLogix</a> hosted the event</li>
+<li><a href="http://www.smartlogicsolutions.com/">SmartLogic</a> provided the pizza</li>
+<li><a href="http://www.inthebackforty.com/">Back Forty</a> - Honorable mention</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
