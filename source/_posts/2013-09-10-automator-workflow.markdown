@@ -5,7 +5,8 @@ date: 2013-09-10 09:25
 comments: true
 toc: false
 categories: 
-  - cat1
+  - automator
+  - howto
 ---
 
 I don't like to repeat myself, and I use a Mac, so I have a great little tool called "Automator".  Every morning when I am about to start work I open Spotlight (`cmd + space` for me) and type "startwork".  The first app that shows up is my Automator workflow for opening all the programs that I need to work.
