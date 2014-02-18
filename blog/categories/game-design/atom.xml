@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: game design | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/game-design/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2014-02-17T20:04:13-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Crafty JS]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/02/17/crafty-js/"/>
+    <updated>2014-02-17T12:53:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/02/17/crafty-js</id>
+    <content type="html"><![CDATA[<p>Recently I started playing Clash of Clans on the iPhone, which is a City building game.  It is a free app that uses in-app purchases to speed up your progress.  I have tried many of these types of games and there is something addictive about them.</p>
+
+<p>Why not build my own game?  Great idea, but I know nothing about game design.  I am just a programmer.  So a bit of Googling later and I have a small list of required items.  All of which are required to get a game published.  Basically, not useful to me, since I want to learn, not sell.</p>
+
+<p>So instead of building the next award winning game that will make me a millionare I am going to play to my strength of programming and slowly move into the other area that are needed for an engaging game.</p>
+
+<p>That is where Crafty comes in.  <a href="http://craftyjs.com/">Crafty</a> is a Javascript game engine.  Unfortunately their documentation sucks, so I am writing what I understand (though it is probably wrong).</p>
+
+<!-- more -->
+
+
+<p>I chose Crafty because it was literally the first thing that came up when I googled "javascript game engine".  So I jumped into the <a href="http://buildnewgames.com/introduction-to-crafty/">getting started guild</a>, and followed it in my own <a href="https://github.com/jkamenik/crafty_tutorial">repo</a>.</p>
+
+<p>A game is built by combining various types of objects together.  This is a basic list of the Crafty objects.</p>
+
+<h2>Scenes</h2>
+
+<p>A scene is the groundwork for a distinct part of the game.  One might be the loading screen that shows the user that things are happening.  Another might be the actual game screen.  Another might be a "game over" screen.</p>
+
+<p>Scenes are registered with <code>Crafty.scene</code> which takes 3 arguments</p>
+
+<ol>
+<li>Name - A string representing the scene name</li>
+<li>init function - a function to set up the scene</li>
+<li>uninit function - a function called to stop the scene (called after 2D objects are destroyed)</li>
+</ol>
+
+
+<p><code>Crafty.enterScene</code> can be used to enter a new scene (and by extension destroy the current scene).</p>
+
+<h2>Component</h2>
+
+<p>A component encapsulates data and behaviors into reusable parts.  There are already many prebuilt components like <code>SpriteAnimation</code> which allows a sprite to animate itself, and "Collision" which allows object to detect if they have hit a convex polygon.</p>
+
+<p>Components are registered with <code>Crafty.c</code> which takes 2 arguments</p>
+
+<ol>
+<li>Name - A string representing the component</li>
+<li>Object - A JS object representing the data and behaviors of the component</li>
+</ol>
+
+
+<p>There are two special functions:</p>
+
+<ol>
+<li>init - is called when the component is included within an entity</li>
+<li>remove - is called when the component is removed or an entity is destroyed.  If it is being called because of an entity then it is passed a single "true" argument.</li>
+</ol>
+
+
+<p>By convention if you provide a function that has the same name as the component then it is used as a constructor by the entity.</p>
+
+<p>```javascript
+Crafty.c('Test',{</p>
+
+<pre><code>init: function(){},
+
+test: function(message){
+    alert(message);
+}
+</code></pre>
+
+<p>});</p>
+
+<p>Crafty.e('Test').test('something');
+```</p>
+
+<h2>Entity</h2>
+
+<p>An entity is an individual and distinct object in the game.  They are usually made up of one or more Components, but are not necessarily visible to the user.  Your player character will be an entity that might include a keyboard event component as well as a collision component and sprite component.</p>
+
+<p>Entities are created with <code>Crafty.e</code> which takes a single argument:</p>
+
+<ol>
+<li>Components - Either a comma separated list of component names, or a set of strings each being their own components</li>
+</ol>
+
+
+<p>```javascript
+Crafty.e('Collision, Fourway');</p>
+
+<p>// is the same as</p>
+
+<p>Crafty.e('Collision', 'Fourway');
+```</p>
+
+<h2>Events</h2>
+
+<p>Events come in two flavors: Component and Global events.  Component events happen to or on an Entity that has included the Component.  For example the player entity may include the "Fourway" component which would add the "Moved" event.  Anyone (including the player itself) could listen for that event and know when the player moved.</p>
+
+<p>Global events are registered to and triggered from the global Crafty object.  The tricky part with global events is that they do not have be registered or used, so it is up to you to make sure that you document events that you trigger and correctly bind to those events.</p>
+
+<p>An event is triggered with <code>Crafty.trigger</code> which takes any number of arguments.</p>
+
+<ol>
+<li>Name - the name of the event to trigger</li>
+<li>data - All the rest of the arguments are blindly passed to any event listener</li>
+</ol>
+
+
+<p>An event is listened for using one of the following.  All of them accept two arguments: the name of the event, and the callback function when the event is triggered.</p>
+
+<ol>
+<li><code>bind</code> - listen for event</li>
+<li><code>uniqueBind</code> - same as bind, but prevents other event listeners for the same event</li>
+<li><code>one</code> - same as bind, but automatically unbinds itself after the first event is triggered</li>
+</ol>
+
+
+<p>Note: in general you should use a named function as the callback.  That way scenes can <code>unbind</code> event listeners when they become inactive (thereby saving the overhead of intercepting events that cannot be acted upon).</p>
+
+<h2>Assets</h2>
+
+<p>An asset is anything data that might need to be loaded before a scene can be played.  This might be images, audio, video, or player data.  Assets are globally registered and can be loaded anyway you see fit, but for convenience there is a loader object which does the heavy lifting.</p>
+
+<p>Assets are loaded with <code>Crafty.load</code> which takes up to 4 arguments</p>
+
+<ol>
+<li>assets - an array of the asset URLs to load</li>
+<li>onLoad - call after ALL assets are loaded</li>
+<li>onProgress - called after each asset is loaded.  It is called with the loaded asset, the total number of assets being loaded, and percentage complete.</li>
+<li>onError - called when an asset fails to load.</li>
+</ol>
+
+
+<p>Assets that have been loaded can be acquired using <code>Crafty.asset</code> which takes 1 argument</p>
+
+<ol>
+<li>key - the unique name of the asset.  Usually it is the URL used to load the asset.</li>
+</ol>
+
+
+<h2>Sprites</h2>
+
+<p>A sprite is just a component, but it is likely to be one of the most common components of your game that it bares introduction.  Basically a sprite is an image shown to the user.  They could be used for the player, or obstacles on the game board, or for the game board itself.</p>
+
+<p>There is a Sprite component in Crafty, which will almost never be used by itself.  Instead <code>Crafty.sprite</code> will be used to split an image into one or more registered sprite components that you will use.  It takes a variable number of arguments</p>
+
+<ol>
+<li>tiles (optional) - the number of tiles in the image.  Each image is assumed to be square so if this number was "16" it would assume there are 4 columns and 4 rows.</li>
+<li>tileWidth, tileHeight (optional) - The width and height of individual tiles.  Either use this or "tiles", but not both</li>
+<li>url - The URL of the loaded image.  This should be preloaded by the <code>Crafty.loader</code></li>
+<li>map - map of the sprites to register from this image in the form
+
+<ol>
+<li>key - the name of the Sprite component</li>
+<li>value - array of offset and size attributes
+
+<ol>
+<li>x offset</li>
+<li>y offset</li>
+<li>width (optional)</li>
+<li>height (optional)</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>paddingX (optional) - horizontal space between tiles</li>
+<li>paddingY (optional) - vertical space between tiles</li>
+<li>paddingArroundBorder (optional) - if true then there is assumed to be the same amount of padding between the edge of the image and tile as there is between tiles.</li>
+</ol>
+
+
+<p>```javascript
+// FlowerSprite is at 0,0 and is 16x32 in size
+Crafty.sprite('img/spritemap.png', {FlowerSprite: [0,0,16,32]})</p>
+
+<p>// RoseSprite is at 0,0 and is 50x50
+// GrassSprite is at 0,50px and is 150x50px
+Crafty.sprite(50, 'img/spritemap2.png', {</p>
+
+<pre><code>RoseSprite: [0,0],
+GrassSprite: [0,1,3,1]
+</code></pre>
+
+<p>})
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

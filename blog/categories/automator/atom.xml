@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: cat1 | Random Software Inklings]]></title>
-  <link href="http://jkamenik.github.com/blog/categories/cat1/atom.xml" rel="self"/>
+  <title><![CDATA[Category: automator | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/automator/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-02-12T10:20:40-05:00</updated>
+  <updated>2014-02-17T20:04:13-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>

@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-02-12T10:20:40-05:00</updated>
+  <updated>2014-02-17T20:04:13-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,210 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Crafty JS]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/02/17/crafty-js/"/>
+    <updated>2014-02-17T12:53:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/02/17/crafty-js</id>
+    <content type="html"><![CDATA[<p>Recently I started playing Clash of Clans on the iPhone, which is a City building game.  It is a free app that uses in-app purchases to speed up your progress.  I have tried many of these types of games and there is something addictive about them.</p>
+
+<p>Why not build my own game?  Great idea, but I know nothing about game design.  I am just a programmer.  So a bit of Googling later and I have a small list of required items.  All of which are required to get a game published.  Basically, not useful to me, since I want to learn, not sell.</p>
+
+<p>So instead of building the next award winning game that will make me a millionare I am going to play to my strength of programming and slowly move into the other area that are needed for an engaging game.</p>
+
+<p>That is where Crafty comes in.  <a href="http://craftyjs.com/">Crafty</a> is a Javascript game engine.  Unfortunately their documentation sucks, so I am writing what I understand (though it is probably wrong).</p>
+
+<!-- more -->
+
+
+<p>I chose Crafty because it was literally the first thing that came up when I googled &#8220;javascript game engine&#8221;.  So I jumped into the <a href="http://buildnewgames.com/introduction-to-crafty/">getting started guild</a>, and followed it in my own <a href="https://github.com/jkamenik/crafty_tutorial">repo</a>.</p>
+
+<p>A game is built by combining various types of objects together.  This is a basic list of the Crafty objects.</p>
+
+<h2>Scenes</h2>
+
+<p>A scene is the groundwork for a distinct part of the game.  One might be the loading screen that shows the user that things are happening.  Another might be the actual game screen.  Another might be a &#8220;game over&#8221; screen.</p>
+
+<p>Scenes are registered with <code>Crafty.scene</code> which takes 3 arguments</p>
+
+<ol>
+<li>Name - A string representing the scene name</li>
+<li>init function - a function to set up the scene</li>
+<li>uninit function - a function called to stop the scene (called after 2D objects are destroyed)</li>
+</ol>
+
+
+<p><code>Crafty.enterScene</code> can be used to enter a new scene (and by extension destroy the current scene).</p>
+
+<h2>Component</h2>
+
+<p>A component encapsulates data and behaviors into reusable parts.  There are already many prebuilt components like <code>SpriteAnimation</code> which allows a sprite to animate itself, and &#8220;Collision&#8221; which allows object to detect if they have hit a convex polygon.</p>
+
+<p>Components are registered with <code>Crafty.c</code> which takes 2 arguments</p>
+
+<ol>
+<li>Name - A string representing the component</li>
+<li>Object - A JS object representing the data and behaviors of the component</li>
+</ol>
+
+
+<p>There are two special functions:</p>
+
+<ol>
+<li>init - is called when the component is included within an entity</li>
+<li>remove - is called when the component is removed or an entity is destroyed.  If it is being called because of an entity then it is passed a single &#8220;true&#8221; argument.</li>
+</ol>
+
+
+<p>By convention if you provide a function that has the same name as the component then it is used as a constructor by the entity.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,{</span>
+</span><span class='line'>    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">test</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">).</span><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Entity</h2>
+
+<p>An entity is an individual and distinct object in the game.  They are usually made up of one or more Components, but are not necessarily visible to the user.  Your player character will be an entity that might include a keyboard event component as well as a collision component and sprite component.</p>
+
+<p>Entities are created with <code>Crafty.e</code> which takes a single argument:</p>
+
+<ol>
+<li>Components - Either a comma separated list of component names, or a set of strings each being their own components</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s1">&#39;Collision, Fourway&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// is the same as</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s1">&#39;Collision&#39;</span><span class="p">,</span> <span class="s1">&#39;Fourway&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Events</h2>
+
+<p>Events come in two flavors: Component and Global events.  Component events happen to or on an Entity that has included the Component.  For example the player entity may include the &#8220;Fourway&#8221; component which would add the &#8220;Moved&#8221; event.  Anyone (including the player itself) could listen for that event and know when the player moved.</p>
+
+<p>Global events are registered to and triggered from the global Crafty object.  The tricky part with global events is that they do not have be registered or used, so it is up to you to make sure that you document events that you trigger and correctly bind to those events.</p>
+
+<p>An event is triggered with <code>Crafty.trigger</code> which takes any number of arguments.</p>
+
+<ol>
+<li>Name - the name of the event to trigger</li>
+<li>data - All the rest of the arguments are blindly passed to any event listener</li>
+</ol>
+
+
+<p>An event is listened for using one of the following.  All of them accept two arguments: the name of the event, and the callback function when the event is triggered.</p>
+
+<ol>
+<li><code>bind</code> - listen for event</li>
+<li><code>uniqueBind</code> - same as bind, but prevents other event listeners for the same event</li>
+<li><code>one</code> - same as bind, but automatically unbinds itself after the first event is triggered</li>
+</ol>
+
+
+<p>Note: in general you should use a named function as the callback.  That way scenes can <code>unbind</code> event listeners when they become inactive (thereby saving the overhead of intercepting events that cannot be acted upon).</p>
+
+<h2>Assets</h2>
+
+<p>An asset is anything data that might need to be loaded before a scene can be played.  This might be images, audio, video, or player data.  Assets are globally registered and can be loaded anyway you see fit, but for convenience there is a loader object which does the heavy lifting.</p>
+
+<p>Assets are loaded with <code>Crafty.load</code> which takes up to 4 arguments</p>
+
+<ol>
+<li>assets - an array of the asset URLs to load</li>
+<li>onLoad - call after ALL assets are loaded</li>
+<li>onProgress - called after each asset is loaded.  It is called with the loaded asset, the total number of assets being loaded, and percentage complete.</li>
+<li>onError - called when an asset fails to load.</li>
+</ol>
+
+
+<p>Assets that have been loaded can be acquired using <code>Crafty.asset</code> which takes 1 argument</p>
+
+<ol>
+<li>key - the unique name of the asset.  Usually it is the URL used to load the asset.</li>
+</ol>
+
+
+<h2>Sprites</h2>
+
+<p>A sprite is just a component, but it is likely to be one of the most common components of your game that it bares introduction.  Basically a sprite is an image shown to the user.  They could be used for the player, or obstacles on the game board, or for the game board itself.</p>
+
+<p>There is a Sprite component in Crafty, which will almost never be used by itself.  Instead <code>Crafty.sprite</code> will be used to split an image into one or more registered sprite components that you will use.  It takes a variable number of arguments</p>
+
+<ol>
+<li>tiles (optional) - the number of tiles in the image.  Each image is assumed to be square so if this number was &#8220;16&#8221; it would assume there are 4 columns and 4 rows.</li>
+<li>tileWidth, tileHeight (optional) - The width and height of individual tiles.  Either use this or &#8220;tiles&#8221;, but not both</li>
+<li>url - The URL of the loaded image.  This should be preloaded by the <code>Crafty.loader</code></li>
+<li>map - map of the sprites to register from this image in the form
+
+<ol>
+<li>key - the name of the Sprite component</li>
+<li>value - array of offset and size attributes
+
+<ol>
+<li>x offset</li>
+<li>y offset</li>
+<li>width (optional)</li>
+<li>height (optional)</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>paddingX (optional) - horizontal space between tiles</li>
+<li>paddingY (optional) - vertical space between tiles</li>
+<li>paddingArroundBorder (optional) - if true then there is assumed to be the same amount of padding between the edge of the image and tile as there is between tiles.</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// FlowerSprite is at 0,0 and is 16x32 in size</span>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">sprite</span><span class="p">(</span><span class="s1">&#39;img/spritemap.png&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">FlowerSprite</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">32</span><span class="p">]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// RoseSprite is at 0,0 and is 50x50</span>
+</span><span class='line'><span class="c1">// GrassSprite is at 0,50px and is 150x50px</span>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">sprite</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;img/spritemap2.png&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">RoseSprite</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>    <span class="nx">GrassSprite</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[B'More on Rails Meetup - Feb 11, 2014]]></title>
@@ -2091,111 +2295,6 @@ close I get to my ultimate goal, and how long it takes to get there.</p>
 <p>So things started to fall into place with Jekyll.  I just needed to install a syntax highlighting gem, and design the site.  In the process, I stumbled across Octopress, which is a wrapper around a Jekyll site, works with github, has syntax highlighting, provides a clean theme, and has a programmer friendly workflow.</p>
 
 <p>So Octopress is the blog engine for me.  And it will reside at <a href="http://jkamenik.github.com">http://jkamenik.github.com</a>.  I will slowly be transferring all my entries from here, but I doubt I will retire this site entirely.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Testing Rails in IE though Pow]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/09/11/testing-rails-in-ie-though-pow/"/>
-    <updated>2012-09-11T00:00:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/09/11/testing-rails-in-ie-though-pow</id>
-    <content type="html"><![CDATA[<h2>My Problem</h2>
-
-<p>I can&#8217;t test in IE (but the client wants it to work in IE 7 and IE 8)</p>
-
-<!-- more -->
-
-
-<h2>My Setup</h2>
-
-<ol>
-<li>A mac - because I need it to work the first time every time</li>
-<li><a href="http://rubyonrails.org">Rails</a></li>
-<li><a href="https://rvm.io">RVM</a> - because you should be using it</li>
-<li>PostgreSQL - it is better then MySQL and actually easier to setup after you do it once.</li>
-<li><a href="http://pow.cx">Pow</a> - because it is small, spins up the rails server when you need it and the url looks like http://myhost.dev, not http://127.0.0.1:3000 (some browsers will attempt to look up &#8220;localhost&#8221; via google search, before asking DNS)</li>
-<li>TDD
-
-<ol>
-<li><a href="http://cukes.info">Cucumber</a> - because it is easier to read integration level testing</li>
-<li><a href="https://www.relishapp.com/rspec">Rspec</a> - because I like it (it both backs cucumber, and also us the unit testing for models and libraries)</li>
-<li><a href="https://github.com/jnicklas/capybara">Capybara</a></li>
-<li><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> - so the browser is opened headless and doesn&#8217;t intrupt other work</li>
-</ol>
-</li>
-</ol>
-
-
-<h2>My Solution</h2>
-
-<p>First do everything as normal, since you will be developing faster and only at the END worry about IE.  This is counter to a lot of thinking, but I have found that if you stick to good TDD and are testing using an actual opened browser then the only issue you will end up with are CSS related issues.</p>
-
-<h3>Before you start</h3>
-
-<p>Since it is likely that you will only have CSS issues it is a requirement that you make the main CSS work on HTML5 compliant browsers.  And add exceptions for the others.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;real&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">&lt;!--[if IE]&gt;</span>
-</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
-</span><span class='line'><span class="x">&lt;!--[if IE 8]&gt;</span>
-</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie8&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
-</span><span class='line'><span class="x">&lt;!--[if IE 7]&gt;</span>
-</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;ie7&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">&lt;![endif]--&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Use a Windows VM</h3>
-
-<p>Go to https://github.com/xdissent/ievms and install the various IE VMs.  I have not had luck with IE6 and IE7, but IE8 works fine.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -s https://raw.github.com/xdissent/ievms/master/ievms.sh | <span class="nv">IEVMS_VERSIONS</span><span class="o">=</span><span class="s2">&quot;8&quot;</span> bash
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If it fails, just keep rerunning it, or try a different version</p>
-
-<h4>Boot and wait for driver detection</h4>
-
-<p>On first boot I usually go in as Admin and let windows detect everything and install all the needed components.  This isn&#8217;t a genuine version of windows so after 30 days you will be locked out, at which point you just need to revert to the &#8220;clean&#8221; snapshot.</p>
-
-<h4>Install the OS extensions</h4>
-
-<p>For some reason the CD doesn&#8217;t autoplay for me.  Just enter &#8220;d:&#8221; in the Start Menu -> Search and then select the installer.</p>
-
-<h4>Add Fake DNS</h4>
-
-<p>Pow munges DNS on the Mac so that you don&#8217;t have to use &#8220;localhost&#8221;.  I actually really like this about Pow and so will remain using it.  The only thing that you need to do is edit the windows Hosts file and add the Fake DNS there as well.</p>
-
-<ol>
-<li>Login as the IEUser</li>
-<li>Start -> Search -> &#8220;Notepad&#8221;</li>
-<li>Right click and select &#8220;Open as administrator&#8221;</li>
-<li>File -> Open</li>
-<li>Change URL to &#8220;C:\WINDOWS\system32\drivers\etc\hosts&#8221;</li>
-<li>Add the following (change the host names as you need)
-
-<ol>
-<li>&#8220;10.0.2.2       myhost.dev&#8221;</li>
-<li>&#8220;10.0.2.2       myhost1.dev&#8221;</li>
-</ol>
-</li>
-<li>Now open http://myhost.dev in IE and it will work</li>
-</ol>
-
 ]]></content>
   </entry>
   

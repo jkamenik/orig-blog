@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Crafty JS - Random Software Inklings</title>
+  <meta name="author" content="John T. Kamenik">
+
+  
+  <meta name="description" content="Recently I started playing Clash of Clans on the iPhone, which is a City building game. It is a free app that uses in-app purchases to speed up your &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/02/17/crafty-js/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Random Software Inklings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
+<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Random Software Inklings</a></h1>
+  
+    <h2>Random documentation of things I have learned.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jkamenik.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://jkamenik.github.com/Resume">Resume</a></li>
+  <li><a href="/knowledge">Knowledge</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Crafty JS</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-17T12:53:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently I started playing Clash of Clans on the iPhone, which is a City building game.  It is a free app that uses in-app purchases to speed up your progress.  I have tried many of these types of games and there is something addictive about them.</p>
+
+<p>Why not build my own game?  Great idea, but I know nothing about game design.  I am just a programmer.  So a bit of Googling later and I have a small list of required items.  All of which are required to get a game published.  Basically, not useful to me, since I want to learn, not sell.</p>
+
+<p>So instead of building the next award winning game that will make me a millionare I am going to play to my strength of programming and slowly move into the other area that are needed for an engaging game.</p>
+
+<p>That is where Crafty comes in.  <a href="http://craftyjs.com/">Crafty</a> is a Javascript game engine.  Unfortunately their documentation sucks, so I am writing what I understand (though it is probably wrong).</p>
+
+<!-- more -->
+
+
+<p>I chose Crafty because it was literally the first thing that came up when I googled &#8220;javascript game engine&#8221;.  So I jumped into the <a href="http://buildnewgames.com/introduction-to-crafty/">getting started guild</a>, and followed it in my own <a href="https://github.com/jkamenik/crafty_tutorial">repo</a>.</p>
+
+<p>A game is built by combining various types of objects together.  This is a basic list of the Crafty objects.</p>
+
+<h2>Scenes</h2>
+
+<p>A scene is the groundwork for a distinct part of the game.  One might be the loading screen that shows the user that things are happening.  Another might be the actual game screen.  Another might be a &#8220;game over&#8221; screen.</p>
+
+<p>Scenes are registered with <code>Crafty.scene</code> which takes 3 arguments</p>
+
+<ol>
+<li>Name - A string representing the scene name</li>
+<li>init function - a function to set up the scene</li>
+<li>uninit function - a function called to stop the scene (called after 2D objects are destroyed)</li>
+</ol>
+
+
+<p><code>Crafty.enterScene</code> can be used to enter a new scene (and by extension destroy the current scene).</p>
+
+<h2>Component</h2>
+
+<p>A component encapsulates data and behaviors into reusable parts.  There are already many prebuilt components like <code>SpriteAnimation</code> which allows a sprite to animate itself, and &#8220;Collision&#8221; which allows object to detect if they have hit a convex polygon.</p>
+
+<p>Components are registered with <code>Crafty.c</code> which takes 2 arguments</p>
+
+<ol>
+<li>Name - A string representing the component</li>
+<li>Object - A JS object representing the data and behaviors of the component</li>
+</ol>
+
+
+<p>There are two special functions:</p>
+
+<ol>
+<li>init - is called when the component is included within an entity</li>
+<li>remove - is called when the component is removed or an entity is destroyed.  If it is being called because of an entity then it is passed a single &#8220;true&#8221; argument.</li>
+</ol>
+
+
+<p>By convention if you provide a function that has the same name as the component then it is used as a constructor by the entity.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,{</span>
+</span><span class='line'>    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">test</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">).</span><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Entity</h2>
+
+<p>An entity is an individual and distinct object in the game.  They are usually made up of one or more Components, but are not necessarily visible to the user.  Your player character will be an entity that might include a keyboard event component as well as a collision component and sprite component.</p>
+
+<p>Entities are created with <code>Crafty.e</code> which takes a single argument:</p>
+
+<ol>
+<li>Components - Either a comma separated list of component names, or a set of strings each being their own components</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s1">&#39;Collision, Fourway&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// is the same as</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s1">&#39;Collision&#39;</span><span class="p">,</span> <span class="s1">&#39;Fourway&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Events</h2>
+
+<p>Events come in two flavors: Component and Global events.  Component events happen to or on an Entity that has included the Component.  For example the player entity may include the &#8220;Fourway&#8221; component which would add the &#8220;Moved&#8221; event.  Anyone (including the player itself) could listen for that event and know when the player moved.</p>
+
+<p>Global events are registered to and triggered from the global Crafty object.  The tricky part with global events is that they do not have be registered or used, so it is up to you to make sure that you document events that you trigger and correctly bind to those events.</p>
+
+<p>An event is triggered with <code>Crafty.trigger</code> which takes any number of arguments.</p>
+
+<ol>
+<li>Name - the name of the event to trigger</li>
+<li>data - All the rest of the arguments are blindly passed to any event listener</li>
+</ol>
+
+
+<p>An event is listened for using one of the following.  All of them accept two arguments: the name of the event, and the callback function when the event is triggered.</p>
+
+<ol>
+<li><code>bind</code> - listen for event</li>
+<li><code>uniqueBind</code> - same as bind, but prevents other event listeners for the same event</li>
+<li><code>one</code> - same as bind, but automatically unbinds itself after the first event is triggered</li>
+</ol>
+
+
+<p>Note: in general you should use a named function as the callback.  That way scenes can <code>unbind</code> event listeners when they become inactive (thereby saving the overhead of intercepting events that cannot be acted upon).</p>
+
+<h2>Assets</h2>
+
+<p>An asset is anything data that might need to be loaded before a scene can be played.  This might be images, audio, video, or player data.  Assets are globally registered and can be loaded anyway you see fit, but for convenience there is a loader object which does the heavy lifting.</p>
+
+<p>Assets are loaded with <code>Crafty.load</code> which takes up to 4 arguments</p>
+
+<ol>
+<li>assets - an array of the asset URLs to load</li>
+<li>onLoad - call after ALL assets are loaded</li>
+<li>onProgress - called after each asset is loaded.  It is called with the loaded asset, the total number of assets being loaded, and percentage complete.</li>
+<li>onError - called when an asset fails to load.</li>
+</ol>
+
+
+<p>Assets that have been loaded can be acquired using <code>Crafty.asset</code> which takes 1 argument</p>
+
+<ol>
+<li>key - the unique name of the asset.  Usually it is the URL used to load the asset.</li>
+</ol>
+
+
+<h2>Sprites</h2>
+
+<p>A sprite is just a component, but it is likely to be one of the most common components of your game that it bares introduction.  Basically a sprite is an image shown to the user.  They could be used for the player, or obstacles on the game board, or for the game board itself.</p>
+
+<p>There is a Sprite component in Crafty, which will almost never be used by itself.  Instead <code>Crafty.sprite</code> will be used to split an image into one or more registered sprite components that you will use.  It takes a variable number of arguments</p>
+
+<ol>
+<li>tiles (optional) - the number of tiles in the image.  Each image is assumed to be square so if this number was &#8220;16&#8221; it would assume there are 4 columns and 4 rows.</li>
+<li>tileWidth, tileHeight (optional) - The width and height of individual tiles.  Either use this or &#8220;tiles&#8221;, but not both</li>
+<li>url - The URL of the loaded image.  This should be preloaded by the <code>Crafty.loader</code></li>
+<li>map - map of the sprites to register from this image in the form
+
+<ol>
+<li>key - the name of the Sprite component</li>
+<li>value - array of offset and size attributes
+
+<ol>
+<li>x offset</li>
+<li>y offset</li>
+<li>width (optional)</li>
+<li>height (optional)</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>paddingX (optional) - horizontal space between tiles</li>
+<li>paddingY (optional) - vertical space between tiles</li>
+<li>paddingArroundBorder (optional) - if true then there is assumed to be the same amount of padding between the edge of the image and tile as there is between tiles.</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// FlowerSprite is at 0,0 and is 16x32 in size</span>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">sprite</span><span class="p">(</span><span class="s1">&#39;img/spritemap.png&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">FlowerSprite</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">32</span><span class="p">]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// RoseSprite is at 0,0 and is 50x50</span>
+</span><span class='line'><span class="c1">// GrassSprite is at 0,50px and is 150x50px</span>
+</span><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">sprite</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;img/spritemap2.png&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">RoseSprite</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>    <span class="nx">GrassSprite</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-17T12:53:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/crafty/'>Crafty</a>, <a class='category' href='/blog/categories/js/'>JS</a>, <a class='category' href='/blog/categories/game-design/'>game design</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/02/17/crafty-js/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/02/17/crafty-js/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/12/bmore-on-rails-meetup/" title="Previous Post: B'More on Rails Meetup - Feb 11, 2014">&laquo; B'More on Rails Meetup - Feb 11, 2014</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/17/crafty-js/">Crafty JS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/12/bmore-on-rails-meetup/">B'More on Rails Meetup - Feb 11, 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/07/controller-test-in-rails-engines/">Controller Test in Rails Engines</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/30/killing-the-crunch-mode-antipattern/">Killing the Crunch Mode Antipattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/21/drafts/">Drafts</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/crafty/'>Crafty (1)</a></li>
+<li class='category'><a href='/blog/categories/francis/'>Francis (1)</a></li>
+<li class='category'><a href='/blog/categories/js/'>JS (2)</a></li>
+<li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
+<li class='category'><a href='/blog/categories/antipattern/'>antipattern (1)</a></li>
+<li class='category'><a href='/blog/categories/automator/'>automator (1)</a></li>
+<li class='category'><a href='/blog/categories/b-more/'>b'more (1)</a></li>
+<li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
+<li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
+<li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
+<li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
+<li class='category'><a href='/blog/categories/email/'>email (1)</a></li>
+<li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
+<li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
+<li class='category'><a href='/blog/categories/game-design/'>game design (1)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (10)</a></li>
+<li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
+<li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/opinion/'>opinion (4)</a></li>
+<li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
+<li class='category'><a href='/blog/categories/planning/'>planning (3)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/rails-engines/'>rails engines (1)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (5)</a></li>
+<li class='category'><a href='/blog/categories/rspec/'>rspec (1)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/ruby-on-rails/'>ruby on rails (1)</a></li>
+<li class='category'><a href='/blog/categories/screencast/'>screencast (1)</a></li>
+<li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
+<li class='category'><a href='/blog/categories/technical-debt-calculator/'>technical-debt-calculator (2)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (4)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui mockup (1)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui-mockup (2)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Twitter</h1>
+    <a class="twitter-timeline" href="https://twitter.com/jkamenik" data-widget-id="354049262578982914">Tweets by @jkamenik</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jkamenik',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - John T. Kamenik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'randomsoftwareinklings';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/02/17/crafty-js/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/02/17/crafty-js/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
