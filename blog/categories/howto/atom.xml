@@ -4,7 +4,7 @@
   <title><![CDATA[Category: howto | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/howto/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-02-17T20:04:13-05:00</updated>
+  <updated>2014-02-24T16:43:06-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,164 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Crafty Timer]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/02/24/crafty-timer/"/>
+    <updated>2014-02-24T13:28:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/02/24/crafty-timer</id>
+    <content type="html"><![CDATA[<p>Crafty JS is a game engine written in Javascript.  Like many game engines there is a main event loop that drives everything.  This is actually a great thing, unless you are trying to use timers.</p>
+
+<p>Javascript is single threaded but asynchronous.  This means there is no way to "sleep" the main loop.  Instead there is a <code>setTimeout</code> function which takes a callback that is called after the timer has expired.  In most JS programs having one or more timers setup via <code>setTimeout</code> isn't much of an issue.</p>
+
+<p>In Crafty there is already a main event loop that actually performs the same function and it better fits the separation of background and rendering responsibilities.  Remember that in a game you will have hundreds or thousands of background calculation per second but only 40 to 60 rendering calculations.</p>
+
+<p>With that in mind I created two components: a Timer which does everything in the background, and TimePrinter which is a timer and rerenders the current seconds until the timer expires.</p>
+
+<!-- more -->
+
+
+<h2>Timer</h2>
+
+<p>```coffeescript timer.coffee
+Crafty.c('Timer',{
+  <em>stopFunc:    null,
+  </em>expireTime:  null,
+  _secondsLeft: null,</p>
+
+<p>  start: -></p>
+
+<pre><code>return if this._stopFunc
+return if this._calculateTime &lt;= 0
+
+self = this
+this._stopFunc = Crafty.bind('EnterFrame', -&gt;
+  # a proxy callback which sets the "this"
+  self._calculateTime()
+)
+this
+</code></pre>
+
+<p>  stop: -></p>
+
+<pre><code>return unless this._stopFunc
+Crafty.unbind('EnterFrame', this._stopFunc)
+this._stopFunc = null
+this
+</code></pre>
+
+<p>  expiresIn: (seconds, autoStart = false)-></p>
+
+<pre><code>this._expireTime = Date.now() + (seconds * 1000)
+this.start() if autoStart
+this
+</code></pre>
+
+<p>  addSeconds: (seconds, autoStart = false)-></p>
+
+<pre><code>this._expireTime = Date.now() if this._secondsLeft &lt;= 0
+this._expireTime += (seconds * 1000)
+this.start() if autoStart
+this
+</code></pre>
+
+<p>  _calculateTime: (event)-></p>
+
+<pre><code>now  = Date.now()
+left = this._expireTime - now
+this._secondsLeft = Math.floor(left / 1000)
+
+this.stop() if this._secondsLeft &lt;= 0
+this._secondsLeft
+</code></pre>
+
+<p>})
+```</p>
+
+<p><code>start</code> starts the timer.  It binds to the "EnterFrame" event and sets up a proxy callback to ensure the "this" variable is maintained during the callback.</p>
+
+<p><code>stop</code> remotes the "EnterFrame" callback thereby detacting it from the timer loop.</p>
+
+<p><code>expiresIn</code> sets up a number of seconds to expire the timer in.  There is an optional second paramter to start the timer loop.</p>
+
+<p><code>addSeconds</code> adds seconds to the existing timer, making it take longer to expire.  If the timer has expired then it behaves like <code>expiresIn</code></p>
+
+<p><code>_calculateTime</code> is the work horse.  It calculates the real time and compares it to the expire time and returns the number of seconds until it expires.  If the current time is greater or equal to the expire time then the timer is considered expired and is stopped.  Stopping the timer removes any useless calculations, speeding up the overall game.</p>
+
+<h2>Time Printer</h2>
+
+<p>In order to separate concerns I created a separate component to print the number of seconds until the timer expires.  By separating things out I can have a general purpose timer which is displayed many different ways.</p>
+
+<p>This class simply shows the number of seconds left as a string.</p>
+
+<p>```coffeescript time_printer.js
+Crafty.c('TimePrinter',{
+  init: -></p>
+
+<pre><code>this.requires '2D, DOM, Text, Timer'
+this.attr({
+  x: 100,
+  y: 100,
+  w: 200
+})
+self = this
+this.bind('RenderScene',-&gt;
+  self.render()
+)
+</code></pre>
+
+<p>  render: -></p>
+
+<pre><code>this.text ''+this._secondsLeft+' seconds'
+</code></pre>
+
+<p>})
+```</p>
+
+<p><code>init</code> requires the DOM, 2D, and Text components so that I can render text.  It also requires Timer so that it behaves like a Timer.  It also binds to the "RenderScene" event, which just rendering thread.</p>
+
+<p><code>render</code> is the call back called when it is time to render the entity.</p>
+
+<h2>Usage</h2>
+
+<p>A simple usage might look something like this:</p>
+
+<p><code>coffeescript scene/loading.coffee
+Crafty.scene('Loading',-&gt;
+  printer = Crafty.e("TimePrinter")
+  printer.expiresIn 10, true
+)
+</code></p>
+
+<p>```html timer.html
+<html>
+<head></p>
+
+<pre><code>&lt;script src="lib/crafty.js"&gt;&lt;/script&gt;
+&lt;script src="src/components/timer.js"&gt;&lt;/script&gt;
+&lt;script src="src/components/time_printer.js"&gt;&lt;/script&gt;
+&lt;script src="src/scenes/loading.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.addEventListener('load',-&gt;
+    Crafty.init()
+
+    Crafty.scene('Loading')
+  )
+&lt;/script&gt;
+&lt;style&gt;
+    body { 
+        padding: 0;
+        margin:  0;
+    }
+&lt;/style&gt;
+</code></pre>
+
+<p></head>
+<body></body>
+</html>
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Drafts]]></title>
@@ -472,197 +630,6 @@ end
 <li>Keynote -> better</li>
 <li>Keynote with details -> <strong>HORRIBLE!!!!</strong></li>
 <li>Actual implementation -> best</li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Screenplays]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/07/28/screenplays/"/>
-    <updated>2013-07-28T21:09:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/07/28/screenplays</id>
-    <content type="html"><![CDATA[<p>So part of my job has been to give screencasts of some of the projects I have been working on.  Having a Mac I can use iMovie to pretty much do everything, but I struggled with the structure and timing of the screencasts.</p>
-
-<p>The issue was that I know pretty much everything about the feature I implemented, so I would just go at it.  I would often get confused, start over, or go off on a tangent.  By the end everything took longer then it should, and wasn't as good as it should have been.  Over all very frustrating.</p>
-
-<p>I don't know why I didn't think about this sooner and why this isn't the first thing people tell when you start doing screencasts, but start with a screenplay.  The movie industry has decades of experience and they start each movie with a pitch and a screenplay.</p>
-
-<!-- more -->
-
-
-<p>Think of a screenplay like a wireframe for your video.  Everything about them is about making things simple to understand.  Below is a simplified version of <a href="http://2012.scriptfrenzy.org/howtoformatascreenplay">the screenplay format</a> applied specifically to screencasts.</p>
-
-<p>I have a sample Google doc file <a href="https://docs.google.com/document/d/1tstVIrAOQlfjjttxyjK_igDmrrIFf4IYuHhNJQljOQY/edit?usp=sharing">here</a>.</p>
-
-<h2>Page layout</h2>
-
-<ol>
-<li>Page size
-
-<ol>
-<li>8.5" x 11"</li>
-</ol>
-</li>
-<li>Margins
-
-<ol>
-<li>Left: 1.5 in</li>
-<li>Top/Bottom/Right: 1 in</li>
-</ol>
-</li>
-<li>Font
-
-<ol>
-<li>Courier</li>
-<li>12 point</li>
-<li>no bold</li>
-<li>no italics</li>
-</ol>
-</li>
-<li>Single space between
-
-<ol>
-<li>Character name and dialog</li>
-<li>Character name and parenthetical</li>
-<li>Parenthetical and dialog</li>
-</ol>
-</li>
-<li>Double space between
-
-<ol>
-<li>everything else</li>
-</ol>
-</li>
-</ol>
-
-
-<h2>Structure</h2>
-
-<h3>Title page</h3>
-
-<ol>
-<li>Title of the script
-
-<ol>
-<li>Center of the page</li>
-<li>Left aligned</li>
-</ol>
-</li>
-<li>By line
-
-<ol>
-<li>Immediately after Title</li>
-</ol>
-</li>
-</ol>
-
-
-<h3>Slug line</h3>
-
-<ol>
-<li>All Caps</li>
-<li>Left aligned</li>
-<li>Describes the screen</li>
-<li>Separate parts with "-"</li>
-<li>For screencasts
-
-<ol>
-<li>omit the internal/external indicator (you are always in a computer)</li>
-<li>omit the time of day indictor</li>
-<li>Add a Website / Program indicator</li>
-<li>Add an off screen indicator (O.S.), this either needs to be prior to recording or will be removed post production</li>
-</ol>
-</li>
-</ol>
-
-
-<p>```
-GOOGLE PLUS - LOGIN - OFF SCREEN</p>
-
-<p>...</p>
-
-<p>GOOGLE PLUS - ADD FRIEND TO CIRCLE
-```</p>
-
-<h3>Action</h3>
-
-<ol>
-<li>Optional</li>
-<li>Immediately after Slug line</li>
-<li>Describes setup of screen (work performed off screen, prior to recording)</li>
-<li>Left aligned</li>
-</ol>
-
-
-<p>```
-GOOGLE PLUS - ADD A FRIEND TO CIRCLE</p>
-
-<p>Two accounts exist.  Account 1 is logged in.</p>
-
-<p>Search for account 2.
-```</p>
-
-<h3>Character name</h3>
-
-<ol>
-<li>Above parenthetical or dialog - Anytime the person speaking changes</li>
-<li>All Caps</li>
-<li>4 tabs in (2")</li>
-<li>For screencasts
-
-<ol>
-<li>Use PRESENTER X (omit the X if only one presenter)</li>
-</ol>
-</li>
-</ol>
-
-
-<p>```</p>
-
-<pre><code>    JOHN
-
-  (doing something)
-
-And talking
-
-
-    JANE
-
-Just talking
-</code></pre>
-
-<p>```</p>
-
-<h3>Parenthetical</h3>
-
-<ol>
-<li>Immediately after character name</li>
-<li>Used to show actions performed while talking</li>
-<li>3 tabs in (1.5")</li>
-<li>For screencasts
-
-<ol>
-<li>Use generic terms like "highlight", and "submit form" instead of very specific "move mouse to" and "click submit button"</li>
-</ol>
-</li>
-</ol>
-
-
-<h3>Dialog</h3>
-
-<ol>
-<li>Immediately after character name or parenthetical</li>
-<li>What the character says</li>
-<li>No quotes</li>
-<li>Present tense</li>
-<li>Only explain what isn't covered by the video
-
-<ol>
-<li>For example it is fine to use Jargon like "goto google" because in the video you will be opening the browser, going to the URL bar, and typing in "http://google.com".</li>
-</ol>
-</li>
-<li>2 tabs in (1")</li>
 </ol>
 
 ]]></content>

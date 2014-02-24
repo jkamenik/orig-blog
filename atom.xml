@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-02-17T20:04:13-05:00</updated>
+  <updated>2014-02-24T16:43:06-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,230 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Crafty Timer]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/02/24/crafty-timer/"/>
+    <updated>2014-02-24T13:28:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/02/24/crafty-timer</id>
+    <content type="html"><![CDATA[<p>Crafty JS is a game engine written in Javascript.  Like many game engines there is a main event loop that drives everything.  This is actually a great thing, unless you are trying to use timers.</p>
+
+<p>Javascript is single threaded but asynchronous.  This means there is no way to &#8220;sleep&#8221; the main loop.  Instead there is a <code>setTimeout</code> function which takes a callback that is called after the timer has expired.  In most JS programs having one or more timers setup via <code>setTimeout</code> isn&#8217;t much of an issue.</p>
+
+<p>In Crafty there is already a main event loop that actually performs the same function and it better fits the separation of background and rendering responsibilities.  Remember that in a game you will have hundreds or thousands of background calculation per second but only 40 to 60 rendering calculations.</p>
+
+<p>With that in mind I created two components: a Timer which does everything in the background, and TimePrinter which is a timer and rerenders the current seconds until the timer expires.</p>
+
+<!-- more -->
+
+
+<h2>Timer</h2>
+
+<figure class='code'><figcaption><span>timer.coffee</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s">&#39;Timer&#39;</span><span class="p">,{</span>
+</span><span class='line'>  <span class="nv">_stopFunc: </span>   <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>  <span class="nv">_expireTime: </span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>  <span class="nv">_secondsLeft: </span><span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">start: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_stopFunc</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_calculateTime</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">self = </span><span class="k">this</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_stopFunc = </span><span class="nx">Crafty</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s">&#39;EnterFrame&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="c1"># a proxy callback which sets the &quot;this&quot;</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">_calculateTime</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">stop: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">unless</span> <span class="k">this</span><span class="p">.</span><span class="nx">_stopFunc</span>
+</span><span class='line'>    <span class="nx">Crafty</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s">&#39;EnterFrame&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_stopFunc</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_stopFunc = </span><span class="kc">null</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">expiresIn: </span><span class="nf">(seconds, autoStart = false)-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_expireTime = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="nx">seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">()</span> <span class="k">if</span> <span class="nx">autoStart</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">addSeconds: </span><span class="nf">(seconds, autoStart = false)-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_expireTime = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_expireTime</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">()</span> <span class="k">if</span> <span class="nx">autoStart</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">_calculateTime: </span><span class="nf">(event)-&gt;</span>
+</span><span class='line'>    <span class="nv">now  = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+</span><span class='line'>    <span class="nv">left = </span><span class="k">this</span><span class="p">.</span><span class="nx">_expireTime</span> <span class="o">-</span> <span class="nx">now</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_secondsLeft = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">left</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">stop</span><span class="p">()</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>start</code> starts the timer.  It binds to the &#8220;EnterFrame&#8221; event and sets up a proxy callback to ensure the &#8220;this&#8221; variable is maintained during the callback.</p>
+
+<p><code>stop</code> remotes the &#8220;EnterFrame&#8221; callback thereby detacting it from the timer loop.</p>
+
+<p><code>expiresIn</code> sets up a number of seconds to expire the timer in.  There is an optional second paramter to start the timer loop.</p>
+
+<p><code>addSeconds</code> adds seconds to the existing timer, making it take longer to expire.  If the timer has expired then it behaves like <code>expiresIn</code></p>
+
+<p><code>_calculateTime</code> is the work horse.  It calculates the real time and compares it to the expire time and returns the number of seconds until it expires.  If the current time is greater or equal to the expire time then the timer is considered expired and is stopped.  Stopping the timer removes any useless calculations, speeding up the overall game.</p>
+
+<h2>Time Printer</h2>
+
+<p>In order to separate concerns I created a separate component to print the number of seconds until the timer expires.  By separating things out I can have a general purpose timer which is displayed many different ways.</p>
+
+<p>This class simply shows the number of seconds left as a string.</p>
+
+<figure class='code'><figcaption><span>time_printer.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s">&#39;TimePrinter&#39;</span><span class="p">,{</span>
+</span><span class='line'>  <span class="nv">init: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">requires</span> <span class="s">&#39;2D, DOM, Text, Timer&#39;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span>
+</span><span class='line'>      <span class="nv">x: </span><span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>      <span class="nv">y: </span><span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>      <span class="nv">w: </span><span class="mi">200</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>    <span class="nv">self = </span><span class="k">this</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s">&#39;RenderScene&#39;</span><span class="p">,</span><span class="o">-&gt;</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">render</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">render: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">text</span> <span class="s">&#39;&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span><span class="o">+</span><span class="s">&#39; seconds&#39;</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>init</code> requires the DOM, 2D, and Text components so that I can render text.  It also requires Timer so that it behaves like a Timer.  It also binds to the &#8220;RenderScene&#8221; event, which just rendering thread.</p>
+
+<p><code>render</code> is the call back called when it is time to render the entity.</p>
+
+<h2>Usage</h2>
+
+<p>A simple usage might look something like this:</p>
+
+<figure class='code'><figcaption><span>scene/loading.coffee</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">scene</span><span class="p">(</span><span class="s">&#39;Loading&#39;</span><span class="p">,</span><span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nv">printer = </span><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s">&quot;TimePrinter&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">printer</span><span class="p">.</span><span class="nx">expiresIn</span> <span class="mi">10</span><span class="p">,</span> <span class="kc">true</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>timer.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'><span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;lib/crafty.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;src/components/timer.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;src/components/time_printer.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;src/scenes/loading.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script&gt;</span>
+</span><span class='line'>      <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span><span class="o">-&gt;</span>
+</span><span class='line'>        <span class="nx">Crafty</span><span class="p">.</span><span class="nx">init</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">Crafty</span><span class="p">.</span><span class="nx">scene</span><span class="p">(</span><span class="s1">&#39;Loading&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">)</span>
+</span><span class='line'>    <span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;style&gt;</span>
+</span><span class='line'>        <span class="nt">body</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">padding</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">margin</span><span class="o">:</span>  <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="nt">&lt;/style&gt;</span>
+</span><span class='line'><span class="nt">&lt;/head&gt;</span>
+</span><span class='line'><span class="nt">&lt;body&gt;&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Crafty JS]]></title>
@@ -2235,66 +2459,6 @@
 
 <p>This section is way to big, but it is too early to go into too much detail.  It is going to be interesting to see how
 close I get to my ultimate goal, and how long it takes to get there.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The long away]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/11/02/the-long-away/"/>
-    <updated>2012-11-02T00:00:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/11/02/the-long-away</id>
-    <content type="html"><![CDATA[<h2>The Reason</h2>
-
-<p>First, let me apologize to my 3 readers that I have been away for so long.  There are a lot of reasons why I have been gone, but mainly it boils down to how much I hate the blogger interface for dealing with code.</p>
-
-<!-- more -->
-
-
-<p>Sure, blogger is a simple platform and does exactly what it says.  Sure, it integrates with google plus, twitter, etc&#8230;  Sure, it was easy to configure, setup and deploy.  Sure, it has a lot of features.</p>
-
-<p>But, it sucks for code!  And I mean Sucks!  For code there are a few very specific hot button items that are must haves:</p>
-
-<ol>
-<li>Monospaced font and significant whitespace (&lt;pre> in HTML)</li>
-<li>Line numbers</li>
-<li>Syntax highlighting</li>
-</ol>
-
-
-<p>Not that much to ask, but those features are ONLY ever going to be needed by a programmer.  So I can see why they don&#8217;t get that much attention.</p>
-
-<p>Both the old and the new blogger interface have a way of dealing with this, but it is time consuming and annoying:</p>
-
-<ol>
-<li>Use gist.github.com as a dumping place for all your code samples
-
-<ol>
-<li>Create a separate file in the gist for each sample (makes it easier later)</li>
-<li>Make sure the file name has the right extension so that syntax highlighting happens</li>
-<li>Copy the embed codes for each gist</li>
-</ol>
-</li>
-<li>When editing the blog only use HTML mode!
-
-<ol>
-<li>The gist code is a javascript so it will only render in preview</li>
-<li>Switching between HMTL and compose sometimes rearranges non-visible items, which means when your page renders your code could be anywhere</li>
-<li>If I am going to write raw HTML I might as well use Markdown, which sucks less and converts to HTML</li>
-</ol>
-</li>
-<li>Hope that nobody views your blog with JS disabled!</li>
-</ol>
-
-
-<h2>The Solution</h2>
-
-<p>After playing with many blogging solution and giving up on Wordpress entirely (Sorry I just cannot get what I want without a LOT of php hacking), I have decided to give a Octopress a serious shot.  I use github all the time and even host a few things using github pages.</p>
-
-<p>In case you don&#8217;t know, Github pages can render Jekyll sites.  And Jekyll is a blog aware static site generator, which can read markdown.  And Markdown is a much more human friendly markup language then HTML, but compiles into HTML; also, Github uses it everywhere in their site (as do a lot of other places).</p>
-
-<p>So things started to fall into place with Jekyll.  I just needed to install a syntax highlighting gem, and design the site.  In the process, I stumbled across Octopress, which is a wrapper around a Jekyll site, works with github, has syntax highlighting, provides a clean theme, and has a programmer friendly workflow.</p>
-
-<p>So Octopress is the blog engine for me.  And it will reside at <a href="http://jkamenik.github.com">http://jkamenik.github.com</a>.  I will slowly be transferring all my entries from here, but I doubt I will retire this site entirely.</p>
 ]]></content>
   </entry>
   

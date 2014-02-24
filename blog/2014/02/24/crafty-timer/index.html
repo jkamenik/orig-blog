@@ -1,0 +1,542 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Crafty Timer - Random Software Inklings</title>
+  <meta name="author" content="John T. Kamenik">
+
+  
+  <meta name="description" content="Crafty JS is a game engine written in Javascript. Like many game engines there is a main event loop that drives everything. This is actually a great &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/02/24/crafty-timer/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Random Software Inklings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
+<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Random Software Inklings</a></h1>
+  
+    <h2>Random documentation of things I have learned.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jkamenik.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://jkamenik.github.com/Resume">Resume</a></li>
+  <li><a href="/knowledge">Knowledge</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Crafty Timer</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-24T13:28:00-05:00" pubdate data-updated="true">Feb 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Crafty JS is a game engine written in Javascript.  Like many game engines there is a main event loop that drives everything.  This is actually a great thing, unless you are trying to use timers.</p>
+
+<p>Javascript is single threaded but asynchronous.  This means there is no way to &#8220;sleep&#8221; the main loop.  Instead there is a <code>setTimeout</code> function which takes a callback that is called after the timer has expired.  In most JS programs having one or more timers setup via <code>setTimeout</code> isn&#8217;t much of an issue.</p>
+
+<p>In Crafty there is already a main event loop that actually performs the same function and it better fits the separation of background and rendering responsibilities.  Remember that in a game you will have hundreds or thousands of background calculation per second but only 40 to 60 rendering calculations.</p>
+
+<p>With that in mind I created two components: a Timer which does everything in the background, and TimePrinter which is a timer and rerenders the current seconds until the timer expires.</p>
+
+<!-- more -->
+
+
+<h2>Timer</h2>
+
+<figure class='code'><figcaption><span>timer.coffee</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s">&#39;Timer&#39;</span><span class="p">,{</span>
+</span><span class='line'>  <span class="nv">_stopFunc: </span>   <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>  <span class="nv">_expireTime: </span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>  <span class="nv">_secondsLeft: </span><span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">start: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_stopFunc</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_calculateTime</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">self = </span><span class="k">this</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_stopFunc = </span><span class="nx">Crafty</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s">&#39;EnterFrame&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="c1"># a proxy callback which sets the &quot;this&quot;</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">_calculateTime</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">stop: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">unless</span> <span class="k">this</span><span class="p">.</span><span class="nx">_stopFunc</span>
+</span><span class='line'>    <span class="nx">Crafty</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s">&#39;EnterFrame&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_stopFunc</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_stopFunc = </span><span class="kc">null</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">expiresIn: </span><span class="nf">(seconds, autoStart = false)-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_expireTime = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="nx">seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">()</span> <span class="k">if</span> <span class="nx">autoStart</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">addSeconds: </span><span class="nf">(seconds, autoStart = false)-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_expireTime = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_expireTime</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">()</span> <span class="k">if</span> <span class="nx">autoStart</span>
+</span><span class='line'>    <span class="k">this</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">_calculateTime: </span><span class="nf">(event)-&gt;</span>
+</span><span class='line'>    <span class="nv">now  = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+</span><span class='line'>    <span class="nv">left = </span><span class="k">this</span><span class="p">.</span><span class="nx">_expireTime</span> <span class="o">-</span> <span class="nx">now</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nv">_secondsLeft = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">left</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">stop</span><span class="p">()</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>start</code> starts the timer.  It binds to the &#8220;EnterFrame&#8221; event and sets up a proxy callback to ensure the &#8220;this&#8221; variable is maintained during the callback.</p>
+
+<p><code>stop</code> remotes the &#8220;EnterFrame&#8221; callback thereby detacting it from the timer loop.</p>
+
+<p><code>expiresIn</code> sets up a number of seconds to expire the timer in.  There is an optional second paramter to start the timer loop.</p>
+
+<p><code>addSeconds</code> adds seconds to the existing timer, making it take longer to expire.  If the timer has expired then it behaves like <code>expiresIn</code></p>
+
+<p><code>_calculateTime</code> is the work horse.  It calculates the real time and compares it to the expire time and returns the number of seconds until it expires.  If the current time is greater or equal to the expire time then the timer is considered expired and is stopped.  Stopping the timer removes any useless calculations, speeding up the overall game.</p>
+
+<h2>Time Printer</h2>
+
+<p>In order to separate concerns I created a separate component to print the number of seconds until the timer expires.  By separating things out I can have a general purpose timer which is displayed many different ways.</p>
+
+<p>This class simply shows the number of seconds left as a string.</p>
+
+<figure class='code'><figcaption><span>time_printer.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s">&#39;TimePrinter&#39;</span><span class="p">,{</span>
+</span><span class='line'>  <span class="nv">init: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">requires</span> <span class="s">&#39;2D, DOM, Text, Timer&#39;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span>
+</span><span class='line'>      <span class="nv">x: </span><span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>      <span class="nv">y: </span><span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>      <span class="nv">w: </span><span class="mi">200</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>    <span class="nv">self = </span><span class="k">this</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s">&#39;RenderScene&#39;</span><span class="p">,</span><span class="o">-&gt;</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">render</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">render: </span><span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">text</span> <span class="s">&#39;&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">_secondsLeft</span><span class="o">+</span><span class="s">&#39; seconds&#39;</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>init</code> requires the DOM, 2D, and Text components so that I can render text.  It also requires Timer so that it behaves like a Timer.  It also binds to the &#8220;RenderScene&#8221; event, which just rendering thread.</p>
+
+<p><code>render</code> is the call back called when it is time to render the entity.</p>
+
+<h2>Usage</h2>
+
+<p>A simple usage might look something like this:</p>
+
+<figure class='code'><figcaption><span>scene/loading.coffee</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">Crafty</span><span class="p">.</span><span class="nx">scene</span><span class="p">(</span><span class="s">&#39;Loading&#39;</span><span class="p">,</span><span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nv">printer = </span><span class="nx">Crafty</span><span class="p">.</span><span class="nx">e</span><span class="p">(</span><span class="s">&quot;TimePrinter&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">printer</span><span class="p">.</span><span class="nx">expiresIn</span> <span class="mi">10</span><span class="p">,</span> <span class="kc">true</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>timer.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'><span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;lib/crafty.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;src/components/timer.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;src/components/time_printer.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;src/scenes/loading.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script&gt;</span>
+</span><span class='line'>      <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span><span class="o">-&gt;</span>
+</span><span class='line'>        <span class="nx">Crafty</span><span class="p">.</span><span class="nx">init</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">Crafty</span><span class="p">.</span><span class="nx">scene</span><span class="p">(</span><span class="s1">&#39;Loading&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">)</span>
+</span><span class='line'>    <span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;style&gt;</span>
+</span><span class='line'>        <span class="nt">body</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">padding</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">margin</span><span class="o">:</span>  <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="nt">&lt;/style&gt;</span>
+</span><span class='line'><span class="nt">&lt;/head&gt;</span>
+</span><span class='line'><span class="nt">&lt;body&gt;&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-24T13:28:00-05:00" pubdate data-updated="true">Feb 24<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/crafty/'>Crafty</a>, <a class='category' href='/blog/categories/js/'>JS</a>, <a class='category' href='/blog/categories/howto/'>howto</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/02/24/crafty-timer/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/02/24/crafty-timer/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/17/crafty-js/" title="Previous Post: Crafty JS">&laquo; Crafty JS</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/24/crafty-timer/">Crafty Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/17/crafty-js/">Crafty JS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/12/bmore-on-rails-meetup/">B'More on Rails Meetup - Feb 11, 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/07/controller-test-in-rails-engines/">Controller Test in Rails Engines</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/30/killing-the-crunch-mode-antipattern/">Killing the Crunch Mode Antipattern</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/crafty/'>Crafty (2)</a></li>
+<li class='category'><a href='/blog/categories/francis/'>Francis (1)</a></li>
+<li class='category'><a href='/blog/categories/js/'>JS (3)</a></li>
+<li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
+<li class='category'><a href='/blog/categories/antipattern/'>antipattern (1)</a></li>
+<li class='category'><a href='/blog/categories/automator/'>automator (1)</a></li>
+<li class='category'><a href='/blog/categories/b-more/'>b'more (1)</a></li>
+<li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
+<li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
+<li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
+<li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
+<li class='category'><a href='/blog/categories/email/'>email (1)</a></li>
+<li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
+<li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
+<li class='category'><a href='/blog/categories/game-design/'>game design (1)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (11)</a></li>
+<li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
+<li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/opinion/'>opinion (4)</a></li>
+<li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
+<li class='category'><a href='/blog/categories/planning/'>planning (3)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/rails-engines/'>rails engines (1)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (5)</a></li>
+<li class='category'><a href='/blog/categories/rspec/'>rspec (1)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/ruby-on-rails/'>ruby on rails (1)</a></li>
+<li class='category'><a href='/blog/categories/screencast/'>screencast (1)</a></li>
+<li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
+<li class='category'><a href='/blog/categories/technical-debt-calculator/'>technical-debt-calculator (2)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (4)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui mockup (1)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui-mockup (2)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Twitter</h1>
+    <a class="twitter-timeline" href="https://twitter.com/jkamenik" data-widget-id="354049262578982914">Tweets by @jkamenik</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jkamenik',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - John T. Kamenik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'randomsoftwareinklings';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/02/24/crafty-timer/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/02/24/crafty-timer/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>

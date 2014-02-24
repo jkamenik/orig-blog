@@ -9,7 +9,7 @@
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="Recently I started playing Clash of Clans on the iPhone, which is a City building game. It is a free app that uses in-app purchases to speed up your &hellip;">
+  <meta name="description" content="Crafty JS is a game engine written in Javascript. Like many game engines there is a main event loop that drives everything. This is actually a great &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +69,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/24/crafty-timer/">Crafty Timer</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-24T13:28:00-05:00" pubdate data-updated="true">Feb 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Crafty JS is a game engine written in Javascript.  Like many game engines there is a main event loop that drives everything.  This is actually a great thing, unless you are trying to use timers.</p>
+
+<p>Javascript is single threaded but asynchronous.  This means there is no way to &#8220;sleep&#8221; the main loop.  Instead there is a <code>setTimeout</code> function which takes a callback that is called after the timer has expired.  In most JS programs having one or more timers setup via <code>setTimeout</code> isn&#8217;t much of an issue.</p>
+
+<p>In Crafty there is already a main event loop that actually performs the same function and it better fits the separation of background and rendering responsibilities.  Remember that in a game you will have hundreds or thousands of background calculation per second but only 40 to 60 rendering calculations.</p>
+
+<p>With that in mind I created two components: a Timer which does everything in the background, and TimePrinter which is a timer and rerenders the current seconds until the timer expires.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/02/24/crafty-timer/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -468,78 +515,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/29/using-keynote-for-mockups/">Using Keynote for Mockups</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-29T08:47:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There are a lot of UI mockup software out there.  I am sure they are good, but chances are that you already have exactly what you need.  I used to ominigraffle, which was fine.  And I know people that use Visio.  And there are a ton of UI Mocking software out there that costs a ton.</p>
-
-<p>However, I have found presentation software (specifically Keynote) already has all the features you need for a good UI mockup.</p>
-
-<p>Features of Keynote:</p>
-
-<ol>
-<li>Almost everyone knows how to create a presentation</li>
-<li>$20 on the app store (that is not a sales price)</li>
-<li>Presentation ready</li>
-<li>Master slides, which allows
-
-<ol>
-<li>Crafting static backgrounds</li>
-<li>Text placeholders</li>
-<li>Custom guidelines</li>
-</ol>
-</li>
-<li>Hidden slides
-
-<ol>
-<li>Allows for templating common items, but not showing them in the presentation</li>
-</ol>
-</li>
-<li>Clickable elements
-
-<ol>
-<li>Allows simulating of a working UI.</li>
-</ol>
-</li>
-</ol>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/29/using-keynote-for-mockups/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -553,6 +528,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/24/crafty-timer/">Crafty Timer</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/02/17/crafty-js/">Crafty JS</a>
@@ -570,18 +549,14 @@
         <a href="/blog/2014/01/30/killing-the-crunch-mode-antipattern/">Killing the Crunch Mode Antipattern</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/01/21/drafts/">Drafts</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/crafty/'>Crafty (1)</a></li>
+    <li class='category'><a href='/blog/categories/crafty/'>Crafty (2)</a></li>
 <li class='category'><a href='/blog/categories/francis/'>Francis (1)</a></li>
-<li class='category'><a href='/blog/categories/js/'>JS (2)</a></li>
+<li class='category'><a href='/blog/categories/js/'>JS (3)</a></li>
 <li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
 <li class='category'><a href='/blog/categories/antipattern/'>antipattern (1)</a></li>
 <li class='category'><a href='/blog/categories/automator/'>automator (1)</a></li>
@@ -595,7 +570,7 @@
 <li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (1)</a></li>
 <li class='category'><a href='/blog/categories/game-design/'>game design (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
-<li class='category'><a href='/blog/categories/howto/'>howto (10)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (11)</a></li>
 <li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
 <li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>octopress (2)</a></li>
