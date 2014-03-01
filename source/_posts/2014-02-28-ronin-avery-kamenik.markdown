@@ -40,7 +40,7 @@ Born February 21st, 2014 at 7:04am.  8lbs 11oz, 21 3/4 inches.
 
 **1:30pm** Go back to the hospital, are admitted and settle into our room.
 
-**7pm** Not making much progress so they give us some options: go home, stay and risk the C-Section.  We counter with stay but walk.  They allow us to unhook from the monitors and walk the halls.  So we walk constantly for 2+ hours.
+**7pm** Not making much progress so they give us some options: go home, stay have the water broken and risk the C-Section.  We counter with stay but walk.  They allow us to unhook from the monitors and walk the halls.  So we walk constantly for 2+ hours.
 
 **11pm** Re-checked and she had progressed to 8 cm dilated.  Walking really did the trick.
 
