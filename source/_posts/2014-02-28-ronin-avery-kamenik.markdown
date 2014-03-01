@@ -52,7 +52,7 @@ About 10 minutes after the water broke the first dry contraction starts.  It man
 
 The hardest part is getting Mel relaxed after the contractions, but they are coming every few seconds.  After many contractions we relent and agree on the epidural if she promises to take a nap so that when it is time to push she is ready.
 
-(As an aside, she probably could have gone a lot further without the med, but with so little sleep we were risking another C-Section if she was too tired to push)
+(As an aside, she probably could have gone a lot further without the meds, but with so little sleep we were risking another C-Section if she was too tired to push)
 
 **12:30am** The epidural is put in, which is difficult because you have to remain still and relaxed.  Pretty much impossible when you are contracting, so the Dr has to work between contractions.
 
@@ -66,15 +66,15 @@ The Midwife suggests that Mel perform some practice pushing just to get Ronin en
 
 The next time Mel feels the urge she pushes, while the Doula and I hold her legs.  She pushed him to engagement, so the Midwife starts massaging the cervix to get it around his head.  A few pushes later Ronin is descending.  The Midwife is very happy with the quality, strength, and duration of Mel's pushes.
 
-**6:45am** The Midwife points out the very top of Ronin's head, which is just visible, and doesn't retract between pushes.  This means he is fully engaged.
+**6:45am** The Midwife points out the very top of Ronin's head, which is just visible, and doesn't retract between pushes.  This means that Mel's "practice" pushing will actually birth Ronin.
 
-About 3 pushes later and he is fully crowning.  The Midwife holds her hand on Ronin's head to prevent him for ejecting and calls for a gown.  The room is teaming with Doctors and nurses now, and she is given freedom to push.
+About 3 pushes later and he is fully crowning.  The Midwife holds her hand on Ronin's head to prevent him from ejecting and calls for a gown.  The room is teaming with Doctors and nurses now, and she is given freedom to push.
 
 1 push and the head is out.  Couple pushes later his shoulders.
 
 **7:04am** Ronin is born and laying on Mel's chest.  They give her a few moments before taking him for clean up and scoring.
 
-**8am** Everything went well.  Ronin is looking great and we are left alone for several hours to enjoy our new baby.
+**8am** Everything went well.  Ronin has a 1 minute Apgar score of 8 and 5 minute score of 9.  He is looking great and we are left alone for several hours to enjoy our new baby.
 
 **10am** The nurse comes back in to give Ronin his first bath, and check him over again.  They are still waiting for a recovery room to become free so we remain in the delivery room.
 
@@ -82,7 +82,7 @@ About 3 pushes later and he is fully crowning.  The Midwife holds her hand on Ro
 
 **Saturday 2pm** Ronin has had all the tests done, and the lactation consult has been in to help Mel with breast feeding, and we are free to leave.  Breast feeding is going much easier with Ronin; 90% of it is that Mel is more relaxed.
 
-With our first leaving the hospital was a nerveracking time, but with our second we already know what we are doing, and we already have all the stuff.  We are ready to go.  I can't wait to sleep in my own bed, next to my wife.
+With our first, leaving the hospital was a nerveracking time, but with our second we already know what we are doing, and we already have all the stuff.  We are ready to go.  I can't wait to sleep in my own bed, next to my wife.
 
 ## What I have learned (this time)
 
@@ -91,15 +91,15 @@ Each baby is different, and I am not a medical professional.  Everything I liste
 1. Each baby is different.  For example:
     1. Frankie slept for the first week, even sleeping through feedings.  Ronin was awake for several hours after birth, and spends several hours a day awake.
     1. Frankie could lift his head after 1 week.  Ronin was born with the ability to lift his head.
-    1. Frankie was easier to carry because he was a lump.  Ronin moves a lot and throws his head around and is much harder to carry when he was awake.
-    1. Frankie didn’t care to be held for long periods of time.  Ronin prefers to be held.
+    1. Frankie was easier to carry because he was a lump.  Ronin moves a lot and throws his head around and is much harder to carry when he is awake.
+    1. Frankie didn’t care to be held.  Ronin prefers to be held.
     1. Frankie prefers to sit in his own filth rather than being changed.  Ronin hates to be dirty and prefers to be changed.
     1. Frankie fit well into a size bigger (3 month clothes when he was born).  Ronin is slightly longer than Frankie, but lighter so nothing fits him correctly.
 1. Each pregnancy is different
-    1. Each pregnancy gets harder.  The pains hurt worse during pregnancy and after it.
+    1. Each pregnancy gets harder.  The pains hurt worse during pregnancy and the after pains are wrose as well.
     1. Each pregnancy gets easier.  Even though everything hurts more you are expecting it, and can better deal with it.
 1. Life is hardest after the first one.  It is hard to go from “without kids” to “with kids”.  But once you are “with kids” two kids is not that much harder than one.  You have already baby proofed the house, and changed your life around.
 1. Allowing comments on your baby’s birth story is stupid.  I learned that after the first one.  Therefore I have disabled them on this one.  Sorry for anyone that wants to wish us well, but one can ruin it for everyone.
 1. Sleep is less of an issue with the 2nd.  To be honest we get a lot less sleep this time around.  The difference is that we know we are going to get sleep 30 minutes at a time.  And we love it when he gives us more.  With Frankie we were scared to sleep because we should only get 1 hour or so.
-1. A vaginal birth is front loaded, while a C-Section is back loaded.  I am not a proponent for one vs the other, but in our case the C-Section was over and done with in a matter of minutes.  The vaginal birth took hours (31 to be exact).  In the C-Section case all of the recovery started after the birth with 3 days in the hospital.  With the VBAC once the delivery was over we were free to go.  So with Vaginal birth (assuming there are no complications) everything happens leading up to the birth, with a C-Section everything happens after the birth.
+1. A vaginal birth is front loaded, while a C-Section is back loaded.  I am not a proponent for one vs the other, but in our case the C-Section was over and done with in a matter of minutes.  The vaginal birth took hours (31 to be exact).  In the C-Section case, all of the recovery started after the birth with 3 days in the hospital.  With the VBAC once the delivery was over we were free to go.  So with Vaginal birth (assuming there are no complications) everything happens leading up to the birth, with a C-Section everything happens after the birth.
 1. Writing a birth plan, having a Doula, and using Midwifes was ideal for us.  Everyone was really supportive, and the Doula stayed with us the entire time.  The midwives and nurses reviewed the birth plan and where very engaged with us if there were reasons we had to go off plan.
