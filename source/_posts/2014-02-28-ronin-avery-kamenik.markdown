@@ -46,7 +46,7 @@ Born February 21st, 2014 at 7:04am.  8lbs 11oz, 21 3/4 inches.
 
 **Friday 12am** Water spontaneously broke while laying in bed.  I was holding her hand through the contractions, in socks.  You can imagine what happened to the those socks :)
 
-Labor has truly started, but Mel is still at 8cm, and Ronin is at -2 station.  There are still many hours of labor left.
+Now we are on the clock.  Mel is still at 8cm, and Ronin is at -2 station.  There are still many hours of labor left.
 
 About 10 minutes after the water broke the first dry contraction starts.  It many many many times more powerful and painful then the back labor she has been dealing with so far.  Mel (against her birth plan) wants an epidural.  The doula, nurse, and I are getting Mel through the contractions one at a time, by being positive and telling her she can do it.
 
