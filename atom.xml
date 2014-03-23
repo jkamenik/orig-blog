@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-02-28T22:27:55-05:00</updated>
+  <updated>2014-03-23T16:54:03-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,58 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Inbox Zero: Part 1]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/03/23/inbox-zero-part-1/"/>
+    <updated>2014-03-23T16:45:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/03/23/inbox-zero-part-1</id>
+    <content type="html"><![CDATA[<p>This is the first in a series of posts related to reducing the number of emails in your inbox, and more importantly, keeping it reduced.  This idea comes from the world of GTD (specifically 43Folders) and is a good strategy for anyone who needs quick access to “important” emails.</p>
+
+<p>The filter-then-process method that I am about to describe works with pretty much any job you can think of: You sort laundry then wash it, you rake leaves into piles before you bag them, you collect dishes before you wash them.</p>
+
+<!-- more -->
+
+
+<p>Everything I describe is done with stock Gmail: no add-ons, no configurations, no 3rd party tools.  Just vanilla Gmail.</p>
+
+<h2>Background</h2>
+
+<p>I do not to live out of email, but part of my job requires reading it.  I check email at most twice a day, and I am still more responsive than anyone else at the company; especially those that who  “live” out of email.</p>
+
+<p>The reason is focus.  Those who jump around have too much to focus on, and lose details.  They are great people for the quick one-line “Got it” emails, but rarely have any follow-through.</p>
+
+<h2>The goal</h2>
+
+<p>The goals are simple: see the emails worth reading and responding to.  To achieve this we are going to:</p>
+
+<ol>
+<li>Set up Gmail and develop a process</li>
+<li>Move non-emails out of Email</li>
+<li>Automate the process</li>
+<li>Refine the process</li>
+<li>Enjoy our free time</li>
+</ol>
+
+
+<h2>The Fear of Missing Out</h2>
+
+<p>At this point you are probably looking at my comment on checking email twice a day and thinking “that will never work for me.”  Chances are you said to yourself “What if I miss out on something important,” or a variant like:</p>
+
+<ol>
+<li>What if I miss an email that my child/husband/wife/father/mother is in trouble?</li>
+<li>What if my boss emails me work that must be done immediately?</li>
+<li>What if my friends invite me to a party and I miss the email?</li>
+</ol>
+
+
+<p>To that I say “nonsense.”  Your mind is inventing scenarios that will never happen.  Nobody has ever turned to email in times of emergencies.  If a boss wants something immediately they will tell you in person, or over the phone. And if your friends were really inviting you to a party, they would do so via Evite, Meetup, or something similar.</p>
+
+<h2>Conclusion</h2>
+
+<p>Here all I did was tell you that this way of processing your email will work.  In the next post we will actually get started on the process.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ronin Avery Kamenik]]></title>
@@ -2450,79 +2502,6 @@
 <h2>Screw ups</h2>
 
 <p>Adding points to the wrong user happens, and for the time being I still don&#8217;t have a good answer.  But then again there are a lot of design changes to be tested before we try to tackle this.  It is hard to tell if this will even be an issue now.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Bunco Phase 1]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1/"/>
-    <updated>2012-11-21T08:21:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1</id>
-    <content type="html"><![CDATA[<p>Phase 1 is always a learning experience.  Often very little work is done, but a lot of research is done.  I generally do not like that approach.  Instead I like to start out simple and let that guide me.  And it has guided me to a initial working version at <a href="http://jkamenik.github.com/Bunco">http://jkamenik.github.com/Bunco</a>.</p>
-
-<!-- more -->
-
-
-<h2>The Target</h2>
-
-<p>Before any design could start I first had to decide what language, what library, what device, and how it will be accessed.</p>
-
-<h3>Device</h3>
-
-<p>I have my phone with me everywhere I go.  So it is a clear choice as the scorecard and input device.  The only question then becomes: do I host it from the web, or create a native app?</p>
-
-<p>I don&#8217;t know native iPhone, but I know that PhoneGap can be used to generate a native app from a hosted one.  So I can still go native if I want, but I don&#8217;t have to start with an all or nothing approach.</p>
-
-<h3>Hosting</h3>
-
-<p>Now that I have decided on using the phone and hosting I have to figure out where to host and let that inform what else is available to me.</p>
-
-<p>I could use a standard LAMP install on a hosting provider, but those can get expensive.</p>
-
-<p>I could use a home server with DDNS to reverse port through my firewall, but I don&#8217;t like maintaining my own infrastructure.</p>
-
-<p>I could use a Micro Amazon EC2 instance (free for the first year), but again I have to do a lot of setup.</p>
-
-<p>I could use Heroku and either spin-up a simple Node.js or Ruby on Rails app.  Actually I started doing this, but then decided that in this stage with the need to message between phones it was overkill to even setup a server.</p>
-
-<p>That is where Github Pages comes in.  I already use them to serve my blog, and a few other things.  And I am pretty much serving a static site.  All I have to do is work out of a git branch called gh_pages and everything will just work.</p>
-
-<h3>Lanuage and Libraries</h3>
-
-<p>Knowing that I am serving a static site from GitHub I open to using the web, but limited into things that are pre-compiled and static.  And since it going to be for the iPhone jQuery Mobile is a natural fit because it just uses HTML5&#8217;s Semantic markup features.</p>
-
-<p>I could use CoffeeScript - in fact if it gets any bigger I will - which compile to Javascript, but has a lot of niceties I am used to when working on Rails.  But since this isn&#8217;t a full blown Rails 3.2 app - with the full asset pipeline and compiling, minifying, and cache busting that goes along with it - the boon of CoffeeScript is slightly diminished.  Also, since I am starting with a library I haven&#8217;t used before it might be more complicated debugging a CoffeeScript bug vs a jQuery Mobile bug.  I will leave CoffeeScript on the back burner for now.</p>
-
-<h4>Aside (Backbone.js)</h4>
-
-<p>As an aside, when I started I was writing raw JS hashes, but was having trouble keeping things sorted.  I remember my days of using ExtJS, which is great for managing complex GUIs, but very large.  Then I remembered Backbone.js which is what I use now.  Much smaller, and less cumbersome.</p>
-
-<h2>Design</h2>
-
-<p>Once all the limitation are know (or at least most of them) everything starts with a design.  And I am not graphic designer, so I usually just go at the problem using rails.  Not really an option here.</p>
-
-<p>But since I plan on using jQuery Mobile, right on their website they have a embedded designer.  The output is HTML5 markup with the &#8220;data&#8221; flash that jQuery Mobile uses.  Here is my initial design:</p>
-
-<!-- image here -->
-
-
-<ol>
-<li>Header - Refresh button and title</li>
-<li>Footer - Scoring buttons: 0, 1, 5, 21</li>
-<li>Body - The score board.  Players across, Rounds down.</li>
-</ol>
-
-
-<h3>The score board</h3>
-
-<p>Very quickly I figured out that I really didn&#8217;t have the room for the scoreboard.  Not without shrinking the size of the text to unreadable levels.  So I had to switch to another style.</p>
-
-<p>Enter the accordion.  Instead of a grid where I see all scores I use an accordion showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.</p>
-
-<p><img src="http://jkamenik.github.com/images/bunco/ScoreBoard_1.png"></p>
-
-<!-- image here -->
-
 ]]></content>
   </entry>
   
