@@ -1,0 +1,53 @@
+---
+layout: post
+title: "BMore on Rails 4-8-2014"
+date: 2014-04-09 12:51
+comments: true
+toc: false
+published: true
+categories: 
+  - ruby on rails
+  - b'more
+---
+
+As always, last nights B'More on Rails meetup was enjoyable.  There were two talks and a lot of the new people.  The first talk was on solving the "Eight queens" problem in Haskell.  The second was about Postgresql and Rails 4.
+
+<!-- more -->
+
+## Eight Queens
+
+For those - like me - that are not familar with this problem the full details are [here](http://en.wikipedia.org/wiki/Eight_queens_puzzle).  Basically, given an 8x8 board place 8 queens such that no queen can attach another queen.  In actuality Robert solved the more difficult N-Queens problem using Haskell.
+
+The solution was to brute force through all combinations until a solution is reached.  This would seem to be a slow approach, but haskell (as a functional language) is setup for these kinds of tasks.
+
+As a Rails guy I found the syntax of Haskell extremely difficult to understand.  However, Robert was a fantastic and funny speaker; turning an otherwise dry programming talk into an interesting presentation about trails and pitfalls.
+
+One such pitfall Robert explained was using the imutable list which caused the calcuation time to grow by an order of magnatude.  By swaping the imutable list with a mutable set the calcuation time was reduced dramatically.  Sure, using something mutable violates the purity of a "pure functional" language, but Haskell appears to allow some wiggle room.
+
+Another pitfall was in understanding and using Monads.  After reading on my own, my best guess is that a Monad is simply context for containing a non-functional (in the sense of not allowed in a functional language) behavior.
+
+All-in-all I don't think I will be running out to try Haskell, but I would like to hear another talk from Robert.
+
+## Postgresql and Rails 4
+
+[Slides](http://decomplecting.org/rails4-postgres/#/)
+
+The second talk wasn't so much about Rails 4, but more about ActiveRecord 4 and how it has introduced direct support for some of the nicer Postgresql features.  This talk was jam packed with examples and references.  The full slides are linked above.  The summary is:
+
+
+1. ActiveRecord adds the following columns types
+    1. Array
+	  1. UUID
+	  1. HStore
+1. ActiveRecord adds direct support for GiN and GiST indexes
+1. The following gems are still useful:
+    1. [schema_plus](https://github.com/lomba/schema_plus)
+	    1. Adds a reduced migration syntax - do more with one line
+		  1. Adds foreign key constrains
+		  1. Adds views
+	  1. [pg_search](https://github.com/Casecommons/pg_search)
+	    1. Makes direct database searching easier
+	  1. [postgres_ext](https://github.com/dockyard/postgres_ext)
+		  1. Adds native postgresql types to ActiveRecord
+1. You should read [The Vietnam Of Computer Science](http://blogs.tedneward.com/2006/06/26/The+Vietnam+Of+Computer+Science.aspx)
+
