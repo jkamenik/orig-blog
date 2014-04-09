@@ -4,7 +4,7 @@
   <title><![CDATA[Category: b'more | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/b-more/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-03-23T16:54:03-04:00</updated>
+  <updated>2014-04-09T14:11:52-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[BMore on Rails 4-8-2014]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/"/>
+    <updated>2014-04-09T12:51:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014</id>
+    <content type="html"><![CDATA[<p>As always, last nights B'More on Rails meetup was enjoyable.  There were two talks and a lot of the new people.  The first talk was on solving the "Eight queens" problem in Haskell.  The second was about Postgresql and Rails 4.</p>
+
+<!-- more -->
+
+
+<h2>Eight Queens</h2>
+
+<p>For those - like me - that are not familar with this problem the full details are <a href="http://en.wikipedia.org/wiki/Eight_queens_puzzle">here</a>.  Basically, given an 8x8 board place 8 queens such that no queen can attach another queen.  In actuality Robert solved the more difficult N-Queens problem using Haskell.</p>
+
+<p>The solution was to brute force through all combinations until a solution is reached.  This would seem to be a slow approach, but haskell (as a functional language) is setup for these kinds of tasks.</p>
+
+<p>As a Rails guy I found the syntax of Haskell extremely difficult to understand.  However, Robert was a fantastic and funny speaker; turning an otherwise dry programming talk into an interesting presentation about trails and pitfalls.</p>
+
+<p>One such pitfall Robert explained was using the imutable list which caused the calcuation time to grow by an order of magnatude.  By swaping the imutable list with a mutable set the calcuation time was reduced dramatically.  Sure, using something mutable violates the purity of a "pure functional" language, but Haskell appears to allow some wiggle room.</p>
+
+<p>Another pitfall was in understanding and using Monads.  After reading on my own, my best guess is that a Monad is simply context for containing a non-functional (in the sense of not allowed in a functional language) behavior.</p>
+
+<p>All-in-all I don't think I will be running out to try Haskell, but I would like to hear another talk from Robert.</p>
+
+<h2>Postgresql and Rails 4</h2>
+
+<p><a href="http://decomplecting.org/rails4-postgres/#/">Slides</a></p>
+
+<p>The second talk wasn't so much about Rails 4, but more about ActiveRecord 4 and how it has introduced direct support for some of the nicer Postgresql features.  This talk was jam packed with examples and references.  The full slides are linked above.  The summary is:</p>
+
+<ol>
+<li>ActiveRecord adds the following columns types
+
+<ol>
+<li>Array</li>
+<li>UUID</li>
+<li>HStore</li>
+</ol>
+</li>
+<li>ActiveRecord adds direct support for GiN and GiST indexes</li>
+<li>The following gems are still useful:
+
+<ol>
+<li><a href="https://github.com/lomba/schema_plus">schema_plus</a>
+
+<ol>
+<li>Adds a reduced migration syntax - do more with one line</li>
+<li>Adds foreign key constrains</li>
+<li>Adds views</li>
+</ol>
+</li>
+<li><a href="https://github.com/Casecommons/pg_search">pg_search</a>
+
+<ol>
+<li>Makes direct database searching easier</li>
+</ol>
+</li>
+<li><a href="https://github.com/dockyard/postgres_ext">postgres_ext</a>
+
+<ol>
+<li>Adds native postgresql types to ActiveRecord</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>You should read <a href="http://blogs.tedneward.com/2006/06/26/The+Vietnam+Of+Computer+Science.aspx">The Vietnam Of Computer Science</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[B'More on Rails Meetup - Feb 11, 2014]]></title>

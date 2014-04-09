@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: selenium - Random Software Inklings</title>
+  <title>BMore on Rails 4-8-2014 - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="Category: selenium">
+  <meta name="description" content="As always, last nights B&#8217;More on Rails meetup was enjoyable. There were two talks and a lot of the new people. The first talk was on solving &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.comblog/categories/selenium/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,36 +68,155 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Selenium</h1>
+    
+      <h1 class="entry-title">BMore on Rails 4-8-2014</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-09T12:51:00-04:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>As always, last nights B&#8217;More on Rails meetup was enjoyable.  There were two talks and a lot of the new people.  The first talk was on solving the &#8220;Eight queens&#8221; problem in Haskell.  The second was about Postgresql and Rails 4.</p>
 
-  
-  <h2>2010</h2>
-
-<article>
-  
-<h1><a href="/blog/2010/11/18/learning-selenium/">Learning Selenium</a></h1>
-<time datetime="2010-11-18T00:00:00-05:00" pubdate><span class='month'>Nov</span> <span class='day'>18</span> <span class='year'>2010</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/selenium/'>selenium</a>, <a class='category' href='/blog/categories/testing/'>testing</a></span>
-</footer>
+<!-- more -->
 
 
-</article>
+<h2>Eight Queens</h2>
+
+<p>For those - like me - that are not familar with this problem the full details are <a href="http://en.wikipedia.org/wiki/Eight_queens_puzzle">here</a>.  Basically, given an 8x8 board place 8 queens such that no queen can attach another queen.  In actuality Robert solved the more difficult N-Queens problem using Haskell.</p>
+
+<p>The solution was to brute force through all combinations until a solution is reached.  This would seem to be a slow approach, but haskell (as a functional language) is setup for these kinds of tasks.</p>
+
+<p>As a Rails guy I found the syntax of Haskell extremely difficult to understand.  However, Robert was a fantastic and funny speaker; turning an otherwise dry programming talk into an interesting presentation about trails and pitfalls.</p>
+
+<p>One such pitfall Robert explained was using the imutable list which caused the calcuation time to grow by an order of magnatude.  By swaping the imutable list with a mutable set the calcuation time was reduced dramatically.  Sure, using something mutable violates the purity of a &#8220;pure functional&#8221; language, but Haskell appears to allow some wiggle room.</p>
+
+<p>Another pitfall was in understanding and using Monads.  After reading on my own, my best guess is that a Monad is simply context for containing a non-functional (in the sense of not allowed in a functional language) behavior.</p>
+
+<p>All-in-all I don&#8217;t think I will be running out to try Haskell, but I would like to hear another talk from Robert.</p>
+
+<h2>Postgresql and Rails 4</h2>
+
+<p><a href="http://decomplecting.org/rails4-postgres/#/">Slides</a></p>
+
+<p>The second talk wasn&#8217;t so much about Rails 4, but more about ActiveRecord 4 and how it has introduced direct support for some of the nicer Postgresql features.  This talk was jam packed with examples and references.  The full slides are linked above.  The summary is:</p>
+
+<ol>
+<li>ActiveRecord adds the following columns types
+
+<ol>
+<li>Array</li>
+<li>UUID</li>
+<li>HStore</li>
+</ol>
+</li>
+<li>ActiveRecord adds direct support for GiN and GiST indexes</li>
+<li>The following gems are still useful:
+
+<ol>
+<li><a href="https://github.com/lomba/schema_plus">schema_plus</a>
+
+<ol>
+<li>Adds a reduced migration syntax - do more with one line</li>
+<li>Adds foreign key constrains</li>
+<li>Adds views</li>
+</ol>
+</li>
+<li><a href="https://github.com/Casecommons/pg_search">pg_search</a>
+
+<ol>
+<li>Makes direct database searching easier</li>
+</ol>
+</li>
+<li><a href="https://github.com/dockyard/postgres_ext">postgres_ext</a>
+
+<ol>
+<li>Adds native postgresql types to ActiveRecord</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>You should read <a href="http://blogs.tedneward.com/2006/06/26/The+Vietnam+Of+Computer+Science.aspx">The Vietnam Of Computer Science</a></li>
+</ol>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-09T12:51:00-04:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/b-more/'>b'more</a>, <a class='category' href='/blog/categories/ruby-on-rails/'>ruby on rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/23/inbox-zero-part-1/" title="Previous Post: Inbox Zero: Part 1">&laquo; Inbox Zero: Part 1</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -228,7 +347,10 @@
       var disqus_shortname = 'randomsoftwareinklings';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
