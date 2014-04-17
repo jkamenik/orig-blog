@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>RBAC in Ruby - Random Software Inklings</title>
+  <title>Code does rust - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="RBAC stands for Role Based Access Control. It is basically a means to programmitically configure access rights without hardcoding. The full details &hellip;">
+  <meta name="description" content="Fourteen years ago Joel Spolsky wrote an article entitled &#8220;Netscape Goes Bonkers&#8221;. In that article he states that &#8220;old software &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/04/10/code-does-rust/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -72,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">RBAC in Ruby</h1>
+      <h1 class="entry-title">Code Does Rust</h1>
     
     
       <p class="meta">
@@ -88,88 +88,57 @@
   
 
 
-<time datetime="2014-01-10T15:07:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2014</time>
+<time datetime="2014-04-10T14:58:00-04:00" pubdate data-updated="true">Apr 10<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>RBAC stands for <em>Role Based Access Control</em>.  It is basically a means to programmitically configure access rights without hardcoding.</p>
-
-<p>The full details are <a href="http://en.wikipedia.org/wiki/Role-based_access_control">here</a>, but to be honest I don&#8217;t fully understand it as writen.  What I understand of it is from trial and error.</p>
-
-<p>This entry is an attempt to codify that understanding and apply it using the ruby language.</p>
+<div class="entry-content"><p>Fourteen years ago Joel Spolsky wrote an article entitled &#8220;Netscape Goes Bonkers&#8221;.  In that article he states that &#8220;old software doesn&#8217;t rust&#8221;.  The rest of the article is good, but that statement is &#8220;off&#8221;.</p>
 
 <!-- more -->
 
 
-<h2>Basics</h2>
+<p>To be clear, as a direct comparison software contains no metal to oxidize and therefore cannot actually &#8220;rust&#8221;.  But as an analogy, over time untouched software will slowly degrade and eventually stop working.  So the corrected statement should have been &#8220;[untouched] old software rust[s].&#8221;</p>
 
-<p>The inputs to the policy are:</p>
+<p>Recently, some login code I wrote a few years ago magically stopped working on FireFox.  This functionality continues to work on all other major browsers. However, due to the fact that FireFox decided to change how it handled cookies my software is now slightly less capable of performing as expected.</p>
 
-<ol>
-<li>User or Actor</li>
-<li>Action being performed</li>
-<li>Resource being acted on</li>
-</ol>
+<p>As a result, instead of making further progress on a new feature I am forced to a take a moment to clean and fix the rust spot.  Not a challenging fix and not indicative of a fundamental design problem, but rather, an annoying, little issue which needs to be addressed. Of course, the big picture view is that, over the years, I&#8217;ve had to deal with hundreds of problems just like this one. Meaning that when I don&#8217;t closely maintain a project&#8217;s codebase and adapt it to dependency updates, then it&#8217;s performance and functionality is diminished.  Very similarly to how an unmaintained metal surface rusts.</p>
 
+<p>This leads me to believe that software does in fact rust.</p>
 
-<pre>
-    +-------------------------------------------------------+
-    | +-------+                                +----------+ |
-    | |       |            +------+            |          | |
-    | |  User |+---------->|Action|+---------->| Resource | |
-    | |       |            +------+            |          | |
-    | +-------+                                +----------+ |
-    +-------------------------------------------------------+
-                               +
-                               |
-                               v
-                            +------+
-                            |Policy|
-                            +------+
-                               +
-                               |
-                               v
-                          +---------+
-                          |Yes or No|
-                          +---------+
-</pre>
+<p>The solution? I&#8217;ve found that there is no substitute for taking the proactive approach and resolving these problems early on because eventually the rust will become too significant and lead to the software being scrapped altogether.</p>
 
+<p>Ideas age like fine wine, but software rusts.</p>
 
-<h2>Policy</h2>
+<h2>How to slow the problem</h2>
 
-<p>The policy is where the business logic goes.  It can be as simple as a set of Ruby classes that simply return values, or it can be as complicated as ActiveDirectory.</p>
+<p>Any time there is an interface between two systems there is corrosion.  This is as true in software as it is in the real world.  Tires exist because road surfaces chew-up (corrode) anything that slides across them.  The tire is the car manufacturer&#8217;s interface to the road.  The same method works for software.</p>
 
-<p>The players are:</p>
+<p>If the interface between two systems is highly corrosive (constantly changing) then the best interface is someone else&#8217;s.  For example, Heroku is a going to be a better interface to &#8220;cloud&#8221; hosting then Amazon.  Amazon is infrastructure in the cloud; basically the road.  Heroku is web hosting in the cloud and uses Amazon as a base; basically the tire.  So if all you want to spend your time on is building the car, then use Heroku as the tires.</p>
 
-<ol>
-<li>Role - collection of permissions bound to a user</li>
-<li>Permission - an answer which is limited to a resource and action</li>
-</ol>
+<p>If the interface between two systems is only slightly corrosive then add a standardized &#8220;socket&#8221;, to protect yourself.  Car&#8217;s don&#8217;t produce enough point-heat to light a cigarette, and instead of piping the 800+ degree exhaust into the cabin or giving unprotected access to the car&#8217;s battery the car manufacturer introduced a socket that could power a heating coil.  The socket protects the car, and provides a standard interface.  And by being standardized, anyone (not just the manufacturer) can create an adaptor to fit the socket.</p>
 
+<p>An Application Programming Interface (API) is the software equivalent of a standardized socket.  Any place your system needs to be accessed, simply create an API, even if you control both ends.  Now your tests can focus on ensuring an unchanging API, to catch any wear that needs to be addressed.</p>
 
-<p>Here is the basic flow of a permission:</p>
+<p>If the interface is non-corrosive then test for wear.  Many systems &#8220;guarantee backwards compatibility&#8221; (at least until they it breaks the first time).  This is the software equivalent of a well lubricated non-corrosive interface.  It is still not immune to corrosion, but you don&#8217;t (and shouldn&#8217;t) actively protect yourself.  Instead, add some once-in-while checks.  Cars usually get a 50K mile service to check for these low wear areas.  Do something similar with your software.</p>
 
-<pre>
-    +------+            +------+             +------------+
-    | User |+---------->| Role |+----------->| Permission |
-    +------+            +------+             |------------|
-              Has many            Has many   | Resource   |
-                                             | Action     |
-                                             | Allowed?   |
-                                             +------------+
-</pre>
+<p>Of the millions of cars that get a 50K mile service a small percentage will have a catastrophic failure, where one of those non-corrosive interfaces corroded.  The same will happen in your software, eventually, but the cost of constantly checking those parts is far greater than any saving gained by not letting it fail.  It is better to follow good practices (like modular design, and not cutting corners) then it is to search for failures everywhere all the time.</p>
 
+<p>If the interface is solid, then fail to launch if there is wiggle.  Cars need engines.  That is a solid interface and a hard requirement, without it you go no where.  And if a engine dies while it is running there is the expectation that the car will stop.  We might be surprised that an engine breaks, but we are not surprised when a broken engine stops a car.  Web servers need databases and network connections.  So code to bind to a port or connect to the database should allow the app to fully fail.</p>
 
-<p>A user can have 1 or more roles.  Each role can have 1 or more permissions.  Each permission associates an action on a resource with an answer.  Either the user is explicitly allowed or explicitly not allowed to access the Resource.</p>
+<p>During normal operations it is common for a database connection to be temporarily closed, like network timeouts.  Temporary failures should have one additional layer of protection: a limited retry count.  After the retry count is exceeded then the issue should be considered a full failure and the app should stop.</p>
 
-<p><em>Note:</em> I have purposely kept the data model simple.  In more complicated setups there can be several levels of permissions, permissions can have filters, and/or permissions can be directly bound to a user (instead of being bound to a role).  These complications are often introduced to deal with edge cases which are outside the scope of this article.</p>
+<h2>Sidenote: Degrading software</h2>
 
-<h3>Policy logic sample code</h3>
+<p>And now I hear you saying &#8220;Woah, apps should degrade gracefully.&#8221;  Honestly, they shouldn&#8217;t, at least not self-degrade.  You would never drive a car, get a flat, and expect the car to change its own tire.  No, you pull over, install the spare tire, and at a degraded level drive slowly to a tire shop to have it fixed (at least that is what you should do).  But the car did not degrade itself.  You, as the driver, are expected to make that choice for the car.</p>
 
-<p>Once the actors are known the logic is easy.  Simply filter in only the permission on a user for the resource and action in question then &#8220;and&#8221; all permissions together.</p>
+<p>The same is true in software.  The software should not degrade itself.  There should be a watchdog for your software which periodically checks to see if it is alive.  If during one of the checks the software is found dead then it should be resurrected.  If it suffers SIDS then the watchdog notifies someone, otherwise it is business as usual.  To be a good-citizen, your software should play nicely with the watchdog.</p>
+
+<p>By adding degradation to your software you must also add complexity to your watchdog, so that it can deal with your &#8220;dying&#8221; software.  And even if you are fine with the Law of Demeter violation you just introduced, you still cannot overcome the permanently-half-dead issue.  Permanently-half-dead is the common state in degrading software where your software has one or more forms of degradation and as a result, it cannot self-correct.  It will never die because it is degraded, but it can never perform fully either.</p>
+
+<p>As a further aside, people often confused degrading software with defensive software.  But to clarify, defensive software is only concerned with preventing bugs due to unforeseen usage.  Things like swapping direct memory manipulation with a memory manager, and code reviews, and testing are defensive.  Defensive software can and does terminate before it can degrade into doing something foolish.  Take for example:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -187,53 +156,21 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Policy</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">DegradedUser</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">name</span><span class="o">=</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># if the user provides too much data, </span>
+</span><span class='line'>    <span class="c1"># ignore their wishes, do what we want,</span>
+</span><span class='line'>    <span class="c1"># and don&#39;t tell them</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span><span class="o">.</span><span class="n">to_s</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">16</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="c1"># returns true if the user *can* perform action on resource, false otherwise</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">allowed?</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">reduce_permissions</span> <span class="n">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">DefensiveUser</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">name</span><span class="o">=</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="s1">&#39;name is too long&#39;</span> <span class="k">if</span> <span class="nb">name</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">16</span>
 </span><span class='line'>
-</span><span class='line'><span class="kp">private</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># returns an array of filtered permissions</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">perm</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">array</span><span class="p">,</span><span class="n">role</span><span class="o">|</span>
-</span><span class='line'>            <span class="n">array</span><span class="o">.</span><span class="n">concat</span> <span class="n">role</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">.</span><span class="n">compact</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_permissions</span><span class="p">(</span><span class="n">perm_array</span><span class="p">)</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">implicit_allow</span> <span class="k">if</span> <span class="n">perm_array</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">perm_array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span><span class="ss">:&amp;</span><span class="o">&amp;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># &quot;and&quot;, for &quot;or&quot; use &quot;:||&quot;</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_function</span>
-</span><span class='line'>        <span class="ss">:&amp;</span><span class="o">&amp;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># default behavior is NOT to give access</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">implicit_allow</span>
-</span><span class='line'>        <span class="kp">false</span>
-</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -259,12 +196,12 @@
   
 
 
-<time datetime="2014-01-10T15:07:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2014</time>
+<time datetime="2014-04-10T14:58:00-04:00" pubdate data-updated="true">Apr 10<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/opinion/'>opinion</a>, <a class='category' href='/blog/categories/rant/'>rant</a>
   
 </span>
 
@@ -273,7 +210,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/04/10/code-does-rust/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/04/10/code-does-rust/" >Tweet</a>
   
   
   
@@ -284,10 +221,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/09/28/tdc-prototype/" title="Previous Post: TDC Prototype">&laquo; TDC Prototype</a>
+        <a class="basic-alignment left" href="/blog/2014/04/09/bmore-on-rails-4-8-2014/" title="Previous Post: BMore on Rails 4-8-2014">&laquo; BMore on Rails 4-8-2014</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/01/21/drafts/" title="Next Post: Drafts">Drafts &raquo;</a>
       
     </p>
   </footer>
@@ -429,8 +364,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/';
-        var disqus_url = 'http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/';
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/04/10/code-does-rust/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/04/10/code-does-rust/';
         var disqus_script = 'embed.js';
       
     (function () {
@@ -466,13 +401,6 @@
   </script>
 
 
-
-  <script type="text/javascript">
-    jQuery(document).ready(function() {
-        // Put a TOC right before the entry content.
-        generateTOC('Table of Contents');
-    });
-  </script>
 
 
 </body>

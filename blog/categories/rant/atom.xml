@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rant | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/rant/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-04-09T14:11:52-04:00</updated>
+  <updated>2014-04-17T11:26:16-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Code does rust]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/04/10/code-does-rust/"/>
+    <updated>2014-04-10T14:58:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/04/10/code-does-rust</id>
+    <content type="html"><![CDATA[<p>Fourteen years ago Joel Spolsky wrote an article entitled "Netscape Goes Bonkers".  In that article he states that "old software doesn't rust".  The rest of the article is good, but that statement is "off".</p>
+
+<!-- more -->
+
+
+<p>To be clear, as a direct comparison software contains no metal to oxidize and therefore cannot actually "rust".  But as an analogy, over time untouched software will slowly degrade and eventually stop working.  So the corrected statement should have been "[untouched] old software rust[s]."</p>
+
+<p>Recently, some login code I wrote a few years ago magically stopped working on FireFox.  This functionality continues to work on all other major browsers. However, due to the fact that FireFox decided to change how it handled cookies my software is now slightly less capable of performing as expected.</p>
+
+<p>As a result, instead of making further progress on a new feature I am forced to a take a moment to clean and fix the rust spot.  Not a challenging fix and not indicative of a fundamental design problem, but rather, an annoying, little issue which needs to be addressed. Of course, the big picture view is that, over the years, I've had to deal with hundreds of problems just like this one. Meaning that when I don't closely maintain a project's codebase and adapt it to dependency updates, then it's performance and functionality is diminished.  Very similarly to how an unmaintained metal surface rusts.</p>
+
+<p>This leads me to believe that software does in fact rust.</p>
+
+<p>The solution? I've found that there is no substitute for taking the proactive approach and resolving these problems early on because eventually the rust will become too significant and lead to the software being scrapped altogether.</p>
+
+<p>Ideas age like fine wine, but software rusts.</p>
+
+<h2>How to slow the problem</h2>
+
+<p>Any time there is an interface between two systems there is corrosion.  This is as true in software as it is in the real world.  Tires exist because road surfaces chew-up (corrode) anything that slides across them.  The tire is the car manufacturer's interface to the road.  The same method works for software.</p>
+
+<p>If the interface between two systems is highly corrosive (constantly changing) then the best interface is someone else's.  For example, Heroku is a going to be a better interface to "cloud" hosting then Amazon.  Amazon is infrastructure in the cloud; basically the road.  Heroku is web hosting in the cloud and uses Amazon as a base; basically the tire.  So if all you want to spend your time on is building the car, then use Heroku as the tires.</p>
+
+<p>If the interface between two systems is only slightly corrosive then add a standardized "socket", to protect yourself.  Car's don't produce enough point-heat to light a cigarette, and instead of piping the 800+ degree exhaust into the cabin or giving unprotected access to the car's battery the car manufacturer introduced a socket that could power a heating coil.  The socket protects the car, and provides a standard interface.  And by being standardized, anyone (not just the manufacturer) can create an adaptor to fit the socket.</p>
+
+<p>An Application Programming Interface (API) is the software equivalent of a standardized socket.  Any place your system needs to be accessed, simply create an API, even if you control both ends.  Now your tests can focus on ensuring an unchanging API, to catch any wear that needs to be addressed.</p>
+
+<p>If the interface is non-corrosive then test for wear.  Many systems "guarantee backwards compatibility" (at least until they it breaks the first time).  This is the software equivalent of a well lubricated non-corrosive interface.  It is still not immune to corrosion, but you don't (and shouldn't) actively protect yourself.  Instead, add some once-in-while checks.  Cars usually get a 50K mile service to check for these low wear areas.  Do something similar with your software.</p>
+
+<p>Of the millions of cars that get a 50K mile service a small percentage will have a catastrophic failure, where one of those non-corrosive interfaces corroded.  The same will happen in your software, eventually, but the cost of constantly checking those parts is far greater than any saving gained by not letting it fail.  It is better to follow good practices (like modular design, and not cutting corners) then it is to search for failures everywhere all the time.</p>
+
+<p>If the interface is solid, then fail to launch if there is wiggle.  Cars need engines.  That is a solid interface and a hard requirement, without it you go no where.  And if a engine dies while it is running there is the expectation that the car will stop.  We might be surprised that an engine breaks, but we are not surprised when a broken engine stops a car.  Web servers need databases and network connections.  So code to bind to a port or connect to the database should allow the app to fully fail.</p>
+
+<p>During normal operations it is common for a database connection to be temporarily closed, like network timeouts.  Temporary failures should have one additional layer of protection: a limited retry count.  After the retry count is exceeded then the issue should be considered a full failure and the app should stop.</p>
+
+<h2>Sidenote: Degrading software</h2>
+
+<p>And now I hear you saying "Woah, apps should degrade gracefully."  Honestly, they shouldn't, at least not self-degrade.  You would never drive a car, get a flat, and expect the car to change its own tire.  No, you pull over, install the spare tire, and at a degraded level drive slowly to a tire shop to have it fixed (at least that is what you should do).  But the car did not degrade itself.  You, as the driver, are expected to make that choice for the car.</p>
+
+<p>The same is true in software.  The software should not degrade itself.  There should be a watchdog for your software which periodically checks to see if it is alive.  If during one of the checks the software is found dead then it should be resurrected.  If it suffers SIDS then the watchdog notifies someone, otherwise it is business as usual.  To be a good-citizen, your software should play nicely with the watchdog.</p>
+
+<p>By adding degradation to your software you must also add complexity to your watchdog, so that it can deal with your "dying" software.  And even if you are fine with the Law of Demeter violation you just introduced, you still cannot overcome the permanently-half-dead issue.  Permanently-half-dead is the common state in degrading software where your software has one or more forms of degradation and as a result, it cannot self-correct.  It will never die because it is degraded, but it can never perform fully either.</p>
+
+<p>As a further aside, people often confused degrading software with defensive software.  But to clarify, defensive software is only concerned with preventing bugs due to unforeseen usage.  Things like swapping direct memory manipulation with a memory manager, and code reviews, and testing are defensive.  Defensive software can and does terminate before it can degrade into doing something foolish.  Take for example:</p>
+
+<p>```ruby
+class DegradedUser
+  def name=(name)</p>
+
+<pre><code># if the user provides too much data, 
+# ignore their wishes, do what we want,
+# and don't tell them
+@name = name.to_s[0..16]
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class DefensiveUser
+  def name=(name)</p>
+
+<pre><code>raise 'name is too long' if name.length &gt; 16
+
+@name = name
+</code></pre>
+
+<p>  end
+end
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Comcast Fail]]></title>
@@ -388,99 +465,6 @@
 <p>These are all excuses I have heard. Each time given by a person in <a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a> (managers) because they are ignoring changes in the field (military term). Every choice has a set of outcomes: some good, some bad. The attempt with agile is not to mitigate bad outcomes, but to allow those outcomes to contribute to the overall direction.</p>
 
 <p>Sometimes the bad outcome will be that something took to long, or that one language/tool was not the correct choice given the problem set. If for every problem that happens the developer has to take their own time, or face embarrassment, to solve the problem then they will stop making choices. Not just choices that might have bad outcomes, but choices altogether. At which point someone in a <a href="http://en.wikipedia.org/wiki/Scrum_(development)#.E2.80.9CChicken.E2.80.9D_roles">chicken role</a> will start making more choices then they should.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to be a bad boss]]></title>
-    <link href="http://jkamenik.github.com/blog/2010/12/05/how-to-be-bad-boss/"/>
-    <updated>2010-12-05T00:00:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2010/12/05/how-to-be-bad-boss</id>
-    <content type="html"><![CDATA[<p>Being a boss is a complicated thing. It is your job to get people to do things, sometimes things they do not want to do. And it is especially complicated in the software industry, where it is like herding cats.</p>
-
-<p>I see a lot of posts on how to be a good boss, but the problem there is that they often forget to mention the things that can and will immediately erode any success you might have had. I am going to assume that as a reader you strive to be a person who others are willing to follow.</p>
-
-<p>Nobody is perfect, so you will probably have done at least one of these things in the past. Or you do then without even knowing. Now is your chance to stop, and be a constructive boss who people want to work for.</p>
-
-<!--more-->
-
-
-<h2>Be smarmy</h2>
-
-<p>Yep, this is number one.Smarmy people are falsely friendly (think used car dealers). Notice I did not say do not "be mean." As a boss sometimes you will need to be mean, or at least not very nice.  And even that should be kept to a minimum, but it is never OK to be smarmy.  All it does is make people uncomfortable confiding in you, which means they will either find better employment (if they can) or they will sabotage you.</p>
-
-<p>Here are some examples of what I mean by smarmy:</p>
-
-<ul>
-<li>Suggest that a problem can be solved by the employee working overtime</li>
-<li>Using scrum (or any general meeting) to point out an employee's failure</li>
-<li>Joke about firing an employee</li>
-<li>Make any sarcastic comment about an employee in the presence of others</li>
-<li>Only talking to an employee when you need them to do something (i.e., I am only talking to you because I want something)</li>
-</ul>
-
-
-<p>Some ways to tell that you have already failed at this:</p>
-
-<ul>
-<li>All laughter stops when you enter the room</li>
-<li>Conversations between you and an employee die quickly</li>
-<li>Employees no longer tell you about issues they are having</li>
-</ul>
-
-
-<h2>Be a hypocrite</h2>
-
-<p>A hypocrite is someone who says one thing and thinks or does another. It can be as overt as being prejudiced (racist, sexist, etc...) or as covert as being passive aggressive. Being a hypocrite is risky because when other people find out, you are just being deceitful, and no one wants to deal with that.</p>
-
-<p>One example is saying that code needs to be high quality but not leaving time for testing. Overtly this often resembles explicitly adding a testing phase at the end of coding and then cutting it if coding goes long. Covertly this is often assuming that testing is done as part of coding, but scoffing at longer estimates. Speed and quality have a tenuous relationship. Something done slowly may or may not be of quality, but something quickly is almost never of quality.</p>
-
-<p>The best way not to be a hypocrite is not to bring your values and prejudices into the equation. To do this though you have to understand what your values and prejudices are. In the case of the no testing, quality is explicitly stated as the important part, but speed is implicitly stated as the important factor. More specifically speed at the cost of quality is stated as the import factor. To avoid this, it is important to explicitly state the importance of all three tenets of the project triangle: that way you avoid the embarrassing case where one tenet goes to 0 unintentionally. See: <a href="http://en.wikipedia.org/wiki/Project_triangle">Project Triangle</a>.</p>
-
-<h2>Be arrogant</h2>
-
-<p>I am not talking about being hard headed or stubborn. I am talking about being truly arrogant. Stubborn people will listen to reason, assuming the opposing argument is good enough; arrogant people cannot be directly convinced. There are two forms of arrogance to watch out for: arrogance of idea, and arrogance of presenter. Arrogance of idea is simply dismissing an idea because it is in direct conflict with your internal ideas or values. Arrogance of presenter is rejecting an idea because of who presented it.</p>
-
-<p>Two engineers approach you with different solutions to the problem of releasing on time: one says to keep the feature set and stop doing unit testing, and the other says reduce the feature set but keep the unit testing. Which do you choose? If you choose "keep the feature set" then you wrong. If you choose "keep the unit testing" you are also wrong. If you chose either (based on only the information provided) then the choice you made was based on you internal values only and not based on the problem being presented.</p>
-
-<p>In the context of work the truth is that new hires probably know more about a given framework than you, and certainly will have a different perspective on how things should be done. They are probably offering you this knowledge, because they have already encountered the problem you are now seeing and have found an appropriate solution. It is tempting to dismiss this simply because a new hire presented it and they don't know the full business impact of their suggestion. But ask yourself: if the system architect presented you with this idea would you accept it? If yes, then you are suffering from arrogance of presenter and should tread lightly.</p>
-
-<p>I suggest instead that you judge an idea (never a presenter) on its merits in the context of only the problem (never on facts you assume to be true). And make sure you are consciously and actively judging the idea, and you are not adding your own problem or values.</p>
-
-<h2>Offer post hoc rewards</h2>
-
-<p>A post hoc reward is a reward given after work is complete. In physical work the effects of post hoc rewards are well known and lead to better results, but in knowledge work offering post hoc rewards has a distracting effect. Work will take longer and be of lower quality. It will make employees very good at performing work that maximizes their incentives, and not at developing a quality product. Be aware that offering reward for work done defines a tangible value for that work, which may demoralize an employee who feels under compensated as a result.</p>
-
-<iframe width="560" height="315" src="http://www.youtube.com/embed/u6XAPnuFjJc" frameborder="0" allowfullscreen></iframe>
-
-
-<p>Intrinsic rewards can and should be used. These are things that are given universally and without reservation. Basic examples would be vacation, and health benefits. Other examples would be a free day to work on any project the employee wanted, or free soda/tea/coffee. These intrinsic benefits help endear you and the company to the employee.</p>
-
-<h2>Accept estimates less than 4 hours</h2>
-
-<p>This may only be true in software, but tasks never take less than 4 hours. A task is really an atomic complete chunk of work, so to be considered complete it must be coded, tested, reviewed, and committed. However, some employees will claim they finish tasks sooner. Often these people are cutting corners (not testing, or not getting a review) or they are doing a bunch of tasks that should have logically been considered one task.</p>
-
-<p>Either way they are playing a game with the numbers to get their counts higher, which means that you are probably rewarding over aggressive estimates, and have a huge defect backlog. Well done!</p>
-
-<h2>Assume research is intrinsic</h2>
-
-<p>I have seen this bite so many bosses, where they say something like "tasks cannot take longer then 4 days." The problem is that now you have employees trying to split tasks that have little or no real research done. So when it comes time to implement you have a bunch of small tasks that are too small to warrant research, but no real clear direction because no real research was done.</p>
-
-<p>Estimates of several weeks or months are fine early in the process. But enough time needs to be given to investigate feasibility prior to high level scoping. Prior to implementation, time should be given to research an implementation and split the tasks out. All of this time should have been blocked in as a single unit during high level scoping.</p>
-
-<h2>Require meetings</h2>
-
-<p>Meetings cost time and money. And in addition to the meeting itself there is time before the meeting where people ramp down, and time after the meeting when people need to ramp back up again. Both ramping phases are about 10 minutes each.</p>
-
-<p>To monetize this for you, let's say you have 12 employees going to a meeting, and on average they make $24 an hour, and the meeting is 15 minutes (a scrum). The total chunk of wasted time is 35 minutes or about $14 per employee. For the company that means you wasted $168. And that does not include any prep time employees had to take.</p>
-
-<p>In general, meetings need to be kept to a minimum and kept on track because they will end up being the single most costly event both in terms of money and productivity.</p>
-
-<h2>Watch your employees work</h2>
-
-<p>Nobody is comfortable being scrutinized. Do not set up your office so that you are looking into your employees' cubes, and don't wonder around aimlessly, and never under any circumstances hover. By doing this you are showing your employees that the most important thing is to look busy (a function of the keyboard and finger), not to solve problems (a function of the brain). At the point where your employees feel scrutinized they will work just hard enough to not get fired, and will partake in CYA games.</p>
-
-<p>The best example is Office Space the movie. Little more needs to be said.</p>
 ]]></content>
   </entry>
   

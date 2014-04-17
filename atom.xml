@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-04-09T14:11:52-04:00</updated>
+  <updated>2014-04-17T11:26:16-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,93 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Code does rust]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/04/10/code-does-rust/"/>
+    <updated>2014-04-10T14:58:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/04/10/code-does-rust</id>
+    <content type="html"><![CDATA[<p>Fourteen years ago Joel Spolsky wrote an article entitled &#8220;Netscape Goes Bonkers&#8221;.  In that article he states that &#8220;old software doesn&#8217;t rust&#8221;.  The rest of the article is good, but that statement is &#8220;off&#8221;.</p>
+
+<!-- more -->
+
+
+<p>To be clear, as a direct comparison software contains no metal to oxidize and therefore cannot actually &#8220;rust&#8221;.  But as an analogy, over time untouched software will slowly degrade and eventually stop working.  So the corrected statement should have been &#8220;[untouched] old software rust[s].&#8221;</p>
+
+<p>Recently, some login code I wrote a few years ago magically stopped working on FireFox.  This functionality continues to work on all other major browsers. However, due to the fact that FireFox decided to change how it handled cookies my software is now slightly less capable of performing as expected.</p>
+
+<p>As a result, instead of making further progress on a new feature I am forced to a take a moment to clean and fix the rust spot.  Not a challenging fix and not indicative of a fundamental design problem, but rather, an annoying, little issue which needs to be addressed. Of course, the big picture view is that, over the years, I&#8217;ve had to deal with hundreds of problems just like this one. Meaning that when I don&#8217;t closely maintain a project&#8217;s codebase and adapt it to dependency updates, then it&#8217;s performance and functionality is diminished.  Very similarly to how an unmaintained metal surface rusts.</p>
+
+<p>This leads me to believe that software does in fact rust.</p>
+
+<p>The solution? I&#8217;ve found that there is no substitute for taking the proactive approach and resolving these problems early on because eventually the rust will become too significant and lead to the software being scrapped altogether.</p>
+
+<p>Ideas age like fine wine, but software rusts.</p>
+
+<h2>How to slow the problem</h2>
+
+<p>Any time there is an interface between two systems there is corrosion.  This is as true in software as it is in the real world.  Tires exist because road surfaces chew-up (corrode) anything that slides across them.  The tire is the car manufacturer&#8217;s interface to the road.  The same method works for software.</p>
+
+<p>If the interface between two systems is highly corrosive (constantly changing) then the best interface is someone else&#8217;s.  For example, Heroku is a going to be a better interface to &#8220;cloud&#8221; hosting then Amazon.  Amazon is infrastructure in the cloud; basically the road.  Heroku is web hosting in the cloud and uses Amazon as a base; basically the tire.  So if all you want to spend your time on is building the car, then use Heroku as the tires.</p>
+
+<p>If the interface between two systems is only slightly corrosive then add a standardized &#8220;socket&#8221;, to protect yourself.  Car&#8217;s don&#8217;t produce enough point-heat to light a cigarette, and instead of piping the 800+ degree exhaust into the cabin or giving unprotected access to the car&#8217;s battery the car manufacturer introduced a socket that could power a heating coil.  The socket protects the car, and provides a standard interface.  And by being standardized, anyone (not just the manufacturer) can create an adaptor to fit the socket.</p>
+
+<p>An Application Programming Interface (API) is the software equivalent of a standardized socket.  Any place your system needs to be accessed, simply create an API, even if you control both ends.  Now your tests can focus on ensuring an unchanging API, to catch any wear that needs to be addressed.</p>
+
+<p>If the interface is non-corrosive then test for wear.  Many systems &#8220;guarantee backwards compatibility&#8221; (at least until they it breaks the first time).  This is the software equivalent of a well lubricated non-corrosive interface.  It is still not immune to corrosion, but you don&#8217;t (and shouldn&#8217;t) actively protect yourself.  Instead, add some once-in-while checks.  Cars usually get a 50K mile service to check for these low wear areas.  Do something similar with your software.</p>
+
+<p>Of the millions of cars that get a 50K mile service a small percentage will have a catastrophic failure, where one of those non-corrosive interfaces corroded.  The same will happen in your software, eventually, but the cost of constantly checking those parts is far greater than any saving gained by not letting it fail.  It is better to follow good practices (like modular design, and not cutting corners) then it is to search for failures everywhere all the time.</p>
+
+<p>If the interface is solid, then fail to launch if there is wiggle.  Cars need engines.  That is a solid interface and a hard requirement, without it you go no where.  And if a engine dies while it is running there is the expectation that the car will stop.  We might be surprised that an engine breaks, but we are not surprised when a broken engine stops a car.  Web servers need databases and network connections.  So code to bind to a port or connect to the database should allow the app to fully fail.</p>
+
+<p>During normal operations it is common for a database connection to be temporarily closed, like network timeouts.  Temporary failures should have one additional layer of protection: a limited retry count.  After the retry count is exceeded then the issue should be considered a full failure and the app should stop.</p>
+
+<h2>Sidenote: Degrading software</h2>
+
+<p>And now I hear you saying &#8220;Woah, apps should degrade gracefully.&#8221;  Honestly, they shouldn&#8217;t, at least not self-degrade.  You would never drive a car, get a flat, and expect the car to change its own tire.  No, you pull over, install the spare tire, and at a degraded level drive slowly to a tire shop to have it fixed (at least that is what you should do).  But the car did not degrade itself.  You, as the driver, are expected to make that choice for the car.</p>
+
+<p>The same is true in software.  The software should not degrade itself.  There should be a watchdog for your software which periodically checks to see if it is alive.  If during one of the checks the software is found dead then it should be resurrected.  If it suffers SIDS then the watchdog notifies someone, otherwise it is business as usual.  To be a good-citizen, your software should play nicely with the watchdog.</p>
+
+<p>By adding degradation to your software you must also add complexity to your watchdog, so that it can deal with your &#8220;dying&#8221; software.  And even if you are fine with the Law of Demeter violation you just introduced, you still cannot overcome the permanently-half-dead issue.  Permanently-half-dead is the common state in degrading software where your software has one or more forms of degradation and as a result, it cannot self-correct.  It will never die because it is degraded, but it can never perform fully either.</p>
+
+<p>As a further aside, people often confused degrading software with defensive software.  But to clarify, defensive software is only concerned with preventing bugs due to unforeseen usage.  Things like swapping direct memory manipulation with a memory manager, and code reviews, and testing are defensive.  Defensive software can and does terminate before it can degrade into doing something foolish.  Take for example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">DegradedUser</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">name</span><span class="o">=</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># if the user provides too much data, </span>
+</span><span class='line'>    <span class="c1"># ignore their wishes, do what we want,</span>
+</span><span class='line'>    <span class="c1"># and don&#39;t tell them</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span><span class="o">.</span><span class="n">to_s</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">16</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">DefensiveUser</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">name</span><span class="o">=</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="s1">&#39;name is too long&#39;</span> <span class="k">if</span> <span class="nb">name</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">16</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[BMore on Rails 4-8-2014]]></title>
@@ -2146,174 +2233,6 @@
 <p><code>When we tried the DVR later it was bricked by corporate.  Nothing worked.  So those shows are lost to us now.  Thank god for online streaming.</code></p>
 
 <p><strong>7:42pm</strong> - I text <strong>A</strong> &#8220;No worries.  Several calls to support later.  Comcast is canceled&#8221;.  I then start writing this blog.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Francis Alexander Kamenik]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/12/02/francis-alexander-kamenik/"/>
-    <updated>2012-12-02T17:20:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/12/02/francis-alexander-kamenik</id>
-    <content type="html"><![CDATA[<p>Born November 28th, 2012 at 12:48pm.  9lbs 1oz, 21 1/4 inches.</p>
-
-<p><img src="http://jkamenik.github.com/images/francis/IMG_0555.jpg"></p>
-
-<!-- more -->
-
-
-<p><img src="http://jkamenik.github.com/images/francis/IMG_0556.JPG"></p>
-
-<h2>Our Experience</h2>
-
-<p><strong>12:30am</strong> Melanie starts labor, but can&#8217;t wake me up.  It didn&#8217;t even dawn on me that it could have been actual labor.  In my defense I am a heavy sleeper so it was difficult to get me up.</p>
-
-<p><strong>2am</strong> Melanie was able to get me fully awake.  I was still unsure what was happening, so I wanted to time the contractions.  Having gone to the labor class I knew that we needed to time contractions: 511, 5 minutes apart, for a 1 minute duration, for 1 hour.  I also knew that false labor, which can sometimes be very painful, proceeds real labor but up to several weeks.</p>
-
-<p><strong>2:20am</strong> We are DONE timing contractions!  Or rather my continuing health demands we stop timing contractions.  The contractions have Mel on the floor with back labor, and she is going to kill me.  Under explicit instructions, tears, and anger I call the on-call Doctor on Mel&#8217;s behalf.</p>
-
-<p><strong>2:40am</strong> We are at the Hospital and Mel is headed to Triage.  I get to wait in the labor waiting room until they have checked her and decide to admit her.</p>
-
-<p><strong>3:00am</strong> We are in the labor rooms.  Very nice and roomy and private to each labor.  Big enough for a couch (where I was sleeping) several chairs, the labor bed, the baby examination table/heater, sink, bathroom, and medical supply room.  Right now it is a waiting game of doctor checks.</p>
-
-<p><strong>5am</strong> Mel gets the epidural.  It is a sterile procedure so I had to wait in the waiting area again.  It takes just under an hour and 2 attempts to get the epidural in correctly.</p>
-
-<p><strong>6am</strong> We start posting updates to friends and family.  We figured it was nicer to wait until at least a standard start of the day and not send the invites at 3am when we were actually admitted.  Mel&#8217;s pain is much less, but so is the strength of the her contractions.  Now her progression has to be monitored more closely, and pitocin administered if needed.</p>
-
-<p><strong>7:30am</strong> Mel has progressed to 7-8cm so we tell her parents to head down.</p>
-
-<p><strong>8am</strong> Mel&#8217;s water is broken by the doctor, but she is still progressing.  No need for pitocin, yet.</p>
-
-<p><strong>9am</strong> Mel&#8217;s parents are here.  And she is progression nicely to 9cm.</p>
-
-<p><strong>10am</strong> Francis is still at 0 station.  He has engaged, but is not progressing.  We are on a watch because the contractions are not constant.</p>
-
-<p><strong>10:30am</strong> Francis heart rate dropped below safe rate and immediately above safe range.  The external monitors are removed and internal monitors added in hopes that the blips were Mel&#8217;s movements and not the actual measurements of the baby.</p>
-
-<p><strong>11am</strong> The new monitors are MUCH more painful, since the vagina is not numbed by the epidural, but she endures.  Also, the progression has stopped, and Francis continues to have heart flutters.  And Mel&#8217;s own blood pressure is setting off alarms right and left.  We are given the option to start pitocin, wait things out, or as the doctor recommends start talking about a C-Section.</p>
-
-<p><strong>11:15am</strong> We had already decided that if something like this happened we were OK with the C-Section.  Mel is terrified of surgery, since she has never had surgery.  Her mother, having had 2 C-Sections, gives her the low down on what it is like.  That, knowing I will be there, knowing they will block her pain, and knowing she will be awake is enough for us to move forward.</p>
-
-<p><strong>11:45am</strong> All the extra sensors are removed, she is in the OR, and I am sitting in the recovery room waiting to be called in.</p>
-
-<p><strong>12pm</strong> In the OR with Mel, Doctor has made the first cut.</p>
-
-<p><strong>12:48pm</strong> Francis is pulled out and immediately begins crying.  Normally this is great but in our case there is meconium in the amniotic fluid, so we don&#8217;t want him to aspirate it.  So the peditritians take him immediately to the examanation table.  All is fine now, but we have to watch him carefully over the next few days.  It is possible for him to develop a lung infection.</p>
-
-<p><strong>+3 days</strong> We are heading home, Francis is fine.</p>
-
-<h2>What we have learned</h2>
-
-<ul>
-<li>Opinions due little but sully the otherwise very special moment</li>
-<li>Nothing goes as planned</li>
-<li>Babies have an inverted sleep schedule</li>
-<li>Breastfeeding is f&#8217;n hard!</li>
-<li>Breasts are purely functional</li>
-<li>Nipple confusion is a much smaller concern then it seems</li>
-<li>The &#8220;connection&#8221; is not instantainious for all women</li>
-<li>&#8220;Baby amnesia&#8221; comes along slowly</li>
-<li>You never have enough diapers</li>
-</ul>
-
-
-<h3>Opinions</h3>
-
-<p>Facts are great, and even talking about experiences are nice.  But spouting opinions sucks, and we have been inundated.  Here are just a few:</p>
-
-<ul>
-<li><em>Circumcision is mutilation and has a good change so killing your boy:</em> <strong>false</strong>.  Very little of this is factually actuate, but it is spouted with such fervor as to be unquestionable.  If you want your boy circumcised then do, if you don&#8217;t that is fine to.  Make the choice and ignore all detractors.</li>
-<li><em>Breastfeeding is </em>always<em> better then formula:</em> <strong>false</strong>.  There are benefits and drawbacks for both breastfeeding and formula.  We choose breastfeeding, but think nothing less of women that choose formula.  You have to pick what is right for you.</li>
-<li><em>Never use a pacifier/bottle when breastfeeding:</em> <strong>false</strong>.  We have tried a bottle, and continue to use a pacifier and have no problem with nipple confusion.  Do what is right for your baby, your life, and you; the rest will take care of itself.</li>
-<li><em>Epidural are selfish, bad, you will have problems:</em> <strong>false</strong>.  Just not true.  Mel wanted a natural birth, but when the pain of back labor was too much the epidural was needed.</li>
-<li><em>Labor is a beautiful things:</em> semi-<strong>false</strong>.  I can see why it is though of as beautiful, and at the highest level it is.  But in the details of the pain, strain, lack of sleep, frustration, fear, and expectation it is more real then beautiful.  The rememberance of Labor will be beautiful - I am sure - but right now things are real.</li>
-</ul>
-
-
-<h3>Nothing goes as planned</h3>
-
-<p>During our planning class the nurse suggested that we &#8220;let the baby drive&#8221;.  Basically do not create a written list, because you will stress over details before labor and when things do not go as planned it will add fuel to the baby blues after labor.</p>
-
-<p>In our case we had a general plan and almost nothing worked out as we wanted.  In the end we had a healthy baby boy and the plan of not planning worked out pretty well.</p>
-
-<h3>Babies sleep during the day</h3>
-
-<p>There are many guesses as to why this is, but basically once born they sleep all day and are awake at night.  Francis was born in the middle of the day, and was nearly impossible to wake up for the first 24 hours.  His bladder and bowels worked fine, so the doctors were not concerned.  In fact, almost a week later and it is still almost impossible to wake Francis after a good feeding during the day, and impossible to get him to sleep after a good feeding during the night.</p>
-
-<p>Right now the only things we can do is keep playing with him during the day (to the point of annoyance), and ignore him at night.  By &#8220;ignore&#8221; all I mean is we can&#8217;t make eye contact, talk to him, pet him, or talk to him (yes I said it twice).  We still pat him to burp him, shush, and bounce him to aid in sleeping, but nothing else.  Easier said then done, but we persist.</p>
-
-<h3>Breastfeeding is hard</h3>
-
-<p>One of the major opinions that is implicitly or explicitly stated is that every baby MUST be breastfed.  And as a women it should be the most natural thing in the world.  Guess what?  It&#8217;s not.</p>
-
-<p>Babies do not know how to breastfeed, and more importantly they do not want to breastfeed.  They spend 9 months being given food with no work, but now they have to work for food.  And they have to work hard!</p>
-
-<p>Worst still a women&#8217;s breast must change to make breastfeeding possible.  So even if the want is there it is very frustrating for many days/weeks.  And sometimes it will never be possible.  In our case we have to use a Nipple Shield to start the feedings because the nipples are flat and Francis doesn&#8217;t know to start sucking.</p>
-
-<h3>Breasts are purely functional</h3>
-
-<p>When we were in the hospital there were no less then 20 people help Mel and I breastfeed Francis, and there was nothing weird about it.  We both thought of it only in terms of what gets Francis food.</p>
-
-<p>Even now we don&#8217;t bother drawing the curtains when breastfeeding.  There just isn&#8217;t anything weird about having a breast hanging out in prep for breastfeeding, nor is there anything sexual about it.  They have a single purpose, which is as a food supply.</p>
-
-<p>It is the equivalent of getting aroused by a hamburger; just not something that happens (normally).</p>
-
-<h3>Nipple confusion</h3>
-
-<p>I guess we made the mistake of telling the doctors that we planned on breastfeeding.  The reason that I said &#8220;mistake&#8221; is because &#8220;nipple confusion&#8221; is such a pervasive argument that they removed all formula, bottles, and pacifiers that are normally provided after labor.</p>
-
-<p>In fact, on one night it took us and several nurses over 6 hours to get just 1/2 oz of colostrum into Francis.  And during all that time breastfeeding was the only option.  It was horrible.</p>
-
-<p>The lactation consultant seeing the medical necessity did eventually give us a breast pump, and pacifier, but no bottle.  We had to use a syringe to provide colostrum through a tube next to a finger that simulated a nipple.</p>
-
-<p>It took a several complete feeding failures, and finally giving Francis to the nurses so we could sleep, to just get him some formula.  In fact, we weren&#8217;t allow to feed him the formula, only the nurses could and only because they could not get him satisfied otherwise.</p>
-
-<p>It has been almost a month, we use pacifies, use bottles, and the breast and we can safely say that he has no nipple confusion.  Perhaps it is something that affects only some babies, or it is something that really hasn&#8217;t been studies and is just take as fact.</p>
-
-<h3>The &#8220;Connection&#8221;</h3>
-
-<p>This seems to me like the female equivalent of &#8220;comparing sizes&#8221;.  When asked women almost universally say &#8220;it was instantaneous&#8221;, or something similar.  And I am sure 3 to 6 years after labor when first asked it seems instantaneous, but it is not for some women.</p>
-
-<p>The &#8220;connection&#8221; is real, but it takes many days, even a week or more before it really kicks in.  And assuming that <strong>all</strong> women have an instantaneous connection really just adds fuel to the baby blues.</p>
-
-<h3>&#8220;Baby Amnesia&#8221;</h3>
-
-<p>It has been about a month and the baby amnesia is just now starting to kicked in.  It is definiately not as originally discribed: a clam that washes over you.  It is not instantaneous.</p>
-
-<p>Basically what happens (at least for us) is you start forgetting the details, pain, and difficulty.  And you also start to realize exactly how much you can actually deal with.  And Francis is quite, content, and smiles and you realize how awesome it is.</p>
-
-<h3>Diapers</h3>
-
-<p>An infant eats every 2 hours to 3 hours during the day, and 2 to 5 hours during the night.  And they pee and poop between feedings.  You would think that 12 diapers / day is about average, but it isn&#8217;t.  As adults we have learned to urinate and defecate during the same bathroom trip.  the same is not of babies.  For them they will urinate and defecate as two separate acts, and to prevent diaper rash you have to change them between each act.  That doesn&#8217;t even account for the partial pee/poop, in which they start pee or poop as soon as you take the diaper off.  And in a lot of cases they will pee or poop as soon as you get the diaper back on; and in some cases do it 3 or 4 times in a single changing.</p>
-
-<p>24 to 30 diapers / day is closer to accurate.</p>
-
-<h2>Why leave the comment below?</h2>
-
-<p>So a number of people have asked me why I left the comment below.  It is rude, and it is hurtful to have someone try to sully the birth of my child with &#8220;yet more opinions&#8221;.</p>
-
-<p>In fact, this type of comment is EXACTLY what I was talking about in the &#8220;What we have learned&#8221; section.  Just for fun I have turned my post and her comment into a conversation.  Hopefully it shows how ridiculous the comment is, and why I think it is important to leave up.</p>
-
-<p><em>me:</em> Opinions suck! They lead to a lot of mis-information.</p>
-
-<p><em>jane:</em> No <strong>your</strong> opinions suck.  Mine opinions are actually FACT!</p>
-
-<p><em>me:</em> Turns out that Epidurals are sometimes necessary for hard deliveries.</p>
-
-<p><em>jane:</em> No, they <strong>are</strong> selfish!  With my first child I had a beautiful natural birth.  With the second I <strong>had</strong> to have a epidural and there were nothing but problems.  As you can see clearly, it was the epidurals fault.  But I am not downing epidurals.</p>
-
-<p><em>me:</em> Breastfeeding is hard.  Frankie wants to do it, but has such a bad overbite that he can&#8217;t lock.  We have had repeated visits from the Lactation consultant and every nurse on the floor has tried to help us, but still nothing.  He is loosing weight and all we want is to get something in him.  Everyone tells us that nipple confusion can happen, but for christ sake lets get at least a little food into Frankie.</p>
-
-<p><em>jane:</em> Babies want to breastfeed, and I also had some trouble.  I had to things like pull out my nipple before each feeding.  Clearly you guys are lazy and stupid!  You need to try harder.  Also, your are wrong nipple confusion <strong>CAN</strong> happen!</p>
-
-<p><em>me:</em> I didn&#8217;t say nipple confusion doesn&#8217;t happen.  What I was saying was that we were told that nipple confusion was instantaneous.  Put your baby on the bottle once and that is all-she-wrote.  That is not the case with Frankie, but never mind you aren&#8217;t listening anyway.</p>
-
-<p><em>jane:</em> Also, circumcised boys <strong>don&#8217;t</strong> breastfeed so you are double stupid!</p>
-
-<p><em>me:</em> Wait, what?  I never said one or the other that I circumcised Frankie.</p>
-
-<p><em>jane:</em> Well it doesn&#8217;t matter.  From the way you talk it is clear that you did.  I read part of your above story, judged your entire life, and walked through all the bad choices you made (entirely within my mind).  I started writing this comment to educate you, so that your child won&#8217;t be a serial killer.  Because &#8220;scientific evidence&#8221; shows that <strong>ALL</strong> serial killers were bottle fed!</p>
-
-<p><em>me:</em> (eyes glazed over)</p>
 ]]></content>
   </entry>
   
