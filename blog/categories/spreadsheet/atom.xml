@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: spreadsheet | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/spreadsheet/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2014-06-22T11:26:46-04:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Google Query Language]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/06/22/google-query-language/"/>
+    <updated>2014-06-22T11:19:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/06/22/google-query-language</id>
+    <content type="html"><![CDATA[<p>A while back, my wife and I started keeping a budget.  We need something very easy that shows us where we are every moment.  Also, to ensure that it is not something we "forget" it must be something that we manually enter.</p>
+
+<p>I created a Google Form in order to allow us to capture the receipts.  The form dumps into a Google Spreadsheet.  I then use a Pivot Table and the Google Query Lanauage to create a Chart.  In this post I will cover the entire process.</p>
+
+<!-- more -->
+
+
+<h2>Step 1: Create a form</h2>
+
+<ol>
+<li>Create a google form</li>
+<li>Add the following fields
+
+<ol>
+<li>"Company" - text- required</li>
+<li>"Date" - date - required (don't include time)</li>
+<li>"Amount" - text - required (add a "number" validation)</li>
+<li>"Category" - list - required.  We added the following
+
+<ol>
+<li>Other / Unknown</li>
+<li>Baby Supplies</li>
+<li>Car</li>
+<li>Entertainment</li>
+<li>Gas</li>
+<li>Groceries</li>
+<li>Home</li>
+<li>Medical</li>
+<li>Pet Supplies</li>
+<li>Resturants / Fast Food</li>
+</ol>
+</li>
+<li>"Comment" - paragraph</li>
+</ol>
+</li>
+<li>Choose response destination
+
+<ol>
+<li>Choose a "New Spreadsheet"</li>
+</ol>
+</li>
+<li>Send the form to yourself and anyone else that needs to enter receipts</li>
+</ol>
+
+
+<p>At this point you have a Form which submits to a Spreadsheet.  I recommend bookmarking the link in your smart-phone so that it is easy and quick to add receipts right after your purchases.</p>
+
+<h2>Step 2: Pivot</h2>
+
+<p>Form usually record into a sheet called "Form Responses" which I assume here.</p>
+
+<ol>
+<li>Select "Form Responses"</li>
+<li>Select Data -> Pivot table report...
+
+<ol>
+<li>Rows - Add "Category"</li>
+<li>Values - Add "Amount"</li>
+</ol>
+</li>
+</ol>
+
+
+<p>Now you should have a two column table.  On the left are the categories.  On the right is the sum of all the values of that category.</p>
+
+<h2>Step 3: Google Query</h2>
+
+<p>In order to chart the budget vs the actual spending we need to create another table.</p>
+
+<ol>
+<li>Insert a sheet named Budget.</li>
+<li>Label the columns: Category, Budget, Actual, Query</li>
+<li>Copy all the categories to column A</li>
+<li>Add the budgeted amount to column B</li>
+<li>Add the following to column C
+
+<ol>
+<li><code>=if(isna(C2), 0, C2)</code></li>
+</ol>
+</li>
+<li>Add the following query to column D
+
+<ol>
+<li><code>=QUERY('Pivot Table'!A:B, "select B where A='"&amp;A2&amp;"'","")</code></li>
+<li>"#N/A" means that are no receipts for the category and can safely be ignored.</li>
+</ol>
+</li>
+<li>Copy and paste cell C2 and D2 to the rest of the cells in the column
+
+<ol>
+<li>Google will change the internal references (A2, and C2) to the correct cell name, so you don't have to.</li>
+</ol>
+</li>
+</ol>
+
+
+<p>The Google Query Language is defined <a href="https://developers.google.com/chart/interactive/docs/querylanguage">here</a>.  It is a good read to see all the power of this language, but I am only going to explain the parts that we need.</p>
+
+<h3>Query</h3>
+
+<p><code>QUERY</code> takes three arguments: range of values, query string, and optional headers.  I am going to explain them in reverse.</p>
+
+<p>The headers are guessed if nothing is provided.  This would cause the query to take two cells, which is not the behavior I wanted.  By adding "" it removes the header.</p>
+
+<p>The query string tells google what data we are selecting into the cell.  In our simple example it is a direct value select using a conditional.  This is because the column order may not be the same in both sheets.  "select B" means to choose the "B" from whatever rows match the query.  "where A='"&amp;A2&amp;"'" means to limit the rows returned to those where the value of cell A matches the value of A2 in this sheet.  The "&amp;" is the string concat operator.</p>
+
+<p>The range of values tells Google what it is allowed to look at.  We use the 'Sheet'!Col:Col form in order to select data from another sheet.  We only provide the columns A and B because we want to look at all rows.</p>
+
+<h3>ISNA</h3>
+
+<p>Charts cannot deal with non-number columns.  Since the query can produce a non-number output (#N/A) we need to add an additional level of processing.</p>
+
+<p><code>isna</code> takes a cell and returns if that cell is #N/A.</p>
+
+<p><code>if</code> take a boolean, a true value, and a false value.  If the first argument is true then the true value is returned.  If the first argument is false then the false value is returned.</p>
+
+<h2>Step 4: Chart</h2>
+
+<p>Charts can only take numbers and they can only accept contiguous cells.  A, B, and C are the columns that we want to chart.</p>
+
+<ol>
+<li>Insert -> Chart</li>
+<li>Data range: Budget!A1:C14</li>
+<li>Use row 1 as headers</li>
+<li>Chart type: Bar chart</li>
+<li>Add a chart title</li>
+</ol>
+
+
+<h2>Step 5: Publish</h2>
+
+<p>The point of this document is to know where your money is going quickly.  In order to make it easy publish the document.  This will make google convert the document into a HTML version which is easily viewed in your smart phone.  The chart will even be convert to an image.</p>
+
+<ol>
+<li>File -> Publish to the web...</li>
+<li>Check "Automatically republish when changes are made"</li>
+<li>Copy the link</li>
+<li>Send to link to anyone that needs to be kept informed about the budget</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

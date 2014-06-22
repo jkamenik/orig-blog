@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Google Query Language - Random Software Inklings</title>
+  <meta name="author" content="John T. Kamenik">
+
+  
+  <meta name="description" content="A while back, my wife and I started keeping a budget. We need something very easy that shows us where we are every moment. Also, to ensure that it is &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/06/22/google-query-language/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Random Software Inklings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
+<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Random Software Inklings</a></h1>
+  
+    <h2>Random documentation of things I have learned.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jkamenik.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://jkamenik.github.com/Resume">Resume</a></li>
+  <li><a href="/knowledge">Knowledge</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Google Query Language</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-22T11:19:00-04:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A while back, my wife and I started keeping a budget.  We need something very easy that shows us where we are every moment.  Also, to ensure that it is not something we &#8220;forget&#8221; it must be something that we manually enter.</p>
+
+<p>I created a Google Form in order to allow us to capture the receipts.  The form dumps into a Google Spreadsheet.  I then use a Pivot Table and the Google Query Lanauage to create a Chart.  In this post I will cover the entire process.</p>
+
+<!-- more -->
+
+
+<h2>Step 1: Create a form</h2>
+
+<ol>
+<li>Create a google form</li>
+<li>Add the following fields
+
+<ol>
+<li>&#8220;Company&#8221; - text- required</li>
+<li>&#8220;Date&#8221; - date - required (don&#8217;t include time)</li>
+<li>&#8220;Amount&#8221; - text - required (add a &#8220;number&#8221; validation)</li>
+<li>&#8220;Category&#8221; - list - required.  We added the following
+
+<ol>
+<li>Other / Unknown</li>
+<li>Baby Supplies</li>
+<li>Car</li>
+<li>Entertainment</li>
+<li>Gas</li>
+<li>Groceries</li>
+<li>Home</li>
+<li>Medical</li>
+<li>Pet Supplies</li>
+<li>Resturants / Fast Food</li>
+</ol>
+</li>
+<li>&#8220;Comment&#8221; - paragraph</li>
+</ol>
+</li>
+<li>Choose response destination
+
+<ol>
+<li>Choose a &#8220;New Spreadsheet&#8221;</li>
+</ol>
+</li>
+<li>Send the form to yourself and anyone else that needs to enter receipts</li>
+</ol>
+
+
+<p>At this point you have a Form which submits to a Spreadsheet.  I recommend bookmarking the link in your smart-phone so that it is easy and quick to add receipts right after your purchases.</p>
+
+<h2>Step 2: Pivot</h2>
+
+<p>Form usually record into a sheet called &#8220;Form Responses&#8221; which I assume here.</p>
+
+<ol>
+<li>Select &#8220;Form Responses&#8221;</li>
+<li>Select Data -> Pivot table report&#8230;
+
+<ol>
+<li>Rows - Add &#8220;Category&#8221;</li>
+<li>Values - Add &#8220;Amount&#8221;</li>
+</ol>
+</li>
+</ol>
+
+
+<p>Now you should have a two column table.  On the left are the categories.  On the right is the sum of all the values of that category.</p>
+
+<h2>Step 3: Google Query</h2>
+
+<p>In order to chart the budget vs the actual spending we need to create another table.</p>
+
+<ol>
+<li>Insert a sheet named Budget.</li>
+<li>Label the columns: Category, Budget, Actual, Query</li>
+<li>Copy all the categories to column A</li>
+<li>Add the budgeted amount to column B</li>
+<li>Add the following to column C
+
+<ol>
+<li><code>=if(isna(C2), 0, C2)</code></li>
+</ol>
+</li>
+<li>Add the following query to column D
+
+<ol>
+<li><code>=QUERY('Pivot Table'!A:B, "select B where A='"&amp;A2&amp;"'","")</code></li>
+<li>&#8220;#N/A&#8221; means that are no receipts for the category and can safely be ignored.</li>
+</ol>
+</li>
+<li>Copy and paste cell C2 and D2 to the rest of the cells in the column
+
+<ol>
+<li>Google will change the internal references (A2, and C2) to the correct cell name, so you don&#8217;t have to.</li>
+</ol>
+</li>
+</ol>
+
+
+<p>The Google Query Language is defined <a href="https://developers.google.com/chart/interactive/docs/querylanguage">here</a>.  It is a good read to see all the power of this language, but I am only going to explain the parts that we need.</p>
+
+<h3>Query</h3>
+
+<p><code>QUERY</code> takes three arguments: range of values, query string, and optional headers.  I am going to explain them in reverse.</p>
+
+<p>The headers are guessed if nothing is provided.  This would cause the query to take two cells, which is not the behavior I wanted.  By adding &#8220;&#8221; it removes the header.</p>
+
+<p>The query string tells google what data we are selecting into the cell.  In our simple example it is a direct value select using a conditional.  This is because the column order may not be the same in both sheets.  &#8220;select B&#8221; means to choose the &#8220;B&#8221; from whatever rows match the query.  &#8220;where A=&#8217;&#8221;&amp;A2&amp;&#8221;&#8217;&#8221; means to limit the rows returned to those where the value of cell A matches the value of A2 in this sheet.  The &#8220;&amp;&#8221; is the string concat operator.</p>
+
+<p>The range of values tells Google what it is allowed to look at.  We use the &#8216;Sheet&#8217;!Col:Col form in order to select data from another sheet.  We only provide the columns A and B because we want to look at all rows.</p>
+
+<h3>ISNA</h3>
+
+<p>Charts cannot deal with non-number columns.  Since the query can produce a non-number output (#N/A) we need to add an additional level of processing.</p>
+
+<p><code>isna</code> takes a cell and returns if that cell is #N/A.</p>
+
+<p><code>if</code> take a boolean, a true value, and a false value.  If the first argument is true then the true value is returned.  If the first argument is false then the false value is returned.</p>
+
+<h2>Step 4: Chart</h2>
+
+<p>Charts can only take numbers and they can only accept contiguous cells.  A, B, and C are the columns that we want to chart.</p>
+
+<ol>
+<li>Insert -> Chart</li>
+<li>Data range: Budget!A1:C14</li>
+<li>Use row 1 as headers</li>
+<li>Chart type: Bar chart</li>
+<li>Add a chart title</li>
+</ol>
+
+
+<h2>Step 5: Publish</h2>
+
+<p>The point of this document is to know where your money is going quickly.  In order to make it easy publish the document.  This will make google convert the document into a HTML version which is easily viewed in your smart phone.  The chart will even be convert to an image.</p>
+
+<ol>
+<li>File -> Publish to the web&#8230;</li>
+<li>Check &#8220;Automatically republish when changes are made&#8221;</li>
+<li>Copy the link</li>
+<li>Send to link to anyone that needs to be kept informed about the budget</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-22T11:19:00-04:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/budget/'>budget</a>, <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/spreadsheet/'>spreadsheet</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/06/22/google-query-language/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/06/22/google-query-language/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/10/code-does-rust/" title="Previous Post: Code does rust">&laquo; Code does rust</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/22/google-query-language/">Google Query Language</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/10/code-does-rust/">Code does rust</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/09/bmore-on-rails-4-8-2014/">BMore on Rails 4-8-2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/23/inbox-zero-part-1/">Inbox Zero: Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/28/ronin-avery-kamenik/">Ronin Avery Kamenik</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/crafty/'>Crafty (2)</a></li>
+<li class='category'><a href='/blog/categories/francis/'>Francis (1)</a></li>
+<li class='category'><a href='/blog/categories/inbox-zero/'>Inbox Zero (1)</a></li>
+<li class='category'><a href='/blog/categories/js/'>JS (3)</a></li>
+<li class='category'><a href='/blog/categories/ronin/'>Ronin (1)</a></li>
+<li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
+<li class='category'><a href='/blog/categories/antipattern/'>antipattern (1)</a></li>
+<li class='category'><a href='/blog/categories/automator/'>automator (1)</a></li>
+<li class='category'><a href='/blog/categories/b-more/'>b'more (2)</a></li>
+<li class='category'><a href='/blog/categories/budget/'>budget (1)</a></li>
+<li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
+<li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
+<li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
+<li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
+<li class='category'><a href='/blog/categories/email/'>email (2)</a></li>
+<li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
+<li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (2)</a></li>
+<li class='category'><a href='/blog/categories/game-design/'>game design (1)</a></li>
+<li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (12)</a></li>
+<li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
+<li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/opinion/'>opinion (5)</a></li>
+<li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
+<li class='category'><a href='/blog/categories/planning/'>planning (3)</a></li>
+<li class='category'><a href='/blog/categories/rails/'>rails (1)</a></li>
+<li class='category'><a href='/blog/categories/rails-engines/'>rails engines (1)</a></li>
+<li class='category'><a href='/blog/categories/rant/'>rant (6)</a></li>
+<li class='category'><a href='/blog/categories/rspec/'>rspec (1)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>ruby (2)</a></li>
+<li class='category'><a href='/blog/categories/ruby-on-rails/'>ruby on rails (2)</a></li>
+<li class='category'><a href='/blog/categories/screencast/'>screencast (1)</a></li>
+<li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/spreadsheet/'>spreadsheet (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
+<li class='category'><a href='/blog/categories/technical-debt-calculator/'>technical-debt-calculator (2)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (4)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui mockup (1)</a></li>
+<li class='category'><a href='/blog/categories/ui-mockup/'>ui-mockup (2)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Twitter</h1>
+    <a class="twitter-timeline" href="https://twitter.com/jkamenik" data-widget-id="354049262578982914">Tweets by @jkamenik</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jkamenik',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - John T. Kamenik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'randomsoftwareinklings';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/06/22/google-query-language/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/06/22/google-query-language/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
