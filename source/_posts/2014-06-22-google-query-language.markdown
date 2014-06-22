@@ -89,7 +89,7 @@ Charts cannot deal with non-number columns.  Since the query can produce a non-n
 
 `if` take a boolean, a true value, and a false value.  If the first argument is true then the true value is returned.  If the first argument is false then the false value is returned.
 
-## Chart
+## Step 4: Chart
 
 Charts can only take numbers and they can only accept contiguous cells.  A, B, and C are the columns that we want to chart.
 
@@ -99,7 +99,7 @@ Charts can only take numbers and they can only accept contiguous cells.  A, B, a
 1. Chart type: Bar chart
 1. Add a chart title
 
-## Publish
+## Step 5: Publish
 
 The point of this document is to know where your money is going quickly.  In order to make it easy publish the document.  This will make google convert the document into a HTML version which is easily viewed in your smart phone.  The chart will even be convert to an image.
 
