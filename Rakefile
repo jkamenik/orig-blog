@@ -120,6 +120,45 @@ task :new_post, :title do |t, args|
   end
 end
 
+desc "Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true"
+task :publish, :pattern do |t, args|
+  require 'tempfile'
+  require 'fileutils'
+
+  files = Dir[File.join(source_dir,posts_dir,args[:pattern])]
+  raise "No files found matching pattern" if files.size == 0
+  # raise "Too many files match pattern" if files.size > 1
+
+  name_time = Time.now.strftime('%Y-%m-%d')
+  file_time = Time.now.strftime('%Y-%m-%d %H:%M')
+
+  file = files.first
+  name = File.basename file
+  new_name = name.gsub(/\d+-\d+-\d+/,name_time)
+  w        = Tempfile.new('publish')
+
+  File.open file do |f|
+    scan = false
+    f.readlines.each do |line|
+      # limit scanning to the YAML front matter
+      scan = !scan if line == "---\n"
+      unless scan
+        w.write line
+        next
+      end
+
+      line.gsub!(/published.*/,"published: true")
+      line.gsub!(/date.*/, "date: #{file_time}")
+
+      w.write line
+    end
+  end
+  w.close
+
+  FileUtils.rm file
+  FileUtils.mv w.path, File.join(source_dir,posts_dir,new_name)
+end
+
 # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")
 desc "Create a new page in #{source_dir}/(filename)/index.#{new_page_ext}"
 task :new_page, :filename do |t, args|
@@ -310,7 +349,7 @@ task :setup_github_pages, :repo do |t, args|
   if args.repo
     repo_url = args.repo
   else
-    puts "Enter the read/write url for your repository" 
+    puts "Enter the read/write url for your repository"
     puts "(For example, 'git@github.com:your_username/your_username.github.com)"
     repo_url = get_stdin("Repository url: ")
   end
