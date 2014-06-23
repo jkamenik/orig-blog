@@ -4,8 +4,8 @@ title: "Francis Alexander Kamenik"
 subtitle: Updated
 date: 2012-12-02 17:20
 updated: 2013-09-20 12:00
-comments: true
-categories: 
+comments: false
+categories:
   - fatherhood
   - Francis
 ---
