@@ -127,7 +127,7 @@ task :publish, :pattern do |t, args|
 
   files = Dir[File.join(source_dir,posts_dir,args[:pattern])]
   raise "No files found matching pattern" if files.size == 0
-  # raise "Too many files match pattern" if files.size > 1
+  raise "Too many files match pattern" if files.size > 1
 
   name_time = Time.now.strftime('%Y-%m-%d')
   file_time = Time.now.strftime('%Y-%m-%d %H:%M')
