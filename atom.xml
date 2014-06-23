@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-06-22T11:26:46-04:00</updated>
+  <updated>2014-06-23T08:43:30-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,122 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rake publish]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/06/23/rake-publish/"/>
+    <updated>2014-06-23T08:29:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/06/23/rake-publish</id>
+    <content type="html"><![CDATA[<p>Octoblog (the engine behind this blog) uses <a href="http://jekyllrb.com/">Jekyll</a>.  As such, it also supports the <code>publish</code> flag.  I a previous post I detailed how I added this feature back to Octopress.  Here I will show you a little rake task to easily publish an unpublished post.</p>
+
+<!-- more -->
+
+
+<h2>Requirements</h2>
+
+<p>For a post to be published I wanted a few things to happen:</p>
+
+<ol>
+<li><code>published: true</code> was set in the YAML front-matter</li>
+<li><code>date: &lt;todays date&gt;</code> was set in the YAML front-matter</li>
+<li>The file was moved to today.</li>
+</ol>
+
+
+<p>Here is what I came up with.</p>
+
+<figure class='code'><figcaption><span>Rakefile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:publish</span><span class="p">,</span> <span class="ss">:pattern</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;tempfile&#39;</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;fileutils&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">files</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span><span class="n">posts_dir</span><span class="p">,</span><span class="n">args</span><span class="o">[</span><span class="ss">:pattern</span><span class="o">]</span><span class="p">)</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">raise</span> <span class="s2">&quot;No files found matching pattern&quot;</span> <span class="k">if</span> <span class="n">files</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">raise</span> <span class="s2">&quot;Too many files match pattern&quot;</span> <span class="k">if</span> <span class="n">files</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">name_time</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-%d&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">file_time</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-%d %H:%M&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">file</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span> <span class="n">file</span>
+</span><span class='line'>  <span class="n">new_name</span> <span class="o">=</span> <span class="nb">name</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\d+-\d+-\d+/</span><span class="p">,</span><span class="n">name_time</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">w</span>        <span class="o">=</span> <span class="no">Tempfile</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;publish&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">File</span><span class="o">.</span><span class="n">open</span> <span class="n">file</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>    <span class="nb">scan</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">line</span><span class="o">|</span>
+</span><span class='line'>      <span class="c1"># limit scanning to the YAML front matter</span>
+</span><span class='line'>      <span class="nb">scan</span> <span class="o">=</span> <span class="o">!</span><span class="nb">scan</span> <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;---</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="k">unless</span> <span class="nb">scan</span>
+</span><span class='line'>        <span class="n">w</span><span class="o">.</span><span class="n">write</span> <span class="n">line</span>
+</span><span class='line'>        <span class="k">next</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">line</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/published.*/</span><span class="p">,</span><span class="s2">&quot;published: true&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">line</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/date.*/</span><span class="p">,</span> <span class="s2">&quot;date: </span><span class="si">#{</span><span class="n">file_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">w</span><span class="o">.</span><span class="n">write</span> <span class="n">line</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="n">w</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">FileUtils</span><span class="o">.</span><span class="n">rm</span> <span class="n">file</span>
+</span><span class='line'>  <span class="no">FileUtils</span><span class="o">.</span><span class="n">mv</span> <span class="n">w</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span><span class="n">posts_dir</span><span class="p">,</span><span class="n">new_name</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Line 6: I take a argument and get a list of files matching the pattern</p>
+
+<p>Line 7 &amp; 8: I found it was too easy to screw up a pattern and publish too few or too many posts.  For that reason I am explicit about the failure.</p>
+
+<p>Line 15: Calculates its name for today.</p>
+
+<p>Line 16 &amp; 37: Generate a temp file to write to.  I found that bad things happened if you published a post that you wrote the same day.  Solution was to write to a temp file and then move the temp file later.</p>
+
+<p>Line 19 &amp;&amp; 22: An inelegant solution to isolating scanning to only the YAML front-matter.</p>
+
+<p>Line 28 &amp; 29: Update the YAML front-matter.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Google Query Language]]></title>
@@ -2179,41 +2295,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Blog changes]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/07/06/blog-changes/"/>
-    <updated>2013-07-06T10:58:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/07/06/blog-changes</id>
-    <content type="html"><![CDATA[<p>My last blog entry was when my son was born.  A perfect reason for a blog entry, but I had fully intended to keep blogging and just didn&#8217;t find the time.  Turns out the issue isn&#8217;t really that I don&#8217;t have the time, but that I don&#8217;t have the time write the really involved articles.</p>
-
-<!-- more -->
-
-
-<p>There is nothing wrong with a fully detailed article, when the time permits.  However, I have a great many partially started articles that still need hours of research and development to finish.  My previous process something like:</p>
-
-<ol>
-<li>Find a concept</li>
-<li>Initial research</li>
-<li>Outline</li>
-<li>Code spike / actual developement</li>
-<li>Refactoring</li>
-<li>Final code (something to be reasonably proud of)</li>
-<li>Start the blog</li>
-<li>More research</li>
-<li>Final blog</li>
-<li>Proof read - Send to editor</li>
-<li>Publish blog</li>
-</ol>
-
-
-<p>Clearly, way to involved to involved to do every week with the time I do have.  The new goal is eposodic entries that may not be fully formed, but would eventually lead to a fully formed article.  To that end I have codified my goals (more as a ways to keep myself inline) <a href="http://jkamenik.github.com/blog-goals">here</a>.</p>
-
-<h2>Knowledge / Continously updated pages</h2>
-
-<p>In addition to adjusting the way I blog I am also going to move continously updated content out of blog entries and into individual pages.  The <a href="http://jkamenik.github.com/knowledge">Knowledge</a> section of the blog is dedicated for these.</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="If you are like me, you always setup a CI to ensure things that you already finished are not broken by things you are currently doing. And if you are &hellip;">
+  <meta name="description" content="Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like Given /^(\d+) blog exists &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +69,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/09/factory-girl-automatic-tests/">Factory Girl Automatic Tests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-09T00:00:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Early in a project I started to use factory girl without fully understanding it. After many months of creating steps like <code>Given /^(\d+) blog exists$/</code> and <code>Given /^the following blogs exist:$/</code> I started to come up with generic functions that would build those steps.</p>
+
+<p>Stupid me for not checking that factory girl already does something like that. All you have to do is include factory girl&#8217;s <a href="http://github.com/thoughtbot/factory_girl/blob/master/lib/factory_girl/step_definitions.rb">step_definition</a> file:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">requie</span> <span class="s1">&#39;factory_girl/step_definitions&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you start using FactoryGirl correctly there are a world of new features that can make your steps both cleaner and more concise. Here are some tips I have found via trial and error.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/03/09/factory-girl-automatic-tests/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -466,6 +516,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/06/23/rake-publish/">rake publish</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/22/google-query-language/">Google Query Language</a>
       </li>
     
@@ -479,10 +533,6 @@
     
       <li class="post">
         <a href="/blog/2014/03/23/inbox-zero-part-1/">Inbox Zero: Part 1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/28/ronin-avery-kamenik/">Ronin Avery Kamenik</a>
       </li>
     
   </ul>
@@ -509,10 +559,10 @@
 <li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (2)</a></li>
 <li class='category'><a href='/blog/categories/game-design/'>game design (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
-<li class='category'><a href='/blog/categories/howto/'>howto (12)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (13)</a></li>
 <li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
 <li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>octopress (2)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (3)</a></li>
 <li class='category'><a href='/blog/categories/opinion/'>opinion (5)</a></li>
 <li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
 <li class='category'><a href='/blog/categories/planning/'>planning (3)</a></li>

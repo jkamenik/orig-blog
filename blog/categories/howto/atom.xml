@@ -4,7 +4,7 @@
   <title><![CDATA[Category: howto | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/howto/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-06-22T11:26:46-04:00</updated>
+  <updated>2014-06-23T08:43:30-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rake publish]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/06/23/rake-publish/"/>
+    <updated>2014-06-23T08:29:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/06/23/rake-publish</id>
+    <content type="html"><![CDATA[<p>Octoblog (the engine behind this blog) uses <a href="http://jekyllrb.com/">Jekyll</a>.  As such, it also supports the <code>publish</code> flag.  I a previous post I detailed how I added this feature back to Octopress.  Here I will show you a little rake task to easily publish an unpublished post.</p>
+
+<!-- more -->
+
+
+<h2>Requirements</h2>
+
+<p>For a post to be published I wanted a few things to happen:</p>
+
+<ol>
+<li><code>published: true</code> was set in the YAML front-matter</li>
+<li><code>date: &lt;todays date&gt;</code> was set in the YAML front-matter</li>
+<li>The file was moved to today.</li>
+</ol>
+
+
+<p>Here is what I came up with.</p>
+
+<p>```ruby Rakefile
+desc "Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true"
+task :publish, :pattern do |t, args|
+  require 'tempfile'
+  require 'fileutils'</p>
+
+<p>  files = Dir[File.join(source_dir,posts_dir,args[:pattern])]
+  raise "No files found matching pattern" if files.size == 0
+  raise "Too many files match pattern" if files.size > 1</p>
+
+<p>  name_time = Time.now.strftime('%Y-%m-%d')
+  file_time = Time.now.strftime('%Y-%m-%d %H:%M')</p>
+
+<p>  file = files.first
+  name = File.basename file
+  new_name = name.gsub(/\d+-\d+-\d+/,name_time)
+  w        = Tempfile.new('publish')</p>
+
+<p>  File.open file do |f|</p>
+
+<pre><code>scan = false
+f.readlines.each do |line|
+  # limit scanning to the YAML front matter
+  scan = !scan if line == "---\n"
+  unless scan
+    w.write line
+    next
+  end
+
+  line.gsub!(/published.*/,"published: true")
+  line.gsub!(/date.*/, "date: #{file_time}")
+
+  w.write line
+end
+</code></pre>
+
+<p>  end
+  w.close</p>
+
+<p>  FileUtils.rm file
+  FileUtils.mv w.path, File.join(source_dir,posts_dir,new_name)
+end
+```</p>
+
+<p>Line 6: I take a argument and get a list of files matching the pattern</p>
+
+<p>Line 7 &amp; 8: I found it was too easy to screw up a pattern and publish too few or too many posts.  For that reason I am explicit about the failure.</p>
+
+<p>Line 15: Calculates its name for today.</p>
+
+<p>Line 16 &amp; 37: Generate a temp file to write to.  I found that bad things happened if you published a post that you wrote the same day.  Solution was to write to a temp file and then move the temp file later.</p>
+
+<p>Line 19 &amp;&amp; 22: An inelegant solution to isolating scanning to only the YAML front-matter.</p>
+
+<p>Line 28 &amp; 29: Update the YAML front-matter.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Google Query Language]]></title>
@@ -531,85 +612,6 @@ end
 
 <p>end
 ```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Automator - Start work - workflow]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/09/10/automator-workflow/"/>
-    <updated>2013-09-10T09:25:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/09/10/automator-workflow</id>
-    <content type="html"><![CDATA[<p>I don't like to repeat myself, and I use a Mac, so I have a great little tool called "Automator".  Every morning when I am about to start work I open Spotlight (<code>cmd + space</code> for me) and type "startwork".  The first app that shows up is my Automator workflow for opening all the programs that I need to work.</p>
-
-<p>Here is my Automator workflow:</p>
-
-<p><img src="/images/start-work.png"></p>
-
-<!-- more -->
-
-
-<h2>The apple script (The first action)</h2>
-
-<p>This is a template apple script that just launches all my applications.</p>
-
-<ol>
-<li>Adium - An OS X chat client that can almost all IM protocols.</li>
-<li>Waterfall Campfire - My company's campfire chatroom isolated inside a Fluid app.</li>
-<li>iTerm - My terminal of choice.</li>
-<li>Tower - My git client of choice.</li>
-<li>RubyMine - My IDE of choice.</li>
-</ol>
-
-
-<p><em>Note: I use "activate" with iTerm, because "launch" throws an error</em></p>
-
-<h3>Assigning apps to desktops</h3>
-
-<p>Automator cannot do this for you (at least not yet).  But I am very particular about where and how I like my windows setup.  Luckily the Mac remembers the last window settings on exit, so moving things around, resizing windows, and quitting does the trick.  However, it does <strong>not</strong> remember which screen an app is on.</p>
-
-<p>To assign an app to open on a specific screen follow these steps:</p>
-
-<ol>
-<li>Open the app</li>
-<li>Move the app to the screen you want (using mission control)</li>
-<li>Switch to that screen</li>
-<li>In the dock
-
-<ol>
-<li>Right click the application icon</li>
-<li>Click Options -> Assign To -> This desktop</li>
-</ol>
-</li>
-</ol>
-
-
-<p><em>Note: this only effects where the app opens, you can move windows to other screens anytime you want</em></p>
-
-<h2>Opening URLs (Last 3 actions)</h2>
-
-<p>The last three actions are the easiest way I can find to open multiple URLs in the same browser at once.  The automator task uses the system's default browser which for me is Chrome.</p>
-
-<p><em>Note: the URLs are opened in a semi-random order.  I don't know how to fix that.</em></p>
-
-<p>I like to open URLs as close to where I actually do my work as possible.  The trick is hacking the URLs.  These are the URLs that I use most.  Other URLs come and go - like right now where I open github.</p>
-
-<ol>
-<li>Pivotal Tracker - https://www.pivotaltracker.com/s/projects/<code>project id</code>
-
-<ol>
-<li>I tend to work on a single project for long periods of time so I just open that project every time.</li>
-</ol>
-</li>
-<li>Google Mail - https://mail.google.com/mail/u/<code>multi-login index</code>
-
-<ol>
-<li>The <code>/u/...</code> tells google to open a different logged in account.  I <em>always</em> log into my personal gmail account first (index 0) and my work account second.  So <code>/u/1</code> is my work email.</li>
-<li>If you add <code>/u/...</code> but aren't logged into google multiple times it will ask you to login again.  This can be jarring if you are not expecting it.</li>
-</ol>
-</li>
-<li>Basecamp - https://basecamp.com/<code>account-id</code></li>
-</ol>
-
 ]]></content>
   </entry>
   

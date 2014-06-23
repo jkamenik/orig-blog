@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-06-22T11:26:46-04:00</updated>
+  <updated>2014-06-23T08:43:30-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rake publish]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/06/23/rake-publish/"/>
+    <updated>2014-06-23T08:29:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/06/23/rake-publish</id>
+    <content type="html"><![CDATA[<p>Octoblog (the engine behind this blog) uses <a href="http://jekyllrb.com/">Jekyll</a>.  As such, it also supports the <code>publish</code> flag.  I a previous post I detailed how I added this feature back to Octopress.  Here I will show you a little rake task to easily publish an unpublished post.</p>
+
+<!-- more -->
+
+
+<h2>Requirements</h2>
+
+<p>For a post to be published I wanted a few things to happen:</p>
+
+<ol>
+<li><code>published: true</code> was set in the YAML front-matter</li>
+<li><code>date: &lt;todays date&gt;</code> was set in the YAML front-matter</li>
+<li>The file was moved to today.</li>
+</ol>
+
+
+<p>Here is what I came up with.</p>
+
+<p>```ruby Rakefile
+desc "Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true"
+task :publish, :pattern do |t, args|
+  require 'tempfile'
+  require 'fileutils'</p>
+
+<p>  files = Dir[File.join(source_dir,posts_dir,args[:pattern])]
+  raise "No files found matching pattern" if files.size == 0
+  raise "Too many files match pattern" if files.size > 1</p>
+
+<p>  name_time = Time.now.strftime('%Y-%m-%d')
+  file_time = Time.now.strftime('%Y-%m-%d %H:%M')</p>
+
+<p>  file = files.first
+  name = File.basename file
+  new_name = name.gsub(/\d+-\d+-\d+/,name_time)
+  w        = Tempfile.new('publish')</p>
+
+<p>  File.open file do |f|</p>
+
+<pre><code>scan = false
+f.readlines.each do |line|
+  # limit scanning to the YAML front matter
+  scan = !scan if line == "---\n"
+  unless scan
+    w.write line
+    next
+  end
+
+  line.gsub!(/published.*/,"published: true")
+  line.gsub!(/date.*/, "date: #{file_time}")
+
+  w.write line
+end
+</code></pre>
+
+<p>  end
+  w.close</p>
+
+<p>  FileUtils.rm file
+  FileUtils.mv w.path, File.join(source_dir,posts_dir,new_name)
+end
+```</p>
+
+<p>Line 6: I take a argument and get a list of files matching the pattern</p>
+
+<p>Line 7 &amp; 8: I found it was too easy to screw up a pattern and publish too few or too many posts.  For that reason I am explicit about the failure.</p>
+
+<p>Line 15: Calculates its name for today.</p>
+
+<p>Line 16 &amp; 37: Generate a temp file to write to.  I found that bad things happened if you published a post that you wrote the same day.  Solution was to write to a temp file and then move the temp file later.</p>
+
+<p>Line 19 &amp;&amp; 22: An inelegant solution to isolating scanning to only the YAML front-matter.</p>
+
+<p>Line 28 &amp; 29: Update the YAML front-matter.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Drafts]]></title>

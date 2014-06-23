@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>RBAC in Ruby - Random Software Inklings</title>
+  <title>rake publish - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="RBAC stands for Role Based Access Control. It is basically a means to programmitically configure access rights without hardcoding. The full details &hellip;">
+  <meta name="description" content="Octoblog (the engine behind this blog) uses Jekyll. As such, it also supports the publish flag. I a previous post I detailed how I added this feature &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/06/23/rake-publish/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -72,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">RBAC in Ruby</h1>
+      <h1 class="entry-title">Rake Publish</h1>
     
     
       <p class="meta">
@@ -88,90 +88,32 @@
   
 
 
-<time datetime="2014-01-10T15:07:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2014</time>
+<time datetime="2014-06-23T08:29:00-04:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>RBAC stands for <em>Role Based Access Control</em>.  It is basically a means to programmitically configure access rights without hardcoding.</p>
-
-<p>The full details are <a href="http://en.wikipedia.org/wiki/Role-based_access_control">here</a>, but to be honest I don&#8217;t fully understand it as writen.  What I understand of it is from trial and error.</p>
-
-<p>This entry is an attempt to codify that understanding and apply it using the ruby language.</p>
+<div class="entry-content"><p>Octoblog (the engine behind this blog) uses <a href="http://jekyllrb.com/">Jekyll</a>.  As such, it also supports the <code>publish</code> flag.  I a previous post I detailed how I added this feature back to Octopress.  Here I will show you a little rake task to easily publish an unpublished post.</p>
 
 <!-- more -->
 
 
-<h2>Basics</h2>
+<h2>Requirements</h2>
 
-<p>The inputs to the policy are:</p>
+<p>For a post to be published I wanted a few things to happen:</p>
 
 <ol>
-<li>User or Actor</li>
-<li>Action being performed</li>
-<li>Resource being acted on</li>
+<li><code>published: true</code> was set in the YAML front-matter</li>
+<li><code>date: &lt;todays date&gt;</code> was set in the YAML front-matter</li>
+<li>The file was moved to today.</li>
 </ol>
 
 
-<pre>
-    +-------------------------------------------------------+
-    | +-------+                                +----------+ |
-    | |       |            +------+            |          | |
-    | |  User |+---------->|Action|+---------->| Resource | |
-    | |       |            +------+            |          | |
-    | +-------+                                +----------+ |
-    +-------------------------------------------------------+
-                               +
-                               |
-                               v
-                            +------+
-                            |Policy|
-                            +------+
-                               +
-                               |
-                               v
-                          +---------+
-                          |Yes or No|
-                          +---------+
-</pre>
+<p>Here is what I came up with.</p>
 
-
-<h2>Policy</h2>
-
-<p>The policy is where the business logic goes.  It can be as simple as a set of Ruby classes that simply return values, or it can be as complicated as ActiveDirectory.</p>
-
-<p>The players are:</p>
-
-<ol>
-<li>Role - collection of permissions bound to a user</li>
-<li>Permission - an answer which is limited to a resource and action</li>
-</ol>
-
-
-<p>Here is the basic flow of a permission:</p>
-
-<pre>
-    +------+            +------+             +------------+
-    | User |+---------->| Role |+----------->| Permission |
-    +------+            +------+             |------------|
-              Has many            Has many   | Resource   |
-                                             | Action     |
-                                             | Allowed?   |
-                                             +------------+
-</pre>
-
-
-<p>A user can have 1 or more roles.  Each role can have 1 or more permissions.  Each permission associates an action on a resource with an answer.  Either the user is explicitly allowed or explicitly not allowed to access the Resource.</p>
-
-<p><em>Note:</em> I have purposely kept the data model simple.  In more complicated setups there can be several levels of permissions, permissions can have filters, and/or permissions can be directly bound to a user (instead of being bound to a role).  These complications are often introduced to deal with edge cases which are outside the scope of this article.</p>
-
-<h3>Policy logic sample code</h3>
-
-<p>Once the actors are known the logic is easy.  Simply filter in only the permission on a user for the resource and action in question then &#8220;and&#8221; all permissions together.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Rakefile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -203,40 +145,64 @@
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Policy</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:publish</span><span class="p">,</span> <span class="ss">:pattern</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;tempfile&#39;</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;fileutils&#39;</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="c1"># returns true if the user *can* perform action on resource, false otherwise</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">allowed?</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">reduce_permissions</span> <span class="n">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">files</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span><span class="n">posts_dir</span><span class="p">,</span><span class="n">args</span><span class="o">[</span><span class="ss">:pattern</span><span class="o">]</span><span class="p">)</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">raise</span> <span class="s2">&quot;No files found matching pattern&quot;</span> <span class="k">if</span> <span class="n">files</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">raise</span> <span class="s2">&quot;Too many files match pattern&quot;</span> <span class="k">if</span> <span class="n">files</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">name_time</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-%d&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">file_time</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-%d %H:%M&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">file</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span> <span class="n">file</span>
+</span><span class='line'>  <span class="n">new_name</span> <span class="o">=</span> <span class="nb">name</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\d+-\d+-\d+/</span><span class="p">,</span><span class="n">name_time</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">w</span>        <span class="o">=</span> <span class="no">Tempfile</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;publish&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">File</span><span class="o">.</span><span class="n">open</span> <span class="n">file</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>    <span class="nb">scan</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">line</span><span class="o">|</span>
+</span><span class='line'>      <span class="c1"># limit scanning to the YAML front matter</span>
+</span><span class='line'>      <span class="nb">scan</span> <span class="o">=</span> <span class="o">!</span><span class="nb">scan</span> <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;---</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="k">unless</span> <span class="nb">scan</span>
+</span><span class='line'>        <span class="n">w</span><span class="o">.</span><span class="n">write</span> <span class="n">line</span>
+</span><span class='line'>        <span class="k">next</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">line</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/published.*/</span><span class="p">,</span><span class="s2">&quot;published: true&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">line</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/date.*/</span><span class="p">,</span> <span class="s2">&quot;date: </span><span class="si">#{</span><span class="n">file_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">w</span><span class="o">.</span><span class="n">write</span> <span class="n">line</span>
 </span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="n">w</span><span class="o">.</span><span class="n">close</span>
 </span><span class='line'>
-</span><span class='line'><span class="kp">private</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># returns an array of filtered permissions</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">perm</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">array</span><span class="p">,</span><span class="n">role</span><span class="o">|</span>
-</span><span class='line'>            <span class="n">array</span><span class="o">.</span><span class="n">concat</span> <span class="n">role</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">.</span><span class="n">compact</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_permissions</span><span class="p">(</span><span class="n">perm_array</span><span class="p">)</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">implicit_allow</span> <span class="k">if</span> <span class="n">perm_array</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">perm_array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span><span class="ss">:&amp;</span><span class="o">&amp;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># &quot;and&quot;, for &quot;or&quot; use &quot;:||&quot;</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_function</span>
-</span><span class='line'>        <span class="ss">:&amp;</span><span class="o">&amp;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># default behavior is NOT to give access</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">implicit_allow</span>
-</span><span class='line'>        <span class="kp">false</span>
-</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="no">FileUtils</span><span class="o">.</span><span class="n">rm</span> <span class="n">file</span>
+</span><span class='line'>  <span class="no">FileUtils</span><span class="o">.</span><span class="n">mv</span> <span class="n">w</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span><span class="n">posts_dir</span><span class="p">,</span><span class="n">new_name</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>Line 6: I take a argument and get a list of files matching the pattern</p>
+
+<p>Line 7 &amp; 8: I found it was too easy to screw up a pattern and publish too few or too many posts.  For that reason I am explicit about the failure.</p>
+
+<p>Line 15: Calculates its name for today.</p>
+
+<p>Line 16 &amp; 37: Generate a temp file to write to.  I found that bad things happened if you published a post that you wrote the same day.  Solution was to write to a temp file and then move the temp file later.</p>
+
+<p>Line 19 &amp;&amp; 22: An inelegant solution to isolating scanning to only the YAML front-matter.</p>
+
+<p>Line 28 &amp; 29: Update the YAML front-matter.</p>
 </div>
 
 
@@ -259,12 +225,12 @@
   
 
 
-<time datetime="2014-01-10T15:07:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2014</time>
+<time datetime="2014-06-23T08:29:00-04:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/octopress/'>octopress</a>
   
 </span>
 
@@ -273,7 +239,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/06/23/rake-publish/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/06/23/rake-publish/" >Tweet</a>
   
   
   
@@ -284,10 +250,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/09/28/tdc-prototype/" title="Previous Post: TDC Prototype">&laquo; TDC Prototype</a>
+        <a class="basic-alignment left" href="/blog/2014/06/22/google-query-language/" title="Previous Post: Google Query Language">&laquo; Google Query Language</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/01/21/drafts/" title="Next Post: Drafts">Drafts &raquo;</a>
       
     </p>
   </footer>
@@ -431,8 +395,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/';
-        var disqus_url = 'http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/';
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/06/23/rake-publish/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/06/23/rake-publish/';
         var disqus_script = 'embed.js';
       
     (function () {
@@ -468,13 +432,6 @@
   </script>
 
 
-
-  <script type="text/javascript">
-    jQuery(document).ready(function() {
-        // Put a TOC right before the entry content.
-        generateTOC('Table of Contents');
-    });
-  </script>
 
 
 </body>

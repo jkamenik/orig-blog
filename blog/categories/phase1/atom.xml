@@ -4,7 +4,7 @@
   <title><![CDATA[Category: phase1 | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/phase1/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-06-22T11:26:46-04:00</updated>
+  <updated>2014-06-23T08:43:30-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -15,10 +15,10 @@
   
   <entry>
     <title type="html"><![CDATA[Bunco Phase 1.2]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/11/22/bunco-phase-1-dot-2/"/>
+    <link href="http://jkamenik.github.com/blog/2012/11/22/bunco-phase-one-dot-two/"/>
     <updated>2012-11-22T21:55:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/11/22/bunco-phase-1-dot-2</id>
-    <content type="html"><![CDATA[<p>This is just a slight addendum to the <a href="{%%20post_url%202012-11-21-bunco-phase-1%20%}">Bunco Phase 1</a> Post.  After having used the score card in several games there are a few issues that arise with the existing layout.</p>
+    <id>http://jkamenik.github.com/blog/2012/11/22/bunco-phase-one-dot-two</id>
+    <content type="html"><![CDATA[<p>This is just a slight addendum to the <a href="{%%0A%20%20post_url%202012-11-21-bunco-phase-one%20%}">Bunco Phase 1</a> Post.  After having used the score card in several games there are a few issues that arise with the existing layout.</p>
 
 <ol>
 <li>Input is cumbersome</li>
@@ -193,9 +193,9 @@ rounds.on('change',function(model){view.findAndReplace(model)});
   
   <entry>
     <title type="html"><![CDATA[Bunco Phase 1]]></title>
-    <link href="http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1/"/>
+    <link href="http://jkamenik.github.com/blog/2012/11/21/bunco-phase-one/"/>
     <updated>2012-11-21T08:21:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2012/11/21/bunco-phase-1</id>
+    <id>http://jkamenik.github.com/blog/2012/11/21/bunco-phase-one</id>
     <content type="html"><![CDATA[<p>Phase 1 is always a learning experience.  Often very little work is done, but a lot of research is done.  I generally do not like that approach.  Instead I like to start out simple and let that guide me.  And it has guided me to a initial working version at <a href="http://jkamenik.github.com/Bunco">http://jkamenik.github.com/Bunco</a>.</p>
 
 <!-- more -->
@@ -258,9 +258,6 @@ rounds.on('change',function(model){view.findAndReplace(model)});
 <p>Enter the accordion.  Instead of a grid where I see all scores I use an accordion showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.</p>
 
 <p>{% img /images/bunco/ScoreBoard_1.png %}</p>
-
-<!-- image here -->
-
 ]]></content>
   </entry>
   
