@@ -1,2 +1,15 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+aside.sidebar li {
+  padding: 0;
+  border-bottom-width: 0px;
+  -webkit-box-shadow: $sidebar-bg 0 0px;
+  -moz-box-shadow: $sidebar-bg 0 0px;
+  box-shadow: $sidebar-bg 0 0px
+}
+aside.sidebar li li {
+  padding-left: 0.5em;
+}
+aside.sidebar li li li {
+  padding-left: 1em;
+}
