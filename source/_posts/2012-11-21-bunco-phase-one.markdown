@@ -64,4 +64,3 @@ Very quickly I figured out that I really didn't have the room for the scoreboard
 Enter the accordion.  Instead of a grid where I see all scores I use an accordion showing the round number of the scores for both players.  Sure only really get to the see the score of current round, but I can just add the winner of the round to the visible title and that solves the problem.  Plus it takes up less room total, which is a win.
 
 {% img /images/bunco/ScoreBoard_1.png %}
-<!-- image here -->

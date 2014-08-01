@@ -8,7 +8,8 @@ categories:
   - phase1
 ---
 
-This is just a slight addendum to the [Bunco Phase 1]({% post_url 2012-11-21-bunco-phase-1 %}) Post.  After having used the score card in several games there are a few issues that arise with the existing layout.
+This is just a slight addendum to the [Bunco Phase 1]({%
+  post_url 2012-11-21-bunco-phase-one %}) Post.  After having used the score card in several games there are a few issues that arise with the existing layout.
 
 1. Input is cumbersome
 1. The interface is SLOW!
