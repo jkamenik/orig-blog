@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Bats"
-date: 2014-08-01 09:40
+date: 2014-08-02 12:06
 comments: true
 toc: false
-published: false
+published: true
 categories:
   - shell
   - testing
