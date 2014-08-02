@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-06-23T08:43:30-04:00</updated>
+  <updated>2014-08-02T12:10:22-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,104 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bats]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/08/02/bats/"/>
+    <updated>2014-08-02T12:06:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/08/02/bats</id>
+    <content type="html"><![CDATA[<p>Shell scripting is a great tool, but rarely is it tested.  Enter <a href="https://github.com/sstephenson/bats">BATS</a>!  In this post I will give a quick tutorial on how to use it to test scripts.</p>
+
+<p>```bash</p>
+
+<h1>!/usr/bin/env bats</h1>
+
+<p>@test "running a command" {
+  run foogrep "bar" foo_file
+  [ "$status" -eq 1 ]
+  [ "$output" = "1: bar baz" ]
+}
+```</p>
+
+<!-- more -->
+
+
+<p>Shameless plug: Before we start, I recommend downloading the language grammar package - <a href="https://atom.io/packages/language-bats">language-bats</a> for the Atom editor.</p>
+
+<p>If you have never used <a href="http://rspec.info">RSpec</a> or other testing framework the idea is simple: your code is run against expectations and if those are met then the tests pass.  The framework deals with the heavy lifting of executing the tests, printing the results, and providing to the correct interface to Continuous Integration servers.</p>
+
+<p>BATS is a test runner for Bash scripts.  Before it each run BATS takes the file and splits each test into its own file.  BATS then runs each test file to see if passes or fails.  Anything you can do in Bash you can do in BATS, and if any command fails then the entire test fails.</p>
+
+<h2>A Basic test</h2>
+
+<p>BATS syntax for a test is <code>@test "desc" {}</code>.  But if you want it to run the file individually you should add the shebang line.  The simplest test looks something like this:</p>
+
+<p>```bash</p>
+
+<h1>!/usr/bin/env bats</h1>
+
+<p>@test "something" {
+  false
+}
+```</p>
+
+<p>This isn't very useful, but it will generate a failing test.</p>
+
+<h3>Skipping tests</h3>
+
+<p>Simetimes it is a useful to skip a test.  Just add <code>skip</code> at the point you want to the test to be skipped.  You can add a description or not.</p>
+
+<p>```bash
+@test "just skip" {
+  skip
+}</p>
+
+<p>@test "skip for a reason" {
+  if [ "$x" == "foo"]; then</p>
+
+<pre><code>skip "Because of foo"
+</code></pre>
+
+<p>  fi</p>
+
+<p>  # more tests
+}
+```</p>
+
+<h3>Running a command</h3>
+
+<p>Bash doesn't let you return strings from functions, so if you are trying to capture output and status then you have to roll your own, or use <code>run</code>.  <code>run</code> returns the commands output to <code>$output</code>, and its exit code to <code>$status</code>.  This makes testing on output and status easier.</p>
+
+<p><code>bash
+@test "check output and status" {
+  run echo_foo
+  [ "$status" == "0" ]
+  [ "$output" == "foo" ]
+}
+</code></p>
+
+<h3>Hooks</h3>
+
+<p>Sometimes multiple tests need to share the same state.  In testing every test should stand on its own and leave no artifacts.  To accomplish this we can use the <code>setup</code> and <code>teardown</code> hooks.</p>
+
+<p>```bash</p>
+
+<p>setup() {
+  mkdir -p /tmp/output
+}</p>
+
+<p>teardown() {
+  rm -rf /tmp/output
+}</p>
+
+<p>@test "writes files" {
+  write_files_to "/tmp/output"
+  run "ls /tmp/output"
+  [ "$output" == "1" ]
+}
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Factory Girl Automatic Tests]]></title>
@@ -510,9 +608,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007ff64b9dfb40></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fca55e7b248></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007ff64b9df618></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fca55e7ad20></p>
 
 <h2>Using RSpec</h2>
 
@@ -581,19 +679,19 @@ end
 </code></pre></noscript></div>
 </p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007ff64b9e5f18></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fca55e81670></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007ff64b9e59f0></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fca55e81148></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007ff64b9e54a0></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fca55e80c20></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007ff64b9e4f78></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fca55e806f8></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007ff64b9e4a50></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fca55e801d0></p>
 
 <h3>Putting it all together</h3>
 

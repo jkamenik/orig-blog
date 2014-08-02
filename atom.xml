@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-06-23T08:43:30-04:00</updated>
+  <updated>2014-08-02T12:10:22-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,141 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bats]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/08/02/bats/"/>
+    <updated>2014-08-02T12:06:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/08/02/bats</id>
+    <content type="html"><![CDATA[<p>Shell scripting is a great tool, but rarely is it tested.  Enter <a href="https://github.com/sstephenson/bats">BATS</a>!  In this post I will give a quick tutorial on how to use it to test scripts.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/usr/bin/env bats</span>
+</span><span class='line'>
+</span><span class='line'>@test <span class="s2">&quot;running a command&quot;</span> <span class="o">{</span>
+</span><span class='line'>  run foogrep <span class="s2">&quot;bar&quot;</span> foo_file
+</span><span class='line'>  <span class="o">[</span> <span class="s2">&quot;$status&quot;</span> -eq 1 <span class="o">]</span>
+</span><span class='line'>  <span class="o">[</span> <span class="s2">&quot;$output&quot;</span> <span class="o">=</span> <span class="s2">&quot;1: bar baz&quot;</span> <span class="o">]</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>Shameless plug: Before we start, I recommend downloading the language grammar package - <a href="https://atom.io/packages/language-bats">language-bats</a> for the Atom editor.</p>
+
+<p>If you have never used <a href="http://rspec.info">RSpec</a> or other testing framework the idea is simple: your code is run against expectations and if those are met then the tests pass.  The framework deals with the heavy lifting of executing the tests, printing the results, and providing to the correct interface to Continuous Integration servers.</p>
+
+<p>BATS is a test runner for Bash scripts.  Before it each run BATS takes the file and splits each test into its own file.  BATS then runs each test file to see if passes or fails.  Anything you can do in Bash you can do in BATS, and if any command fails then the entire test fails.</p>
+
+<h2>A Basic test</h2>
+
+<p>BATS syntax for a test is <code>@test "desc" {}</code>.  But if you want it to run the file individually you should add the shebang line.  The simplest test looks something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/usr/bin/env bats</span>
+</span><span class='line'>
+</span><span class='line'>@test <span class="s2">&quot;something&quot;</span> <span class="o">{</span>
+</span><span class='line'>  <span class="nb">false</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This isn&#8217;t very useful, but it will generate a failing test.</p>
+
+<h3>Skipping tests</h3>
+
+<p>Simetimes it is a useful to skip a test.  Just add <code>skip</code> at the point you want to the test to be skipped.  You can add a description or not.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>@test <span class="s2">&quot;just skip&quot;</span> <span class="o">{</span>
+</span><span class='line'>  skip
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>@test <span class="s2">&quot;skip for a reason&quot;</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$x&quot;</span> <span class="o">==</span> <span class="s2">&quot;foo&quot;</span><span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">    </span>skip <span class="s2">&quot;Because of foo&quot;</span>
+</span><span class='line'>  <span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c"># more tests</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Running a command</h3>
+
+<p>Bash doesn&#8217;t let you return strings from functions, so if you are trying to capture output and status then you have to roll your own, or use <code>run</code>.  <code>run</code> returns the commands output to <code>$output</code>, and its exit code to <code>$status</code>.  This makes testing on output and status easier.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>@test <span class="s2">&quot;check output and status&quot;</span> <span class="o">{</span>
+</span><span class='line'>  run echo_foo
+</span><span class='line'>  <span class="o">[</span> <span class="s2">&quot;$status&quot;</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span> <span class="o">]</span>
+</span><span class='line'>  <span class="o">[</span> <span class="s2">&quot;$output&quot;</span> <span class="o">==</span> <span class="s2">&quot;foo&quot;</span> <span class="o">]</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Hooks</h3>
+
+<p>Sometimes multiple tests need to share the same state.  In testing every test should stand on its own and leave no artifacts.  To accomplish this we can use the <code>setup</code> and <code>teardown</code> hooks.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>setup<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  mkdir -p /tmp/output
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>teardown<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  rm -rf /tmp/output
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>@test <span class="s2">&quot;writes files&quot;</span> <span class="o">{</span>
+</span><span class='line'>  write_files_to <span class="s2">&quot;/tmp/output&quot;</span>
+</span><span class='line'>  run <span class="s2">&quot;ls /tmp/output&quot;</span>
+</span><span class='line'>  <span class="o">[</span> <span class="s2">&quot;$output&quot;</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span> <span class="o">]</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rake publish]]></title>
@@ -2174,127 +2309,6 @@
 <h3>And many more</h3>
 
 <p>Look at the <a href="http://foundation.zurb.com/docs/components/kitchen-sink.html">kitchen sink</a> for a list of all the widgets that you get.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress TOC]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/07/07/octopress-toc/"/>
-    <updated>2013-07-07T14:35:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/07/07/octopress-toc</id>
-    <content type="html"><![CDATA[<p>I wanted to add a Table Of Contents (TOC) to some of my longer blog entries.  Here is how I did it.</p>
-
-<!-- more -->
-
-
-<p>Full credit it due to a google search which turned up this <a href="https://github.com/bmc/brizzled/blob/master/source/_posts/2012-02-04-generating-a-table-of-contents-in-octopress.markdown">https://github.com/bmc/brizzled/blob/master/source/_posts/2012-02-04-generating-a-table-of-contents-in-octopress.markdown</a>.</p>
-
-<p>I followed it to get an idea of what I wanted, but diverged a lot.  What I wanted was:</p>
-
-<ol>
-<li>The TOC to be driven by a <code>toc: true</code> in the YML front matter of any page</li>
-<li>The TOC to be the first item in the sidebar.</li>
-<li>The TOC to contain only the h2 tags and below (Ignoring the H1 page title)</li>
-</ol>
-
-
-<h2>1. Add JS TOC code</h2>
-
-<p>Download the <a href="http://fuelyourcoding.com/scripts/toc/">jQuery TOC plugin</a> and move the js file into javascripts directory.</p>
-
-<p>Add the following code to the head.</p>
-
-<figure class='code'><figcaption><span>_includes/custom/head.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://code.jquery.com/jquery-1.10.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/javascripts/jquery.tableofcontents.min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/javascripts/generate-toc.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This downloads jQuery from a CDN, loads the TOC plugin and will eventually load our driver code.</p>
-
-<h2>2. Write the driver and trigger code</h2>
-
-<p>Create the driver code:</p>
-
-<figure class='code'><figcaption><span>javascripts/generate-toc.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">generateTOC</span><span class="p">(</span><span class="nx">heading</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s2">&quot;&lt;section&gt;&lt;/section&gt;&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s2">&quot;&lt;ul id=&#39;toc&#39;&gt;&lt;/ul&gt;&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;.sidebar&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">heading</span> <span class="o">!=</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">heading</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;h1 class=&quot;tocHeading&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">heading</span> <span class="o">+</span> <span class="s1">&#39;&lt;/h1&gt;&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">div</span><span class="p">.</span><span class="nx">tableOfContents</span><span class="p">(</span><span class="s2">&quot;#content&quot;</span><span class="p">,{</span><span class="nx">startLevel</span><span class="o">:</span> <span class="mi">2</span><span class="p">});</span>
-</span><span class='line'>  <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">div</span><span class="p">);</span>
-</span><span class='line'>  <span class="nx">content</span><span class="p">.</span><span class="nx">prepend</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Adjust the footer to trigger the TOC is needed:</p>
-
-<figure class='code'><figcaption><span>_includes/custom/after_footer.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nx">jQuery</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Put a TOC right before the entry content.</span>
-</span><span class='line'>        <span class="nx">generateTOC</span><span class="p">(</span><span class="s1">&#39;Table of Contents&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>  <span class="nt">&lt;/script&gt;</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>page</code> variable is the YML front mater hash so we can check for <code>toc</code> to ensure the trigger code is only included on pages that want a TOC.</p>
-
-<h2>3. Adjust the generators</h2>
-
-<p><code>rake new_post</code> and <code>rake new_page</code> generate a stub page with some YML head matter so it make sense for me to adjust the generators to include <code>toc</code>.</p>
-
-<p>Just add something like this to the <code>Rakefile</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">task</span> <span class="ss">:new_post</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">do</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>  <span class="nb">open</span><span class="p">(</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
-</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>    <span class="n">post</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;toc: false&quot;</span>
-</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

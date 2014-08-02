@@ -9,7 +9,7 @@
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="I have tried to write this article for years, but could never find the right words. Thankfully Chad Fowler has found those words in his article &hellip;">
+  <meta name="description" content="Testing a controller that your engine provides is tricky. But with rspec the easiest way I have found is to follow these 3 steps: Add type: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +69,54 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/07/controller-test-in-rails-engines/">Controller Test in Rails Engines</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-07T14:13:00-05:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Testing a controller that your engine provides is tricky.  But with rspec the easiest way I have found is to follow these 3 steps:</p>
+
+<ol>
+<li>Add <code>type: controller</code> to the describe block</li>
+<li>Add <code>routes { Your::Engine.routes }</code> block to the top of the tests</li>
+<li>Add <code>controller</code> block to the top</li>
+</ol>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/02/07/controller-test-in-rails-engines/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -490,47 +538,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/07/octopress-toc/">Octopress TOC</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-07T14:35:00-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I wanted to add a Table Of Contents (TOC) to some of my longer blog entries.  Here is how I did it.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/07/octopress-toc/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -548,6 +555,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/02/bats/">Bats</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/23/rake-publish/">rake publish</a>
       </li>
     
@@ -561,10 +572,6 @@
     
       <li class="post">
         <a href="/blog/2014/04/09/bmore-on-rails-4-8-2014/">BMore on Rails 4-8-2014</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/23/inbox-zero-part-1/">Inbox Zero: Part 1</a>
       </li>
     
   </ul>
@@ -606,10 +613,11 @@
 <li class='category'><a href='/blog/categories/ruby-on-rails/'>ruby on rails (2)</a></li>
 <li class='category'><a href='/blog/categories/screencast/'>screencast (1)</a></li>
 <li class='category'><a href='/blog/categories/selenium/'>selenium (1)</a></li>
+<li class='category'><a href='/blog/categories/shell/'>shell (1)</a></li>
 <li class='category'><a href='/blog/categories/spreadsheet/'>spreadsheet (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>svn (1)</a></li>
 <li class='category'><a href='/blog/categories/technical-debt-calculator/'>technical-debt-calculator (2)</a></li>
-<li class='category'><a href='/blog/categories/testing/'>testing (4)</a></li>
+<li class='category'><a href='/blog/categories/testing/'>testing (5)</a></li>
 <li class='category'><a href='/blog/categories/ui-mockup/'>ui mockup (1)</a></li>
 <li class='category'><a href='/blog/categories/ui-mockup/'>ui-mockup (2)</a></li>
 
