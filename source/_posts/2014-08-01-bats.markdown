@@ -1,0 +1,96 @@
+---
+layout: post
+title: "Bats"
+date: 2014-08-01 09:40
+comments: true
+toc: false
+published: false
+categories:
+  - shell
+  - testing
+---
+
+Shell scripting is a great tool, but rarely is it tested.  Enter [BATS](https://github.com/sstephenson/bats)!  In this post I will give a quick tutorial on how to use it to test scripts.
+
+```bash
+#!/usr/bin/env bats
+
+@test "running a command" {
+  run foogrep "bar" foo_file
+  [ "$status" -eq 1 ]
+  [ "$output" = "1: bar baz" ]
+}
+```
+
+<!-- more -->
+
+Shameless plug: Before we start, I recommend downloading the language grammar package - [language-bats](https://atom.io/packages/language-bats) for the Atom editor.
+
+If you have never used [RSpec](http://rspec.info) or other testing framework the idea is simple: your code is run against expectations and if those are met then the tests pass.  The framework deals with the heavy lifting of executing the tests, printing the results, and providing to the correct interface to Continuous Integration servers.
+
+BATS is a test runner for Bash scripts.  Before it each run BATS takes the file and splits each test into its own file.  BATS then runs each test file to see if passes or fails.  Anything you can do in Bash you can do in BATS, and if any command fails then the entire test fails.
+
+## A Basic test
+
+BATS syntax for a test is `@test "desc" {}`.  But if you want it to run the file individually you should add the shebang line.  The simplest test looks something like this:
+
+```bash
+#!/usr/bin/env bats
+
+@test "something" {
+  false
+}
+```
+
+This isn't very useful, but it will generate a failing test.
+
+### Skipping tests
+
+Simetimes it is a useful to skip a test.  Just add `skip` at the point you want to the test to be skipped.  You can add a description or not.
+
+```bash
+@test "just skip" {
+  skip
+}
+
+@test "skip for a reason" {
+  if [ "$x" == "foo"]; then
+    skip "Because of foo"
+  fi
+
+  # more tests
+}
+```
+
+### Running a command
+
+Bash doesn't let you return strings from functions, so if you are trying to capture output and status then you have to roll your own, or use `run`.  `run` returns the commands output to `$output`, and its exit code to `$status`.  This makes testing on output and status easier.
+
+```bash
+@test "check output and status" {
+  run echo_foo
+  [ "$status" == "0" ]
+  [ "$output" == "foo" ]
+}
+```
+
+### Hooks
+
+Sometimes multiple tests need to share the same state.  In testing every test should stand on its own and leave no artifacts.  To accomplish this we can use the `setup` and `teardown` hooks.
+
+```bash
+
+setup() {
+  mkdir -p /tmp/output
+}
+
+teardown() {
+  rm -rf /tmp/output
+}
+
+@test "writes files" {
+  write_files_to "/tmp/output"
+  run "ls /tmp/output"
+  [ "$output" == "1" ]
+}
+```
