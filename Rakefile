@@ -127,7 +127,7 @@ task :publish, :pattern do |t, args|
 
   raise 'No pattern given' if args[:pattern].nil? || args[:pattern].empty?
 
-  files = Dir[File.join(source_dir,posts_dir,args[:pattern])]
+  files = Dir[File.join(source_dir,posts_dir,"*#{args[:pattern]}*")]
   raise "No files found matching pattern" if files.size == 0
   raise "Too many files match pattern" if files.size > 1
 
@@ -159,6 +159,8 @@ task :publish, :pattern do |t, args|
 
   FileUtils.rm file
   FileUtils.mv w.path, File.join(source_dir,posts_dir,new_name)
+
+  puts "Publishing #{new_name}"
 end
 
 # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")
