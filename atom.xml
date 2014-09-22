@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-08-02T12:10:22-04:00</updated>
+  <updated>2014-09-21T21:55:24-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,238 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using &amp;&amp; instead of if]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/09/21/using-and-and-instead-of-if/"/>
+    <updated>2014-09-21T21:54:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/09/21/using-and-and-instead-of-if</id>
+    <content type="html"><![CDATA[<p>You can use <code>&amp;&amp;</code> to perform a logical <code>if</code>.  And there are a few reasons it may be better to use <code>&amp;&amp;</code>.</p>
+
+<p>If I was a Computer Scientist I might pull out logic maps or Turing completeness or do a mathematical proof.  If I was a Computer Architect I might argue that I do not need to prove anything and you should trust my experience.  Luckily I am a Software Engineer, so I will prove my point with tests.</p>
+
+<!-- more -->
+
+
+<p>Lets take <code>if a then b</code>.  The entire purpose of the <code>if then</code> it to only execute <code>b</code> if <code>a</code> is true.  If I were to write it using tests I might do it this way:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="s2">&quot;if then&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Test</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">a</span><span class="p">;</span> <span class="k">end</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">b</span><span class="p">;</span> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">if_then</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">a</span>
+</span><span class='line'>        <span class="n">b</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:t</span><span class="p">)</span> <span class="p">{</span><span class="no">Test</span><span class="o">.</span><span class="n">new</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s1">&#39;executes a&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:a</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span> <span class="kp">false</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">t</span><span class="o">.</span><span class="n">if_then</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s1">&#39;executes b if a is true&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:a</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">t</span><span class="o">.</span><span class="n">if_then</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s1">&#39;does not execute b if a is false&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:a</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">not_to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">t</span><span class="o">.</span><span class="n">if_then</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These tests pass.  So, I will make no change to the tests.  But, I will refactor the Test class to use <code>&amp;&amp;</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Test</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">if_then</span>
+</span><span class='line'>    <span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">b</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These tests also pass!  And you are probably thinking that I duped you somehow.  Let me explain why this works.</p>
+
+<p>Logical <code>and</code> (&amp;&amp;) and logical <code>or</code> (||) can both be short circuited; meaning that if a certain condition is met they can immediately return a value without needing to execute more statements.  For <code>and</code> if any value is <code>false</code> then the entire statement is false.  So the first time the program sees a <code>false</code> value it can return.  For <code>or</code> the first <code>true</code> causes <code>true</code> to be returned.</p>
+
+<p>The actual execution for <code>a &amp;&amp; b</code> is as follows:</p>
+
+<ol>
+<li>Execute a</li>
+<li>if a is false return false</li>
+<li>if a is true Execute b</li>
+</ol>
+
+
+<p>If you look carefully that is identical to the execution path of <code>if a then b</code>, which is why all the previous tests pass without modification.</p>
+
+<h2>if not then</h2>
+
+<p>Just like <code>&amp;&amp;</code> maps to <code>if then</code>, <code>||</code> maps to <code>if not then</code> or in some lanugages like ruby <code>unless then</code>.  I leave it as an exercise for the reader to write the tests, but the code is as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Test</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">if_not_then</span>
+</span><span class='line'>    <span class="n">a</span> <span class="o">||</span> <span class="n">b</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>if then else</h2>
+
+<p><code>else</code> is just the <code>if not</code> case.  Since, <code>||</code> is eqivilant to <code>if not</code> we can chain it after <code>&amp;&amp;</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Test</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">if_then_else</span>
+</span><span class='line'>    <span class="c1"># if a then b else c</span>
+</span><span class='line'>    <span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">b</span> <span class="o">||</span> <span class="n">c</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Why is this useful?</h2>
+
+<p>For some reason many languages can execute <code>&amp;&amp;</code> and <code>||</code> a lot faster then <code>if then else</code>, but I very rarely consider performance a good excuse for crappy looking code.  I have some simple reasons to use <code>&amp;&amp;</code> instead of <code>if</code>:</p>
+
+<h3>1. You are chaining actions</h3>
+
+<p>If the things that you are chaining are actions being performed and those action return weather they were successful then it often reads better as <code>&amp;&amp;</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># bad</span>
+</span><span class='line'><span class="n">paint_it_black</span> <span class="k">if</span> <span class="n">find_a_door</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># good</span>
+</span><span class='line'><span class="n">find_a_door</span> <span class="o">&amp;&amp;</span> <span class="n">paint_it_black</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2. You are likely to chain additional items</h3>
+
+<p>Once you nest logic then readability goes out the window.  Using <code>&amp;&amp;</code> helps.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># bad</span>
+</span><span class='line'><span class="k">if</span> <span class="n">column_a_is_a_string</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">column_b_is_a_number</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">column_c_is_a_boolean</span>
+</span><span class='line'>      <span class="k">raise</span> <span class="s1">&#39;Bad&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># good</span>
+</span><span class='line'><span class="n">column_a_is_a_string</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'><span class="n">column_b_is_a_number</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'><span class="n">column_c_is_a_boolean</span> <span class="o">||</span>
+</span><span class='line'><span class="k">raise</span> <span class="s1">&#39;Bad&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. You don&#8217;t know how many items you need to chain</h3>
+
+<p>Sometimes you need to parse a file of conditionals, or will be given a list of conditionals.  Most of the time you cannot ensure that there are only two items on the list, so the <code>if then</code> contract is not useful, but a variant of <code>&amp;&amp;</code> will work.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># short circuit the first success</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">y</span> <span class="k">if</span> <span class="n">y</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bats]]></title>
@@ -2131,184 +2363,6 @@
 <li>2 tabs in (1&#8221;)</li>
 </ol>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Foundation]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/07/24/foundation/"/>
-    <updated>2013-07-24T20:34:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/07/24/foundation</id>
-    <content type="html"><![CDATA[<p><a href="http://foundation.zurb.com/">Foundation</a> is a UI library which aims to simplify design by starting with a responsive library.  It is very similar to Twitter Bootstrap, but since it uses SCSS it should fit better within Rails.</p>
-
-<p>The demo for what I have done is <a href="http://jkamenik.github.io/waterfall-foundation">here</a></p>
-
-<!-- more -->
-
-
-<p>It would be accurate to say that I have a little crush on this framework.  In my day to day I have to deal with Drupal Designers.  They are not bad people to be sure, and the designs they come up with are great.  But there is no structure to what they provide.  They are painting using waterfall colors on a still pond.  The stuff they come up with is amazing, but if you do anything but look at it all is lost.</p>
-
-<p>Foundation is an apt name because it offer an underlying structure to design.  It has opinions, but as a Rails guy I am used to that.  More importantly the opinions are those of designers, but with a structure that resonates with developers.  So not being a designer I can still develop a decent UI.</p>
-
-<h2>The downside</h2>
-
-<p>First the downside, it doesn&#8217;t support IE lower then 8 and only partially supports IE8.  That isn&#8217;t a huge issue for me, but it does make it difficult to use commercially.  Other then that I don&#8217;t see any issues.</p>
-
-<h2>The grid</h2>
-
-<p>Foundation uses a 12 column grid system to control the layout of elements.  12 is great measure because it divides by 2, 3, 4, and 6.  It also supports the nesting of grid rows within columns.</p>
-
-<h3>Large / Medium / Small</h3>
-
-<p>When defining columns you can give it a span by adding the column count like &#8220;large-9&#8221;.  Just so long as counts add to 12 everything works.  But what is awesome is that each column can be different based on screen size.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-6 medium-7 large-9&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This causes the div to be 6 columns when the screen is small, 7 for medium screens, and 9 for large screens.</p>
-
-<h3>Push / Pull</h3>
-
-<p>Add &#8220;push-X&#8221; cause a column to pad left by the number of columns.  &#8220;small-9 push-3&#8221; means the column is 9 wide and moved over by 3 columns, basically making it the last column even if in the html it is first.</p>
-
-<p>&#8220;pull-X&#8221; does the opposite and moves a column to the right.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-9 push-3&quot;</span><span class="nt">&gt;</span>Last on screen, first in HTML.<span class="nt">&lt;/div&gt;</span>
-</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small-3 pull-9&quot;</span><span class="nt">&gt;</span>First on screen, last in HTML.<span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Show / Hide</h3>
-
-<p>Adding &#8220;show-for-X&#8221; will cause the div to be hidden unless the screen is the correct size.  There is a &#8220;hide-for-X&#8221; as well.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;show-for-small&quot;</span><span class="nt">&gt;</span>Shown only if small<span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Semantic HTML</h2>
-
-<p>Foundation uses semantic HTML in order achieve a responsive design.  And hence why IE7 and below are not supported and IE8 is only partially supported.  But semantic HTML plays very well with the mobile web and makes the HTML easier to code and maintain.</p>
-
-<h2>The Widgets</h2>
-
-<p>Along with the opinions come standardized UI widgets.  It isn&#8217;t on the same level as a GUI toolkit like ExtJS, but all the basic HTML behaviors are there plus a lot of other nice items.</p>
-
-<h3>Navigation</h3>
-
-<p>A &#8220;nav&#8221; element acts as a standard menu with dropdowns on a desktop.  In a mobile browser it becomes a set of clickable links that sweep left.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;top-bar&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;title-area&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!-- Title Area --&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Top Bar Title <span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!-- Remove the class &quot;menu-icon&quot; to get rid of menu icon. Take out &quot;Menu&quot; to just have icon alone --&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;toggle-topbar menu-icon&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;span&gt;</span>Menu<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">&quot;top-bar-section&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!-- Left Nav Section --&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;left&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Main Item 1<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;divider&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/ul&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/section&gt;</span>
-</span><span class='line'><span class="nt">&lt;/nav&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Panels / Flash</h3>
-
-<p>These can be used to display a &#8220;block&#8221; of text.  They have some standard highlights like &#8220;alert&#8221; which makes them good for flash messages.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="c">&lt;!-- Content here --&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;div</span> <span class="na">data-alert</span> <span class="na">class=</span><span class="s">&quot;alert-box&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="c">&lt;!-- Your content goes here --&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">class=</span><span class="s">&quot;close&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;times;</span><span class="nt">&lt;/a&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Joyride</h3>
-
-<p>A joyride lets you highlight elements on the page with some descriptive text.  It is as simple creating a unordered list with the class &#8220;joyride-list&#8221;.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;ol</span> <span class="na">class=</span><span class="s">&quot;joyride-list&quot;</span> <span class="na">data-joyride</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;firstStop&quot;</span> <span class="na">data-text=</span><span class="s">&quot;Next&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;p&gt;</span>Hello and welcome to the Joyride documentation page.<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;numero1&quot;</span> <span class="na">data-class=</span><span class="s">&quot;custom so-awesome&quot;</span> <span class="na">data-text=</span><span class="s">&quot;Next&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;h4&gt;</span>Stop #1<span class="nt">&lt;/h4&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;p&gt;</span>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;numero2&quot;</span> <span class="na">data-button=</span><span class="s">&quot;Next&quot;</span> <span class="na">data-options=</span><span class="s">&quot;tipLocation:top;tipAnimation:fade&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;h4&gt;</span>Stop #2<span class="nt">&lt;/h4&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;p&gt;</span>Get the details right by styling Joyride with a custom stylesheet!<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;li</span> <span class="na">data-button=</span><span class="s">&quot;Next&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;h4&gt;</span>Stop #4<span class="nt">&lt;/h4&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;p&gt;</span>It works as a modal too!<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/li&gt;</span>
-</span><span class='line'><span class="nt">&lt;/ol&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>And many more</h3>
-
-<p>Look at the <a href="http://foundation.zurb.com/docs/components/kitchen-sink.html">kitchen sink</a> for a list of all the widgets that you get.</p>
 ]]></content>
   </entry>
   
