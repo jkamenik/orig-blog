@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Using &amp;&amp; instead of if"
-date: 2014-09-21 20:39
+date: 2014-09-21 21:54
 comments: true
 toc: false
-published: false
+published: true
 categories:
   - ruby
   - programing
