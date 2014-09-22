@@ -125,6 +125,8 @@ task :publish, :pattern do |t, args|
   require 'tempfile'
   require 'fileutils'
 
+  raise 'No pattern given' if args[:pattern].nil? || args[:pattern].empty?
+
   files = Dir[File.join(source_dir,posts_dir,args[:pattern])]
   raise "No files found matching pattern" if files.size == 0
   raise "Too many files match pattern" if files.size > 1
