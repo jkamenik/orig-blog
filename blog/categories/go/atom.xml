@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: go | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/go/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2014-09-29T15:26:45-04:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Golang Steam File]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/09/29/golang-steam-file/"/>
+    <updated>2014-09-29T15:25:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/09/29/golang-steam-file</id>
+    <content type="html"><![CDATA[<p>Go (golang) is a highly concurrent language.  But more then that it is a simple language built using modular components and string them together in useful ways.  This modularity has lead me to play around a bit and one of things that I found was a easy way to stream a file.</p>
+
+<!-- more -->
+
+
+<p>At first I was very unhappy that Go did not support the default compression provided by the <code>xz</code> tool.  At work, we use <code>xz</code> to stream compress very large amounts of data.  But since go had no native support I thought that it would be a lost cause.</p>
+
+<p>Turns out there is no native support because there doesn't have to be.  Below is the basic code.</p>
+
+<p>```go
+func xzReader(r io.Reader) io.ReadCloser {</p>
+
+<pre><code>rpipe, wpipe := io.Pipe()
+
+cmd := exec.Command("xz", "--decompress", "--stdout")
+cmd.Stdin = r
+cmd.Stdout = wpipe
+
+go func() {
+        err := cmd.Run()
+        wpipe.CloseWithError(err)
+}()
+
+return rpipe
+</code></pre>
+
+<p>}
+```</p>
+
+<ol>
+<li>Declare the function to take an <code>io.Reader</code> as STDIN and return <code>io.ReadCloser</code> as STDOUT</li>
+<li>Create a pipe so I that can capture the program's STDOUT and broadcast it as a readable stream</li>
+<li>Register <code>xz</code> as the command to execute</li>
+<li>Set the command's STDIN</li>
+<li>Capture the command's STDOUT</li>
+<li>Run a command in the background
+
+<ol>
+<li>Run the command until there is an error</li>
+<li>Close the pipe when the command exists</li>
+</ol>
+</li>
+<li>Return the read end of the command's STDOUT</li>
+</ol>
+
+
+<p>At this point you have a <code>io.ReaderCloser</code> (which is an <code>io.Reader</code>).  You can use it anywhere you would use an <code>io.Reader</code>.  For example lets say you have a compressed CSV file.  The following code would open the file, decompress it, parse it as CSV, and print that to the screen:</p>
+
+<p>```go
+func main() {
+  fp, err := os.Open(os.Args[1])
+  if err != nil {</p>
+
+<pre><code>log.Fatal(err)
+</code></pre>
+
+<p>  }
+  defer fp.Close()</p>
+
+<p>  xz  := xzReader(fp)
+  defer xz.Close()</p>
+
+<p>  csv := csv.NewReader(xz)</p>
+
+<p>  for {</p>
+
+<pre><code>line, err := csv.Read()
+
+if len(line) &gt; 0 {
+  println(line)
+}
+
+if err != nil {
+  break
+}
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<ol>
+<li>Define the main function</li>
+<li>Open a file</li>
+<li>Test for errors and bail if there are any</li>
+<li>Close the file pointer after the program exits</li>
+<li>Pass the file as the stdin to the xz command and capture its output</li>
+<li>Close the command's STDOUT after the program exits</li>
+<li>Pass the decompressed file to the CSV parser and get back a <code>csv.Reader</code></li>
+<li>Loop until the stream is closed
+
+<ol>
+<li>Read a line</li>
+<li>Print the line if it exists
+
+<ol>
+<li>Note: in Go, it is perfectly reasonable for a command to work and fail in the same call.  If I check for an error before printing the line then I may miss the last line of the file.</li>
+</ol>
+</li>
+<li>Check for a stream error and break the loop</li>
+</ol>
+</li>
+</ol>
+
+
+<p>It is a very common paradigm in Go to take an <code>io.Reader</code> and pass it to a function just to get back a new <code>io.Reader</code>, and take that and pass it around and get back what you want (like a string or CSV row).  Once you get your head around the fact that Go's power is that everything is a small well defined lego block, and that they all fit together, then it stops being strange that you would take one kind of interface and exchange it for exactly the same kind of interface.</p>
+]]></content>
+  </entry>
+  
+</feed>

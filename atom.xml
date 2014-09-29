@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-09-21T21:55:24-04:00</updated>
+  <updated>2014-09-29T15:26:45-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,149 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Golang Steam File]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/09/29/golang-steam-file/"/>
+    <updated>2014-09-29T15:25:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/09/29/golang-steam-file</id>
+    <content type="html"><![CDATA[<p>Go (golang) is a highly concurrent language.  But more then that it is a simple language built using modular components and string them together in useful ways.  This modularity has lead me to play around a bit and one of things that I found was a easy way to stream a file.</p>
+
+<!-- more -->
+
+
+<p>At first I was very unhappy that Go did not support the default compression provided by the <code>xz</code> tool.  At work, we use <code>xz</code> to stream compress very large amounts of data.  But since go had no native support I thought that it would be a lost cause.</p>
+
+<p>Turns out there is no native support because there doesn&#8217;t have to be.  Below is the basic code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">xzReader</span><span class="p">(</span><span class="n">r</span> <span class="n">io</span><span class="p">.</span><span class="n">Reader</span><span class="p">)</span> <span class="n">io</span><span class="p">.</span><span class="n">ReadCloser</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">rpipe</span><span class="p">,</span> <span class="n">wpipe</span> <span class="p">:=</span> <span class="n">io</span><span class="p">.</span><span class="n">Pipe</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cmd</span> <span class="p">:=</span> <span class="n">exec</span><span class="p">.</span><span class="n">Command</span><span class="p">(</span><span class="s">&quot;xz&quot;</span><span class="p">,</span> <span class="s">&quot;--decompress&quot;</span><span class="p">,</span> <span class="s">&quot;--stdout&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">cmd</span><span class="p">.</span><span class="n">Stdin</span> <span class="p">=</span> <span class="n">r</span>
+</span><span class='line'>  <span class="n">cmd</span><span class="p">.</span><span class="n">Stdout</span> <span class="p">=</span> <span class="n">wpipe</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">err</span> <span class="p">:=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">Run</span><span class="p">()</span>
+</span><span class='line'>          <span class="n">wpipe</span><span class="p">.</span><span class="n">CloseWithError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">rpipe</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Declare the function to take an <code>io.Reader</code> as STDIN and return <code>io.ReadCloser</code> as STDOUT</li>
+<li>Create a pipe so I that can capture the program&#8217;s STDOUT and broadcast it as a readable stream</li>
+<li>Register <code>xz</code> as the command to execute</li>
+<li>Set the command&#8217;s STDIN</li>
+<li>Capture the command&#8217;s STDOUT</li>
+<li>Run a command in the background
+
+<ol>
+<li>Run the command until there is an error</li>
+<li>Close the pipe when the command exists</li>
+</ol>
+</li>
+<li>Return the read end of the command&#8217;s STDOUT</li>
+</ol>
+
+
+<p>At this point you have a <code>io.ReaderCloser</code> (which is an <code>io.Reader</code>).  You can use it anywhere you would use an <code>io.Reader</code>.  For example lets say you have a compressed CSV file.  The following code would open the file, decompress it, parse it as CSV, and print that to the screen:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">fp</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">os</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">Args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">err</span> <span class="p">!=</span> <span class="n">nil</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">log</span><span class="p">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">defer</span> <span class="n">fp</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">xz</span>  <span class="p">:=</span> <span class="n">xzReader</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">defer</span> <span class="n">xz</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">csv</span> <span class="p">:=</span> <span class="n">csv</span><span class="p">.</span><span class="n">NewReader</span><span class="p">(</span><span class="n">xz</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">line</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">csv</span><span class="p">.</span><span class="n">Read</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">println</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">err</span> <span class="p">!=</span> <span class="n">nil</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">break</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Define the main function</li>
+<li>Open a file</li>
+<li>Test for errors and bail if there are any</li>
+<li>Close the file pointer after the program exits</li>
+<li>Pass the file as the stdin to the xz command and capture its output</li>
+<li>Close the command&#8217;s STDOUT after the program exits</li>
+<li>Pass the decompressed file to the CSV parser and get back a <code>csv.Reader</code></li>
+<li>Loop until the stream is closed
+
+<ol>
+<li>Read a line</li>
+<li>Print the line if it exists
+
+<ol>
+<li>Note: in Go, it is perfectly reasonable for a command to work and fail in the same call.  If I check for an error before printing the line then I may miss the last line of the file.</li>
+</ol>
+</li>
+<li>Check for a stream error and break the loop</li>
+</ol>
+</li>
+</ol>
+
+
+<p>It is a very common paradigm in Go to take an <code>io.Reader</code> and pass it to a function just to get back a new <code>io.Reader</code>, and take that and pass it around and get back what you want (like a string or CSV row).  Once you get your head around the fact that Go&#8217;s power is that everything is a small well defined lego block, and that they all fit together, then it stops being strange that you would take one kind of interface and exchange it for exactly the same kind of interface.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using &amp;&amp; instead of if]]></title>
@@ -2154,213 +2297,6 @@
 <li>Keynote -> better</li>
 <li>Keynote with details -> <strong>HORRIBLE!!!!</strong></li>
 <li>Actual implementation -> best</li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Screenplays]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/07/28/screenplays/"/>
-    <updated>2013-07-28T21:09:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/07/28/screenplays</id>
-    <content type="html"><![CDATA[<p>So part of my job has been to give screencasts of some of the projects I have been working on.  Having a Mac I can use iMovie to pretty much do everything, but I struggled with the structure and timing of the screencasts.</p>
-
-<p>The issue was that I know pretty much everything about the feature I implemented, so I would just go at it.  I would often get confused, start over, or go off on a tangent.  By the end everything took longer then it should, and wasn&#8217;t as good as it should have been.  Over all very frustrating.</p>
-
-<p>I don&#8217;t know why I didn&#8217;t think about this sooner and why this isn&#8217;t the first thing people tell when you start doing screencasts, but start with a screenplay.  The movie industry has decades of experience and they start each movie with a pitch and a screenplay.</p>
-
-<!-- more -->
-
-
-<p>Think of a screenplay like a wireframe for your video.  Everything about them is about making things simple to understand.  Below is a simplified version of <a href="http://2012.scriptfrenzy.org/howtoformatascreenplay">the screenplay format</a> applied specifically to screencasts.</p>
-
-<p>I have a sample Google doc file <a href="https://docs.google.com/document/d/1tstVIrAOQlfjjttxyjK_igDmrrIFf4IYuHhNJQljOQY/edit?usp=sharing">here</a>.</p>
-
-<h2>Page layout</h2>
-
-<ol>
-<li>Page size
-
-<ol>
-<li>8.5&#8221; x 11&#8221;</li>
-</ol>
-</li>
-<li>Margins
-
-<ol>
-<li>Left: 1.5 in</li>
-<li>Top/Bottom/Right: 1 in</li>
-</ol>
-</li>
-<li>Font
-
-<ol>
-<li>Courier</li>
-<li>12 point</li>
-<li>no bold</li>
-<li>no italics</li>
-</ol>
-</li>
-<li>Single space between
-
-<ol>
-<li>Character name and dialog</li>
-<li>Character name and parenthetical</li>
-<li>Parenthetical and dialog</li>
-</ol>
-</li>
-<li>Double space between
-
-<ol>
-<li>everything else</li>
-</ol>
-</li>
-</ol>
-
-
-<h2>Structure</h2>
-
-<h3>Title page</h3>
-
-<ol>
-<li>Title of the script
-
-<ol>
-<li>Center of the page</li>
-<li>Left aligned</li>
-</ol>
-</li>
-<li>By line
-
-<ol>
-<li>Immediately after Title</li>
-</ol>
-</li>
-</ol>
-
-
-<h3>Slug line</h3>
-
-<ol>
-<li>All Caps</li>
-<li>Left aligned</li>
-<li>Describes the screen</li>
-<li>Separate parts with &#8220;-&#8221;</li>
-<li>For screencasts
-
-<ol>
-<li>omit the internal/external indicator (you are always in a computer)</li>
-<li>omit the time of day indictor</li>
-<li>Add a Website / Program indicator</li>
-<li>Add an off screen indicator (O.S.), this either needs to be prior to recording or will be removed post production</li>
-</ol>
-</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GOOGLE PLUS - LOGIN - OFF SCREEN
-</span><span class='line'>
-</span><span class='line'>...
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>GOOGLE PLUS - ADD FRIEND TO CIRCLE</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Action</h3>
-
-<ol>
-<li>Optional</li>
-<li>Immediately after Slug line</li>
-<li>Describes setup of screen (work performed off screen, prior to recording)</li>
-<li>Left aligned</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GOOGLE PLUS - ADD A FRIEND TO CIRCLE
-</span><span class='line'>
-</span><span class='line'>Two accounts exist.  Account 1 is logged in.
-</span><span class='line'>
-</span><span class='line'>Search for account 2.</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Character name</h3>
-
-<ol>
-<li>Above parenthetical or dialog - Anytime the person speaking changes</li>
-<li>All Caps</li>
-<li>4 tabs in (2&#8221;)</li>
-<li>For screencasts
-
-<ol>
-<li>Use PRESENTER X (omit the X if only one presenter)</li>
-</ol>
-</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>    JOHN
-</span><span class='line'>    
-</span><span class='line'>  (doing something)
-</span><span class='line'>  
-</span><span class='line'>And talking
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    JANE
-</span><span class='line'>    
-</span><span class='line'>Just talking</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Parenthetical</h3>
-
-<ol>
-<li>Immediately after character name</li>
-<li>Used to show actions performed while talking</li>
-<li>3 tabs in (1.5&#8221;)</li>
-<li>For screencasts
-
-<ol>
-<li>Use generic terms like &#8220;highlight&#8221;, and &#8220;submit form&#8221; instead of very specific &#8220;move mouse to&#8221; and &#8220;click submit button&#8221;</li>
-</ol>
-</li>
-</ol>
-
-
-<h3>Dialog</h3>
-
-<ol>
-<li>Immediately after character name or parenthetical</li>
-<li>What the character says</li>
-<li>No quotes</li>
-<li>Present tense</li>
-<li>Only explain what isn&#8217;t covered by the video
-
-<ol>
-<li>For example it is fine to use Jargon like &#8220;goto google&#8221; because in the video you will be opening the browser, going to the URL bar, and typing in &#8220;http://google.com&#8221;.</li>
-</ol>
-</li>
-<li>2 tabs in (1&#8221;)</li>
 </ol>
 
 ]]></content>
