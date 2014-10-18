@@ -4,7 +4,7 @@
   <title><![CDATA[Category: concurrency | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/concurrency/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-09-29T15:26:45-04:00</updated>
+  <updated>2014-10-17T20:58:46-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,130 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Go Concurrency Patterns]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns/"/>
+    <updated>2014-10-17T20:57:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns</id>
+    <content type="html"><![CDATA[<p>One of Golangs strengths is its composibility.  This strength is only useful if you know how to make those composable parts.  That is where patterns are useful.</p>
+
+<p>Golang is concurrent, which is not necessarily parallel.  However, to make things concurrent you have to break thing into automatic steps.  If you are careful in how two step share information then you can easily turn concurrent design into parallel design.  Go channels make this communication stupid simple.</p>
+
+<p>In this post I am going to share what I think are the basis of most other concurrency patterns: The Generator, The Worker, and The Consumer.</p>
+
+<!-- more -->
+
+
+<h2>The Generator</h2>
+
+<p>A generator simply does work and places that work on a channel.  What that means is really up to what is needed but the pattern is:</p>
+
+<ol>
+<li>Create a channel</li>
+<li>Create closure which does work</li>
+<li>Execute the closure as a goroutine</li>
+<li>Return the channel</li>
+</ol>
+
+
+<p>```go
+func generateInt() chan int32 {
+  // 1. Create a channel
+  out := make(chan int32)</p>
+
+<p>  // 3. Spawn a closure
+  go func(){</p>
+
+<pre><code>defer close(out)
+
+// 2. Do work
+for i := int32(0); i &lt; 100; i++ {
+  out &lt;- i
+}
+</code></pre>
+
+<p>  }()</p>
+
+<p>  // 4. Return the channel
+  return out
+}
+```</p>
+
+<h2>The Worker</h2>
+
+<p>A worker takes stuff off an input channel, works on it, and places the result on an output channel.</p>
+
+<p>```go
+func enlargeInt(in chan int32) chan int32 {
+  out := make(chan int32)</p>
+
+<p>  go func() {</p>
+
+<pre><code>defer close(out)
+
+for x := range(in) {
+  out &lt;- x*2
+}
+</code></pre>
+
+<p>  }()</p>
+
+<p>  return out
+}
+```</p>
+
+<h2>The Consumer</h2>
+
+<p>A consumer takes stuff off an input channel and consumes it.  There are two primary way to do this: Blocker and Signaller.</p>
+
+<h3>Blocker</h3>
+
+<p>The blocker form simply run the code.  This version is useful if there is a main loop which shouldn't exit until all work is complete.</p>
+
+<p>```go
+func printInt(in chan int32) {
+  for x := range(in) {</p>
+
+<pre><code>fmt.Println(x)
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p><a href="http://play.golang.org/p/7Iz7kV7soo">Here is a full working version.</a></p>
+
+<h3>Signaller</h3>
+
+<p>A signaller is actually a varient of the Worker pattern, where the output channel is used to signal the completion of work.</p>
+
+<p>```go
+func printInt(in chan int32) chan bool {
+  out := make(chan bool)</p>
+
+<p>  go func() {</p>
+
+<pre><code>defer close(out)
+
+// Work until the channel is closed
+for x := range(in) {
+  fmt.Println(x)
+}
+
+// Single that I am done
+out &lt;- true
+</code></pre>
+
+<p>  }()</p>
+
+<p>  return out
+}
+```</p>
+
+<p><a href="http://play.golang.org/p/1LIgv1ULDy">Here is a full working version.</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Golang Steam File]]></title>

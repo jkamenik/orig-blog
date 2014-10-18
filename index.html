@@ -9,7 +9,7 @@
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="Go (golang) is a highly concurrent language. But more then that it is a simple language built using modular components and string them together in &hellip;">
+  <meta name="description" content="One of Golangs strengths is its composibility. This strength is only useful if you know how to make those composable parts. That is where patterns &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +69,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/17/go-concurrency-patterns/">Go Concurrency Patterns</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-17T20:57:00-04:00" pubdate data-updated="true">Oct 17<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of Golangs strengths is its composibility.  This strength is only useful if you know how to make those composable parts.  That is where patterns are useful.</p>
+
+<p>Golang is concurrent, which is not necessarily parallel.  However, to make things concurrent you have to break thing into automatic steps.  If you are careful in how two step share information then you can easily turn concurrent design into parallel design.  Go channels make this communication stupid simple.</p>
+
+<p>In this post I am going to share what I think are the basis of most other concurrency patterns: The Generator, The Worker, and The Consumer.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/17/go-concurrency-patterns/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -466,53 +511,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/24/crafty-timer/">Crafty Timer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-24T13:28:00-05:00" pubdate data-updated="true">Feb 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Crafty JS is a game engine written in Javascript.  Like many game engines there is a main event loop that drives everything.  This is actually a great thing, unless you are trying to use timers.</p>
-
-<p>Javascript is single threaded but asynchronous.  This means there is no way to &#8220;sleep&#8221; the main loop.  Instead there is a <code>setTimeout</code> function which takes a callback that is called after the timer has expired.  In most JS programs having one or more timers setup via <code>setTimeout</code> isn&#8217;t much of an issue.</p>
-
-<p>In Crafty there is already a main event loop that actually performs the same function and it better fits the separation of background and rendering responsibilities.  Remember that in a game you will have hundreds or thousands of background calculation per second but only 40 to 60 rendering calculations.</p>
-
-<p>With that in mind I created two components: a Timer which does everything in the background, and TimePrinter which is a timer and rerenders the current seconds until the timer expires.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/02/24/crafty-timer/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -528,6 +526,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/17/go-concurrency-patterns/">Go Concurrency Patterns</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/29/golang-steam-file/">Golang Steam File</a>
       </li>
     
@@ -541,10 +543,6 @@
     
       <li class="post">
         <a href="/blog/2014/06/23/rake-publish/">rake publish</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/22/google-query-language/">Google Query Language</a>
       </li>
     
   </ul>
@@ -564,7 +562,7 @@
 <li class='category'><a href='/blog/categories/budget/'>budget (1)</a></li>
 <li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
 <li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
-<li class='category'><a href='/blog/categories/concurrency/'>concurrency (1)</a></li>
+<li class='category'><a href='/blog/categories/concurrency/'>concurrency (2)</a></li>
 <li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
 <li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
 <li class='category'><a href='/blog/categories/email/'>email (2)</a></li>
@@ -572,12 +570,13 @@
 <li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (2)</a></li>
 <li class='category'><a href='/blog/categories/game-design/'>game design (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
-<li class='category'><a href='/blog/categories/go/'>go (1)</a></li>
+<li class='category'><a href='/blog/categories/go/'>go (2)</a></li>
 <li class='category'><a href='/blog/categories/howto/'>howto (13)</a></li>
 <li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
 <li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>octopress (3)</a></li>
 <li class='category'><a href='/blog/categories/opinion/'>opinion (5)</a></li>
+<li class='category'><a href='/blog/categories/patterns/'>patterns (1)</a></li>
 <li class='category'><a href='/blog/categories/phase1/'>phase1 (2)</a></li>
 <li class='category'><a href='/blog/categories/planning/'>planning (3)</a></li>
 <li class='category'><a href='/blog/categories/programing/'>programing (1)</a></li>

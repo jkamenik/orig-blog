@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-09-29T15:26:45-04:00</updated>
+  <updated>2014-10-17T20:58:46-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,170 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Go Concurrency Patterns]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns/"/>
+    <updated>2014-10-17T20:57:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns</id>
+    <content type="html"><![CDATA[<p>One of Golangs strengths is its composibility.  This strength is only useful if you know how to make those composable parts.  That is where patterns are useful.</p>
+
+<p>Golang is concurrent, which is not necessarily parallel.  However, to make things concurrent you have to break thing into automatic steps.  If you are careful in how two step share information then you can easily turn concurrent design into parallel design.  Go channels make this communication stupid simple.</p>
+
+<p>In this post I am going to share what I think are the basis of most other concurrency patterns: The Generator, The Worker, and The Consumer.</p>
+
+<!-- more -->
+
+
+<h2>The Generator</h2>
+
+<p>A generator simply does work and places that work on a channel.  What that means is really up to what is needed but the pattern is:</p>
+
+<ol>
+<li>Create a channel</li>
+<li>Create closure which does work</li>
+<li>Execute the closure as a goroutine</li>
+<li>Return the channel</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">generateInt</span><span class="p">()</span> <span class="k">chan</span> <span class="nb">int32</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// 1. Create a channel</span>
+</span><span class='line'>  <span class="n">out</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 3. Spawn a closure</span>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">(){</span>
+</span><span class='line'>    <span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 2. Do work</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="p">:=</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="p">++</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">out</span> <span class="p">&lt;-</span> <span class="n">i</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 4. Return the channel</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The Worker</h2>
+
+<p>A worker takes stuff off an input channel, works on it, and places the result on an output channel.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">enlargeInt</span><span class="p">(</span><span class="n">in</span> <span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span> <span class="k">chan</span> <span class="nb">int32</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">out</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="n">x</span> <span class="p">:=</span> <span class="k">range</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">out</span> <span class="p">&lt;-</span> <span class="n">x</span><span class="p">*</span><span class="mi">2</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The Consumer</h2>
+
+<p>A consumer takes stuff off an input channel and consumes it.  There are two primary way to do this: Blocker and Signaller.</p>
+
+<h3>Blocker</h3>
+
+<p>The blocker form simply run the code.  This version is useful if there is a main loop which shouldn&#8217;t exit until all work is complete.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">printInt</span><span class="p">(</span><span class="n">in</span> <span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">for</span> <span class="n">x</span> <span class="p">:=</span> <span class="k">range</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://play.golang.org/p/7Iz7kV7soo">Here is a full working version.</a></p>
+
+<h3>Signaller</h3>
+
+<p>A signaller is actually a varient of the Worker pattern, where the output channel is used to signal the completion of work.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">printInt</span><span class="p">(</span><span class="n">in</span> <span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span> <span class="k">chan</span> <span class="n">bool</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">out</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="n">bool</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Work until the channel is closed</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">x</span> <span class="p">:=</span> <span class="k">range</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Single that I am done</span>
+</span><span class='line'>    <span class="n">out</span> <span class="p">&lt;-</span> <span class="n">true</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://play.golang.org/p/1LIgv1ULDy">Here is a full working version.</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Golang Steam File]]></title>
@@ -2129,176 +2293,6 @@
 <p><a href="http://jkamenik.github.com/images/tech-debt-calc/tech-debt-calc3.png">First redesign</a></p>
 
 <p><a href="http://jkamenik.github.com/images/tech-debt-calc/tech-debt-calc4.png">First redesign cont.</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Keynote for Mockups]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/08/29/using-keynote-for-mockups/"/>
-    <updated>2013-08-29T08:47:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/08/29/using-keynote-for-mockups</id>
-    <content type="html"><![CDATA[<p>There are a lot of UI mockup software out there.  I am sure they are good, but chances are that you already have exactly what you need.  I used to ominigraffle, which was fine.  And I know people that use Visio.  And there are a ton of UI Mocking software out there that costs a ton.</p>
-
-<p>However, I have found presentation software (specifically Keynote) already has all the features you need for a good UI mockup.</p>
-
-<p>Features of Keynote:</p>
-
-<ol>
-<li>Almost everyone knows how to create a presentation</li>
-<li>$20 on the app store (that is not a sales price)</li>
-<li>Presentation ready</li>
-<li>Master slides, which allows
-
-<ol>
-<li>Crafting static backgrounds</li>
-<li>Text placeholders</li>
-<li>Custom guidelines</li>
-</ol>
-</li>
-<li>Hidden slides
-
-<ol>
-<li>Allows for templating common items, but not showing them in the presentation</li>
-</ol>
-</li>
-<li>Clickable elements
-
-<ol>
-<li>Allows simulating of a working UI.</li>
-</ol>
-</li>
-</ol>
-
-
-<!-- more -->
-
-
-<p>Here is my step by step for creating UI mockups.</p>
-
-<h2>1. Use pen and paper</h2>
-
-<p>Paper and Pen are the fastest way to get your ideas out of your head.  The other good thing about pen and paper is that you are not nessissarly constrained by UI medaphores built into a computer.  If you are trying to think of a better way to do something using a computer that is subtly forcing your into common UI patterns then that is the direction you will head.  You will not end up with anything better then before and you will likely have wasted a lot of time doing it.</p>
-
-<p>Paper is supposed to be fast, not perfect.  So only use standard printer paper and a black pen.  Nothing more.</p>
-
-<h3>1.1 Paper layout</h3>
-
-<p>Fold the paper like <a href="http://jkamenik.github.com/images/paper_in_8s.jpg">this</a>.</p>
-
-<p>This gives you 16 slides to play with (8 on each side).  Also, it roughly simulates landscape and portrait layout of a screen.  I recommend sacrificing one slide with a orientation arrow (point to the top of the sheet) and short title.  Definitely not a requirement, but it helps when you come back to these slides after a week.</p>
-
-<h3>1.2. The shotgun</h3>
-
-<p>Take part of the UI metaphor and shotgun different ideas on all 16 slides (15 if you want to keep a title).  Spend no more then 10minutes on it, or about 35s / slide.  All you are trying to do is come up with ideas on what might work.</p>
-
-<p>After that spend some time on each slide deciding what does and does not work.  Cross out the complete failures.  Circle things you like.</p>
-
-<p>Repeat this as much as you need to.</p>
-
-<h3>1.3 Story-board</h3>
-
-<p>If you are creating a multipart UI then take everything that worked and story-board out the progression.  Use only the elements that worked.  You might find that when story-boarded things, that you thought would work, don&#8217;t work.  There is not harm shotgunning some new ideas.</p>
-
-<p>Each state of the UI is a single slide.  For example, if I am looking to demo a warning message when a user checks a checkbox then I would draw one frame with the button unchecked and no warning, and another with the button checked and a warning.  You can fill in the rest of the slides with other states or you can leave them blank.</p>
-
-<h3>1.4 The reveal</h3>
-
-<p>Don&#8217;t give a formal presentation.  Just show your slides and explain what you are trying to do.  Ideas will fly, so take notes.</p>
-
-<p>One of two things will happen during the reveal: 1) the ideas are fine, but need a little work.  Or 2) everything about the idea is wrong.  If there are only minor tweaks then I recommend <strong>not</strong> redoing anything paper and instead moving on to more formal design.</p>
-
-<p>If everything is wrong then stop now.  No harm, no foul.  You either didn&#8217;t have enough to go on, or your ideas weren&#8217;t clean.  Either way you only spent 10 to 20 minutes on something that was likely to fail anyway.  It probably best if the project is scrapped or rethought.</p>
-
-<h3>How do I share paper with remote workers?</h3>
-
-<p>Good question!  That is why white paper without lines, and a blank pen are so important.</p>
-
-<p>You share the document by scanning it with a scanner (if you work in an office) or you take a picture of it with your smart phone!</p>
-
-<h2>2. Setup a master document</h2>
-
-<p>Keynote isn&#8217;t really meant for everyone to edit at the same time.  But you can create a master document which you share with the team so that everyone is on the same page.</p>
-
-<ol>
-<li>Start by creating a new document with the &#8220;White&#8221;.</li>
-<li>Open the &#8220;Master Slides&#8221; menu: View -> Show Master Slides</li>
-<li>Delete all the master slides except &#8220;Title &amp; subtitle&#8221; and &#8220;Blank&#8221;</li>
-<li>Fill out the title slide</li>
-</ol>
-
-
-<h2>3. Template common elements</h2>
-
-<p>At this point you should have a rough set of slides or a story-board and the basic master document.  You may have 10s or 100s of slides that need to be converted to digital, but before any of that create common UI elements.</p>
-
-<p><a href="http://keynotopia.com/">http://keynotopia.com/</a> and things like it can be purchased to augment your UI collection.  Copy over or create the UI elements that are present in your story board.</p>
-
-<p>Once you have a good set of common UI elements in one or two slides mark them skipped slide: Slide -> Skip slide.  This will let you later copy and paste elements but skip the slide during presentations.</p>
-
-<h2>4. Create common backgrounds (using master slides)</h2>
-
-<p>Just like creating common UI element, creating master slides lets you quickly throw together backgrounds.  More importantly editing the master slides causes every slide to update.</p>
-
-<p>A master slide is just like a normal slide except that it can be used as the base for other sides.  For that reason anything that you put in a master side is not editable in a normal slide.  The exception is text which can be marked as a placeholder and changed in the slide.</p>
-
-<p>I recommend building master slides in the following manner.</p>
-
-<h3>4.1 Background object</h3>
-
-<p>As a standard slide you can put any objects including shapes, and text.  The rule of thumb is to start with a recognizable background.  For websites that means creating something that looks like a web browser.  For a iPhone app create the outline of an iPhone.  For a computer program create common window.</p>
-
-<p>Since these objects aren&#8217;t editable in slides you may find that you create quite a few master slides with different aspects of the project.  That is a good thing.  You master slides will ballon as your design balloons, which is another form of feedback.</p>
-
-<p><strong>Tip</strong>: You may also want to create a slide that simulates scrolling to the middle or bottom of the page.  Just add a right scroll bar to the right at different positions: top, middle, bottom.</p>
-
-<h3>4.2 Guides</h3>
-
-<p>Once you have the master slide objects in place you will notice that the center of the usable area will not be centered the center of the slide.  This makes it difficult to position things on slides in a consistent way.  To make it easy again add guides.</p>
-
-<p>Show the rulers: View -> Show Rulers.  Then grabbing the top ruler and dragging down will add a horizontal guide.  Grabbing the left ruler and dragging right will add a vertical guide.</p>
-
-<p><strong>Tip:</strong> I add guides on the edges (like the sides of the iPhone screen).  Then I add guides in the middle.  Sometimes I will also add guides at the golden mean, or thirds, but never both at the same time.</p>
-
-<h3>4.3 Placeholders</h3>
-
-<p>Any text box can be a placeholder which means that the text can be modified on the slide.  When doing a website I make the browser title and URL bar a placeholder.</p>
-
-<p>To create a placeholder first add a &#8220;Text box&#8221;, place it where you want, and give it a good default value.  With the item selected open the <strong>Inspector</strong> and go to the <em>Master Slide</em> tab.  Check &#8220;Define as Text Placeholder&#8221; and give it a unique name.</p>
-
-<p>A slide can modify a placeholder in any way it needs to.  This includes changing size, position, or even deleting the item entirely.  But it is a really good way to add quickly configurable defaults.</p>
-
-<h2>5. Create UI (using slides)</h2>
-
-<p>With the master slides and templates in place it is a simple matter to create slides.  A slide should contain no more then would fit on a single screen; remember presentation slides don&#8217;t scroll.  If you need a multipage slide split it over 2 or 3 slides.</p>
-
-<p>Do not try to make the screen interactive.  That is not the purpose of a presentation.  Stick with duplicating the paper slides.</p>
-
-<h2>6. Create interaction (using clickable items)</h2>
-
-<p>You could stop at step 5 and give a pretty great presentation, but sometimes you really want to take things over the top.  Keynote allows you to make objects hyperlinks, which can link to another slide, a webpage, or another presentation.</p>
-
-<p>In the design view there is a visual clue that the item is clickable, but not during the presentation.  And since hyperlinks can jump forward or backwards in the presentation this feature can get you into a lot of trouble.  It is very important that the entire presentation be closed to finished before adding hyperlinks.</p>
-
-<p><strong>Tip:</strong> To help you stay out of trouble, duplicate a slide and only change one item.  Then link from the first slide to the second in a way that makes sense, and be sure to link from the second back to the first.  Resist the urge to have the second slide link anywhere but to the first slide.</p>
-
-<h2>7. Don&#8217;t Add details</h2>
-
-<p>You can spend hours adding details which will either need to be completely removed and redone or will be ignored.  The goal is to provide enough fidelity to be useful but not enough detail to reach the &#8220;uncanny valley&#8221; of sorts.  If the fidelity of the design is too high then people start picking apart the details, and stop thinking about the presentation.</p>
-
-<h3>Uncanny Valley</h3>
-
-<p>This is a term borrowed from the field of human aesthetics that states &#8220;[it] is the region of negative emotional response towards robots that seem &#8216;almost human&#8217;&#8221;.  See the <a href="http://en.wikipedia.org/wiki/Uncanny_valley">wikipedia article</a> for details.</p>
-
-<p>The issue doesn&#8217;t stop with humans judging humans, it takes place anytime a human judges something that seems familiar.  Especially computer programs.  Basically, as we add detail there is a point right before &#8220;perfect&#8221; which is so bad that it is worse then if stopped at the hand drawings.</p>
-
-<ol>
-<li>Nothing -> neutral</li>
-<li>Drawings -> good</li>
-<li>Keynote -> better</li>
-<li>Keynote with details -> <strong>HORRIBLE!!!!</strong></li>
-<li>Actual implementation -> best</li>
-</ol>
-
 ]]></content>
   </entry>
   

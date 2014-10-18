@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Golang Steam File - Random Software Inklings</title>
+  <title>Go Concurrency Patterns - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="Go (golang) is a highly concurrent language. But more then that it is a simple language built using modular components and string them together in &hellip;">
+  <meta name="description" content="One of Golangs strengths is its composibility. This strength is only useful if you know how to make those composable parts. That is where patterns &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/09/29/golang-steam-file/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -72,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">Golang Steam File</h1>
+      <h1 class="entry-title">Go Concurrency Patterns</h1>
     
     
       <p class="meta">
@@ -88,71 +88,33 @@
   
 
 
-<time datetime="2014-09-29T15:25:00-04:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
+<time datetime="2014-10-17T20:57:00-04:00" pubdate data-updated="true">Oct 17<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Go (golang) is a highly concurrent language.  But more then that it is a simple language built using modular components and string them together in useful ways.  This modularity has lead me to play around a bit and one of things that I found was a easy way to stream a file.</p>
+<div class="entry-content"><p>One of Golangs strengths is its composibility.  This strength is only useful if you know how to make those composable parts.  That is where patterns are useful.</p>
+
+<p>Golang is concurrent, which is not necessarily parallel.  However, to make things concurrent you have to break thing into automatic steps.  If you are careful in how two step share information then you can easily turn concurrent design into parallel design.  Go channels make this communication stupid simple.</p>
+
+<p>In this post I am going to share what I think are the basis of most other concurrency patterns: The Generator, The Worker, and The Consumer.</p>
 
 <!-- more -->
 
 
-<p>At first I was very unhappy that Go did not support the default compression provided by the <code>xz</code> tool.  At work, we use <code>xz</code> to stream compress very large amounts of data.  But since go had no native support I thought that it would be a lost cause.</p>
+<h2>The Generator</h2>
 
-<p>Turns out there is no native support because there doesn&#8217;t have to be.  Below is the basic code.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">xzReader</span><span class="p">(</span><span class="n">r</span> <span class="n">io</span><span class="p">.</span><span class="n">Reader</span><span class="p">)</span> <span class="n">io</span><span class="p">.</span><span class="n">ReadCloser</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">rpipe</span><span class="p">,</span> <span class="n">wpipe</span> <span class="p">:=</span> <span class="n">io</span><span class="p">.</span><span class="n">Pipe</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">cmd</span> <span class="p">:=</span> <span class="n">exec</span><span class="p">.</span><span class="n">Command</span><span class="p">(</span><span class="s">&quot;xz&quot;</span><span class="p">,</span> <span class="s">&quot;--decompress&quot;</span><span class="p">,</span> <span class="s">&quot;--stdout&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">cmd</span><span class="p">.</span><span class="n">Stdin</span> <span class="p">=</span> <span class="n">r</span>
-</span><span class='line'>  <span class="n">cmd</span><span class="p">.</span><span class="n">Stdout</span> <span class="p">=</span> <span class="n">wpipe</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>          <span class="n">err</span> <span class="p">:=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">Run</span><span class="p">()</span>
-</span><span class='line'>          <span class="n">wpipe</span><span class="p">.</span><span class="n">CloseWithError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">}()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="n">rpipe</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p>A generator simply does work and places that work on a channel.  What that means is really up to what is needed but the pattern is:</p>
 
 <ol>
-<li>Declare the function to take an <code>io.Reader</code> as STDIN and return <code>io.ReadCloser</code> as STDOUT</li>
-<li>Create a pipe so I that can capture the program&#8217;s STDOUT and broadcast it as a readable stream</li>
-<li>Register <code>xz</code> as the command to execute</li>
-<li>Set the command&#8217;s STDIN</li>
-<li>Capture the command&#8217;s STDOUT</li>
-<li>Run a command in the background
-
-<ol>
-<li>Run the command until there is an error</li>
-<li>Close the pipe when the command exists</li>
-</ol>
-</li>
-<li>Return the read end of the command&#8217;s STDOUT</li>
+<li>Create a channel</li>
+<li>Create closure which does work</li>
+<li>Execute the closure as a goroutine</li>
+<li>Return the channel</li>
 </ol>
 
-
-<p>At this point you have a <code>io.ReaderCloser</code> (which is an <code>io.Reader</code>).  You can use it anywhere you would use an <code>io.Reader</code>.  For example lets say you have a compressed CSV file.  The following code would open the file, decompress it, parse it as CSV, and print that to the screen:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -171,65 +133,124 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">fp</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">os</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">Args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">err</span> <span class="p">!=</span> <span class="n">nil</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">log</span><span class="p">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">defer</span> <span class="n">fp</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">generateInt</span><span class="p">()</span> <span class="k">chan</span> <span class="nb">int32</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// 1. Create a channel</span>
+</span><span class='line'>  <span class="n">out</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="n">xz</span>  <span class="p">:=</span> <span class="n">xzReader</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">defer</span> <span class="n">xz</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</span><span class='line'>  <span class="c1">// 3. Spawn a closure</span>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">(){</span>
+</span><span class='line'>    <span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="n">csv</span> <span class="p">:=</span> <span class="n">csv</span><span class="p">.</span><span class="n">NewReader</span><span class="p">(</span><span class="n">xz</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">for</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">line</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">csv</span><span class="p">.</span><span class="n">Read</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">println</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">// 2. Do work</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="p">:=</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="p">++</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">out</span> <span class="p">&lt;-</span> <span class="n">i</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}()</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="n">err</span> <span class="p">!=</span> <span class="n">nil</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">break</span>
+</span><span class='line'>  <span class="c1">// 4. Return the channel</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The Worker</h2>
+
+<p>A worker takes stuff off an input channel, works on it, and places the result on an output channel.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">enlargeInt</span><span class="p">(</span><span class="n">in</span> <span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span> <span class="k">chan</span> <span class="nb">int32</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">out</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="n">x</span> <span class="p">:=</span> <span class="k">range</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">out</span> <span class="p">&lt;-</span> <span class="n">x</span><span class="p">*</span><span class="mi">2</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The Consumer</h2>
+
+<p>A consumer takes stuff off an input channel and consumes it.  There are two primary way to do this: Blocker and Signaller.</p>
+
+<h3>Blocker</h3>
+
+<p>The blocker form simply run the code.  This version is useful if there is a main loop which shouldn&#8217;t exit until all work is complete.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">printInt</span><span class="p">(</span><span class="n">in</span> <span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">for</span> <span class="n">x</span> <span class="p">:=</span> <span class="k">range</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<ol>
-<li>Define the main function</li>
-<li>Open a file</li>
-<li>Test for errors and bail if there are any</li>
-<li>Close the file pointer after the program exits</li>
-<li>Pass the file as the stdin to the xz command and capture its output</li>
-<li>Close the command&#8217;s STDOUT after the program exits</li>
-<li>Pass the decompressed file to the CSV parser and get back a <code>csv.Reader</code></li>
-<li>Loop until the stream is closed
+<p><a href="http://play.golang.org/p/7Iz7kV7soo">Here is a full working version.</a></p>
 
-<ol>
-<li>Read a line</li>
-<li>Print the line if it exists
+<h3>Signaller</h3>
 
-<ol>
-<li>Note: in Go, it is perfectly reasonable for a command to work and fail in the same call.  If I check for an error before printing the line then I may miss the last line of the file.</li>
-</ol>
-</li>
-<li>Check for a stream error and break the loop</li>
-</ol>
-</li>
-</ol>
+<p>A signaller is actually a varient of the Worker pattern, where the output channel is used to signal the completion of work.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">printInt</span><span class="p">(</span><span class="n">in</span> <span class="k">chan</span> <span class="nb">int32</span><span class="p">)</span> <span class="k">chan</span> <span class="n">bool</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">out</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="n">bool</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Work until the channel is closed</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">x</span> <span class="p">:=</span> <span class="k">range</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Single that I am done</span>
+</span><span class='line'>    <span class="n">out</span> <span class="p">&lt;-</span> <span class="n">true</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>It is a very common paradigm in Go to take an <code>io.Reader</code> and pass it to a function just to get back a new <code>io.Reader</code>, and take that and pass it around and get back what you want (like a string or CSV row).  Once you get your head around the fact that Go&#8217;s power is that everything is a small well defined lego block, and that they all fit together, then it stops being strange that you would take one kind of interface and exchange it for exactly the same kind of interface.</p>
+<p><a href="http://play.golang.org/p/1LIgv1ULDy">Here is a full working version.</a></p>
 </div>
 
 
@@ -252,12 +273,12 @@
   
 
 
-<time datetime="2014-09-29T15:25:00-04:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
+<time datetime="2014-10-17T20:57:00-04:00" pubdate data-updated="true">Oct 17<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/concurrency/'>concurrency</a>, <a class='category' href='/blog/categories/go/'>go</a>
+    <a class='category' href='/blog/categories/concurrency/'>concurrency</a>, <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/patterns/'>patterns</a>
   
 </span>
 
@@ -266,7 +287,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/09/29/golang-steam-file/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/09/29/golang-steam-file/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns/" >Tweet</a>
   
   
   
@@ -277,10 +298,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/09/21/using-and-and-instead-of-if/" title="Previous Post: Using &amp;&amp; instead of if">&laquo; Using &amp;&amp; instead of if</a>
+        <a class="basic-alignment left" href="/blog/2014/09/29/golang-steam-file/" title="Previous Post: Golang Steam File">&laquo; Golang Steam File</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/10/17/go-concurrency-patterns/" title="Next Post: Go Concurrency Patterns">Go Concurrency Patterns &raquo;</a>
       
     </p>
   </footer>
@@ -429,8 +448,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/09/29/golang-steam-file/';
-        var disqus_url = 'http://jkamenik.github.com/blog/2014/09/29/golang-steam-file/';
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/10/17/go-concurrency-patterns/';
         var disqus_script = 'embed.js';
       
     (function () {
