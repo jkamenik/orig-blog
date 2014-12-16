@@ -18,7 +18,7 @@ In this post I will share how I added a key binding to only a single mode.
 
 A key binding is just maps a key sequence to a lisp function.  A global key binding can be added in the following way:
 
-```lisp
+```common-lisp
 (define-key global-map (kbd "C-/") 'comment-or-uncomment-region)
 ```
 
@@ -28,7 +28,7 @@ Each mode has its own map which emacs only uses when you are in that mode.  This
 
 The following will add Agenda mode to OrgMode, which is off my default.
 
-```lisp
+```common-lisp
 (require 'org)
 (define-key org-mode-map (kbd "C-ca") 'org-agenda)
 ```
