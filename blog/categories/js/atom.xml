@@ -4,7 +4,7 @@
   <title><![CDATA[Category: js | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/js/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-10-17T20:58:46-04:00</updated>
+  <updated>2014-12-15T21:54:35-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -45,10 +45,10 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
 
-<script src="/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
+<script src="{{ root_url }}/javascripts/jquery.tableofcontents.min.js" type="text/javascript"></script>
 
 
-<script src="/javascripts/generate-toc.js" type="text/javascript"></script>
+<script src="{{ root_url }}/javascripts/generate-toc.js" type="text/javascript"></script>
 
 
 <p>```</p>
@@ -81,7 +81,17 @@ function generateTOC(heading) {
 <p>Adjust the footer to trigger the TOC is needed:</p>
 
 <p>```html _includes/custom/after_footer.html
+{% if page.toc == true %}
+  <script type="text/javascript"></p>
 
+<pre><code>jQuery(document).ready(function() {
+    // Put a TOC right before the entry content.
+    generateTOC('Table of Contents');
+});
+</code></pre>
+
+<p>  </script>
+{% endif %}
 ```</p>
 
 <p>The <code>page</code> variable is the YML front mater hash so we can check for <code>toc</code> to ensure the trigger code is only included on pages that want a TOC.</p>

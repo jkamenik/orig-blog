@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: emacs | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/emacs/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2014-12-15T21:54:35-05:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[emacs key bindings]]></title>
+    <link href="http://jkamenik.github.com/blog/2014/12/15/emacs-key-bindings/"/>
+    <updated>2014-12-15T21:09:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2014/12/15/emacs-key-bindings</id>
+    <content type="html"><![CDATA[<p>I recently switched to Emacs as my editor of choice.  It has taken a bit of work to get it to where I like it.  My full settings are on github <a href="https://github.com/jkamenik/.emacs.d">here</a>.</p>
+
+<p>In this post I will share how I added a key binding to only a single mode.</p>
+
+<!-- more -->
+
+
+<p>A key binding is just maps a key sequence to a lisp function.  A global key binding can be added in the following way:</p>
+
+<p><code>lisp
+(define-key global-map (kbd "C-/") 'comment-or-uncomment-region)
+</code></p>
+
+<p>This causes a key sequence to be added to a map.  The <code>global-map</code> contains the global key bindings regardless of mode.  This is only useful if the command makes sense in all modes.  In a lot of cases keys should only be bound to a mode.</p>
+
+<p>Each mode has its own map which emacs only uses when you are in that mode.  This is how you add mode specific key bindings.  The map for any mode is the mode name with "-map" added.  You will need to have the mode loaded for the map to exist.</p>
+
+<p>The following will add Agenda mode to OrgMode, which is off my default.</p>
+
+<p><code>lisp
+(require 'org)
+(define-key org-mode-map (kbd "C-ca") 'org-agenda)
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>
