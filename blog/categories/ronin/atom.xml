@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ronin | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/ronin/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-12-15T21:54:35-05:00</updated>
+  <updated>2014-12-15T21:56:47-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -20,7 +20,7 @@
     <id>http://jkamenik.github.com/blog/2014/02/28/ronin-avery-kamenik</id>
     <content type="html"><![CDATA[<p>Born February 21st, 2014 at 7:04am.  8lbs 11oz, 21 3/4 inches.</p>
 
-<p>{% img /images/ronin/IMG_0454.jpeg %}</p>
+<p><img src="/images/ronin/IMG_0454.jpeg"></p>
 
 <!-- more -->
 

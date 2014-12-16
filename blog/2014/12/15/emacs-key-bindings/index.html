@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>BMore on Rails 4-8-2014 - Random Software Inklings</title>
+  <title>emacs key bindings - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="As always, last nights B&#8217;More on Rails meetup was enjoyable. There were two talks and a lot of the new people. The first talk was on solving &hellip;">
+  <meta name="description" content="I recently switched to Emacs as my editor of choice. It has taken a bit of work to get it to where I like it. My full settings are on github here. In &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2014/12/15/emacs-key-bindings/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -72,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">BMore on Rails 4-8-2014</h1>
+      <h1 class="entry-title">Emacs Key Bindings</h1>
     
     
       <p class="meta">
@@ -88,75 +88,38 @@
   
 
 
-<time datetime="2014-04-09T12:51:00-04:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2014-12-15T21:09:00-05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>As always, last nights B&#8217;More on Rails meetup was enjoyable.  There were two talks and a lot of the new people.  The first talk was on solving the &#8220;Eight queens&#8221; problem in Haskell.  The second was about Postgresql and Rails 4.</p>
+<div class="entry-content"><p>I recently switched to Emacs as my editor of choice.  It has taken a bit of work to get it to where I like it.  My full settings are on github <a href="https://github.com/jkamenik/.emacs.d">here</a>.</p>
+
+<p>In this post I will share how I added a key binding to only a single mode.</p>
 
 <!-- more -->
 
 
-<h2>Eight Queens</h2>
+<p>A key binding is just maps a key sequence to a lisp function.  A global key binding can be added in the following way:</p>
 
-<p>For those - like me - that are not familar with this problem the full details are <a href="http://en.wikipedia.org/wiki/Eight_queens_puzzle">here</a>.  Basically, given an 8x8 board place 8 queens such that no queen can attach another queen.  In actuality Robert solved the more difficult N-Queens problem using Haskell.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="nv">define-key</span> <span class="nv">global-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-/&quot;</span><span class="p">)</span> <span class="ss">&#39;comment-or-uncomment-region</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>The solution was to brute force through all combinations until a solution is reached.  This would seem to be a slow approach, but haskell (as a functional language) is setup for these kinds of tasks.</p>
 
-<p>As a Rails guy I found the syntax of Haskell extremely difficult to understand.  However, Robert was a fantastic and funny speaker; turning an otherwise dry programming talk into an interesting presentation about trails and pitfalls.</p>
+<p>This causes a key sequence to be added to a map.  The <code>global-map</code> contains the global key bindings regardless of mode.  This is only useful if the command makes sense in all modes.  In a lot of cases keys should only be bound to a mode.</p>
 
-<p>One such pitfall Robert explained was using the imutable list which caused the calcuation time to grow by an order of magnatude.  By swaping the imutable list with a mutable set the calcuation time was reduced dramatically.  Sure, using something mutable violates the purity of a &#8220;pure functional&#8221; language, but Haskell appears to allow some wiggle room.</p>
+<p>Each mode has its own map which emacs only uses when you are in that mode.  This is how you add mode specific key bindings.  The map for any mode is the mode name with &#8220;-map&#8221; added.  You will need to have the mode loaded for the map to exist.</p>
 
-<p>Another pitfall was in understanding and using Monads.  After reading on my own, my best guess is that a Monad is simply context for containing a non-functional (in the sense of not allowed in a functional language) behavior.</p>
+<p>The following will add Agenda mode to OrgMode, which is off my default.</p>
 
-<p>All-in-all I don&#8217;t think I will be running out to try Haskell, but I would like to hear another talk from Robert.</p>
-
-<h2>Postgresql and Rails 4</h2>
-
-<p><a href="http://decomplecting.org/rails4-postgres/#/">Slides</a></p>
-
-<p>The second talk wasn&#8217;t so much about Rails 4, but more about ActiveRecord 4 and how it has introduced direct support for some of the nicer Postgresql features.  This talk was jam packed with examples and references.  The full slides are linked above.  The summary is:</p>
-
-<ol>
-<li>ActiveRecord adds the following columns types
-
-<ol>
-<li>Array</li>
-<li>UUID</li>
-<li>HStore</li>
-</ol>
-</li>
-<li>ActiveRecord adds direct support for GiN and GiST indexes</li>
-<li>The following gems are still useful:
-
-<ol>
-<li><a href="https://github.com/lomba/schema_plus">schema_plus</a>
-
-<ol>
-<li>Adds a reduced migration syntax - do more with one line</li>
-<li>Adds foreign key constrains</li>
-<li>Adds views</li>
-</ol>
-</li>
-<li><a href="https://github.com/Casecommons/pg_search">pg_search</a>
-
-<ol>
-<li>Makes direct database searching easier</li>
-</ol>
-</li>
-<li><a href="https://github.com/dockyard/postgres_ext">postgres_ext</a>
-
-<ol>
-<li>Adds native postgresql types to ActiveRecord</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>You should read <a href="http://blogs.tedneward.com/2006/06/26/The+Vietnam+Of+Computer+Science.aspx">The Vietnam Of Computer Science</a></li>
-</ol>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;org</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nv">define-key</span> <span class="nv">org-mode-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-ca&quot;</span><span class="p">)</span> <span class="ss">&#39;org-agenda</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -180,12 +143,12 @@
   
 
 
-<time datetime="2014-04-09T12:51:00-04:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2014-12-15T21:09:00-05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/b-more/'>b'more</a>, <a class='category' href='/blog/categories/ruby-on-rails/'>ruby on rails</a>
+    <a class='category' href='/blog/categories/emacs/'>emacs</a>, <a class='category' href='/blog/categories/howto/'>howto</a>
   
 </span>
 
@@ -194,7 +157,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2014/12/15/emacs-key-bindings/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2014/12/15/emacs-key-bindings/" >Tweet</a>
   
   
   
@@ -205,10 +168,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/03/23/inbox-zero-part-1/" title="Previous Post: Inbox Zero: Part 1">&laquo; Inbox Zero: Part 1</a>
+        <a class="basic-alignment left" href="/blog/2014/10/17/go-concurrency-patterns/" title="Previous Post: Go Concurrency Patterns">&laquo; Go Concurrency Patterns</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/04/10/code-does-rust/" title="Next Post: Code does rust">Code does rust &raquo;</a>
       
     </p>
   </footer>
@@ -358,8 +319,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/';
-        var disqus_url = 'http://jkamenik.github.com/blog/2014/04/09/bmore-on-rails-4-8-2014/';
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2014/12/15/emacs-key-bindings/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2014/12/15/emacs-key-bindings/';
         var disqus_script = 'embed.js';
       
     (function () {

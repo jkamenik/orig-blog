@@ -4,7 +4,7 @@
   <title><![CDATA[Category: keynote | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/keynote/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-12-15T21:54:35-05:00</updated>
+  <updated>2014-12-15T21:56:47-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -64,7 +64,7 @@
 
 <h3>1.1 Paper layout</h3>
 
-<p>Fold the paper like <a href="{{%20root_url%20}}/images/paper_in_8s.jpg">this</a>.</p>
+<p>Fold the paper like <a href="/images/paper_in_8s.jpg">this</a>.</p>
 
 <p>This gives you 16 slides to play with (8 on each side).  Also, it roughly simulates landscape and portrait layout of a screen.  I recommend sacrificing one slide with a orientation arrow (point to the top of the sheet) and short title.  Definitely not a requirement, but it helps when you come back to these slides after a week.</p>
 

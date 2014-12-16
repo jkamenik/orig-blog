@@ -4,7 +4,7 @@
   <title><![CDATA[Category: selenium | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/selenium/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-12-15T21:54:35-05:00</updated>
+  <updated>2014-12-15T21:56:47-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -50,7 +50,43 @@
 
 <p>This is the sample file that I created to test.</p>
 
-<p>{% gist 1151478 code.html %}</p>
+<p><div><script src='https://gist.github.com/1151478.js?file=code.html'></script>
+<noscript><pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;script&gt;
+Namespace = {
+  test: function(item){
+    return item == true;
+  }
+};
+
+function String(item){
+  if(!item.push &amp;&amp; typeof(item) === 'object'){
+    return item.name || '';
+  }
+  return ''+item; //yup this is faster then toString
+}
+
+function Int(item){
+  return parseInt(item,10);
+}
+
+function Array(item){
+  var type = typeof(item);
+
+  if(type === 'string'){
+    return item.split(&quot;\n&quot;);
+  } else if(type === 'object'){
+    if(item.push &amp;&amp; item.length &amp;&amp; item.concat){
+      return item;
+    }
+  }
+  return [item];
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></noscript></div>
+</p>
 
 <h3>Using the IDE</h3>
 
@@ -59,17 +95,45 @@
 <p>I am a rails developer, and am familiar with rspec so I use the IDE to run the tests to make sure they work, but then I transfer it to rspec since it is a more expressive test framework.  The downside is that you have to use a Remote Control to run the test, which adds an extra level of complications.  We will get to the Remote Control later.</p>
 
 <p>A basic HTML test looks like this:
-{% gist 1151478 test.html %}</p>
+<div><script src='https://gist.github.com/1151478.js?file=test.html'></script>
+<noscript><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;&gt;
+&lt;head profile=&quot;http://selenium-ide.openqa.org/profiles/test-case&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+&lt;link rel=&quot;selenium.base&quot; href=&quot;file:///Users/jkamenik/Desktop/sel_test.html&quot; /&gt;
+&lt;title&gt;Unit Testing&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;table cellpadding=&quot;1&quot; cellspacing=&quot;1&quot; border=&quot;1&quot;&gt;
+&lt;thead&gt;
+&lt;tr&gt;&lt;td rowspan=&quot;1&quot; colspan=&quot;3&quot;&gt;Unit Testing&lt;/td&gt;&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+ &lt;td&gt;open&lt;/td&gt;
+ &lt;td&gt;file:///Users/jkamenik/Desktop/selenium/sel_test.html&lt;/td&gt;
+ &lt;td&gt;test&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;verifyEval&lt;/td&gt;
+ &lt;td&gt;this.browserbot.getUserWindow().Int(1)&lt;/td&gt;
+ &lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;verifyEval&lt;/td&gt;
+ &lt;td&gt;typeof(this.browserbot.getUserWindow().Int(1))&lt;/td&gt;
+ &lt;td&gt;number&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></noscript></div>
+</p>
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>{% blockquote %}
-In all tests the <code>this</code> object is the base Selenium object so if you want to get to the <code>window</code> object you have to traverse up the stack via <code>this.browserbot.getUserWindow()</code>.
-{% endblockquote %}</p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae230af1a8></p>
 
-<p>{% blockquote %}
-Unfortunately everything tested in Selenium is converted to a string before testing.  So if I need to ensure that an integer parsing function actually produces a number I need to use <code>typeof</code>.
-{% endblockquote %}</p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae230b51e8></p>
 
 <h2>Using RSpec</h2>
 
@@ -78,43 +142,91 @@ Unfortunately everything tested in Selenium is converted to a string before test
 <h3>Installing</h3>
 
 <p>This package requires ruby-gems, rspec, and selenium-client.  I am going to assume you have ruby-gems installed already.  The others are installed like this:
-{% gist 1151478 install.sh %}</p>
+<div><script src='https://gist.github.com/1151478.js?file=install.sh'></script>
+<noscript><pre><code>sudo gem install rspec 
+sudo gem install selenium-client</code></pre></noscript></div>
+</p>
 
 <h3>Converting</h3>
 
 <p>When using Rspec the only real thing to remember is that there are no assert<em> or verify</em> methods.  The reason is that Rspec itself is a testing framework so it will have it own version of assert and verify (in this case should).</p>
 
 <p>The IDE has a great feature in that it converts the HTML test into a rspec test for you.  It isn't a great format, but it is better then nothing and is a good place to start.
-{% gist 1151478 selenium.rb %}</p>
+<div><script src='https://gist.github.com/1151478.js?file=selenium.rb'></script>
+<noscript><pre><code>require &quot;rubygems&quot; 
+gem &quot;rspec&quot; 
+gem &quot;selenium-client&quot; 
+require &quot;selenium/client&quot; 
+require &quot;selenium/rspec/spec_helper&quot; 
+require &quot;spec/test/unit&quot; 
 
-<p>{% blockquote %}
-The browser being shown is <code>chrome</code>.  This actually means Firefox, not Google Chrome.  For Google Chrome use <code>googlechrome</code>.
-{% endblockquote %}</p>
+describe &quot;array_test&quot; do 
+attr_reader :selenium_driver 
+alias :page :selenium_driver 
 
-<p>{% blockquote %}
-For Safari use <code>safari</code>, but remember that you will need to disable the popup blocker manually and close Safari (for this user) otherwise it will just sit there forever.
-{% endblockquote %}</p>
+before(:all) do 
+  @verification_errors = [] 
+  @selenium_driver = Selenium::Client::Driver.new \ 
+    :host =&gt; &quot;localhost&quot;, 
+    :port =&gt; 4444, 
+    :browser =&gt; &quot;*chrome&quot;, 
+    :url =&gt; &quot;file:///Users/user/Desktop/selenium&quot;, 
+    :timeout_in_second =&gt; 60 
+end 
+
+before(:each) do 
+  @selenium_driver.start_new_browser_session 
+end 
+
+append_after(:each) do 
+  @selenium_driver.close_current_browser_session 
+  @verification_errors.should == [] 
+end 
+
+it &quot;test_array_test&quot; do 
+  page.open &quot;file:///Users/jkamenik/Desktop/selenium/index.html&quot; 
+
+  begin 
+    (&quot;1&quot;).should == page.get_eval(&quot;this.browserbot.getUserWindow().Array([1])&quot;) 
+  rescue ExpectationNotMetError 
+    @verification_errors &lt;&lt; $! 
+  end
+
+  begin 
+    (&quot;object&quot;).should == page.get_eval(&quot;typeof(this.browserbot.getUserWindow().Array(1))&quot;) 
+  rescue ExpectationNotMetError 
+    @verification_errors &lt;&lt; $! 
+  end 
+end 
+end
+</code></pre></noscript></div>
+</p>
+
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae218f4630></p>
+
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae230d4200></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>{% blockquote %}
-The server must be run by a user that has access the browser and has a screen to render to.
-{% endblockquote %}</p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae230d38c8></p>
 
-<p>{% blockquote %}
-Firefox will only run a single profile per user.  If you need to run Firefox concurrently on the same machine you need to fake a second profile.  Don't do it, just create a VM; you will be happier.
-{% endblockquote %}</p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae230d2c48></p>
 
-<p>{% blockquote %}
-Google Chrome does not works on OS X.  This is because OS X doesn't add application executables to the path, and the server code isn't smart enough to use the executable directly.  The fix is supposedly <a href="http://groups.google.com/group/selenium-users/browse_thread/thread/7205089285e92973?hide_quotes=no&amp;fwc=1">here</a>, but I was not able to get it to work.  If I do I will probably write another blog entry and link it here.
-{% endblockquote %}</p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae230d1258></p>
 
 <h3>Putting it all together</h3>
 
 <p>By default RSpec provides no runner code and the code the IDE produces is not standalone.  This is not a problem since installing RSpec into a rails app installs script/spec.  I have copied the runner code here so make it easier.
-{% gist 1151478 runner.rb %}</p>
+<div><script src='https://gist.github.com/1151478.js?file=runner.rb'></script>
+<noscript><pre><code>#!/usr/bin/env ruby 
+if ARGV.any? {|arg| %w[--drb -X --generate-options -G --help -h --version -v].include?(arg)} 
+  require 'rubygems' unless ENV['NO_RUBYGEMS'] 
+end 
+require 'spec/autorun' 
+exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
+</p>
 
 <p>I am going to assume the RSpec runner code is called spec and the test file is called test.rb.  To run this test from the command line do the following:</p>
 
