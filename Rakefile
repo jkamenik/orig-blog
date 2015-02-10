@@ -246,6 +246,16 @@ task :isolate, :filename do |t, args|
   end
 end
 
+desc "Hides a single post (similar to isolate)"
+task :hide, :filename do |t, args|
+  stash_dir = "#{source_dir}/#{stash_dir}"
+  FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
+  Dir.glob("#{source_dir}/#{posts_dir}/#{args.filename}") do |post|
+    
+    FileUtils.mv post, stash_dir
+  end
+end  
+
 desc "Move all stashed posts back into the posts directory, ready for site generation."
 task :integrate do
   FileUtils.mv Dir.glob("#{source_dir}/#{stash_dir}/*.*"), "#{source_dir}/#{posts_dir}/"
