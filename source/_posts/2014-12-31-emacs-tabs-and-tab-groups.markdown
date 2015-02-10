@@ -6,8 +6,8 @@ comments: true
 toc: false
 published: false
 categories: 
-	- emacs
-	- howto
+  - emacs
+  - howto
 ---
 
 From other editors I am used to having Tabbars.  Switching to Emacs I
