@@ -144,6 +144,15 @@ task :drafts do |t, args|
   end
 end
 
+desc "Checks all the files for non-ascii characters and prints the first non-ascii character"
+task :check do |t, args|
+  files = Dir[File.join(source_dir,posts_dir,"**/*")]
+
+  files.each do |f|
+    puts `iconv -t US-ASCII #{f} > /dev/null`
+  end  
+end
+
 desc "Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true"
 task :publish, :pattern do |t, args|
   require 'tempfile'
