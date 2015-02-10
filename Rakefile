@@ -126,6 +126,24 @@ task :new_post, :title do |t, args|
   end
 end
 
+desc "Gets a list of the unpublished entries"
+task :drafts do |t, args|
+  require 'fileutils'
+
+  files = Dir[File.join(source_dir,posts_dir,"**/*")]
+
+  files.each do |f|
+    File.open f do |file|
+      file.readlines.each_with_index do |line,i|
+        # Only read the front matter
+        break if line == "---\n" && i > 2
+
+        puts f if line =~ /publish.*false/
+      end
+    end
+  end
+end
+
 desc "Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true"
 task :publish, :pattern do |t, args|
   require 'tempfile'
