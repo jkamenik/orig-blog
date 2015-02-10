@@ -36,7 +36,7 @@ Born February 21st, 2014 at 7:04am.  8lbs 11oz, 21 3/4 inches.
 
 **6:30am** We are home again, and try to relax.
 
-**11am** Midwife appointment.  We are 5cm dilated.  They tell us to go walk around for 2 hours and report to the hospital again.  We head to the near by Annapolis mall to eat lunch, and walk around.  I am massaging Mel’s back as she has contractions while we walk.  People stare but we don’t care.
+**11am** Midwife appointment.  We are 5cm dilated.  They tell us to go walk around for 2 hours and report to the hospital again.  We head to the near by Annapolis mall to eat lunch, and walk around.  I am massaging Mel's back as she has contractions while we walk.  People stare but we don't care.
 
 **1:30pm** Go back to the hospital, are admitted and settle into our room.
 
@@ -92,14 +92,14 @@ Each baby is different, and I am not a medical professional.  Everything I liste
     1. Frankie slept for the first week, even sleeping through feedings.  Ronin was awake for several hours after birth, and spends several hours a day awake.
     1. Frankie could lift his head after 1 week.  Ronin was born with the ability to lift his head.
     1. Frankie was easier to carry because he was a lump.  Ronin moves a lot and throws his head around and is much harder to carry when he is awake.
-    1. Frankie didn’t care to be held.  Ronin prefers to be held.
+    1. Frankie didn't care to be held.  Ronin prefers to be held.
     1. Frankie prefers to sit in his own filth rather than being changed.  Ronin hates to be dirty and prefers to be changed.
     1. Frankie fit well into a size bigger (3 month clothes when he was born).  Ronin is slightly longer than Frankie, but lighter so nothing fits him correctly.
 1. Each pregnancy is different
     1. Each pregnancy gets harder.  The pains hurt worse during pregnancy and the after pains are wrose as well.
     1. Each pregnancy gets easier.  Even though everything hurts more you are expecting it, and can better deal with it.
-1. Life is hardest after the first one.  It is hard to go from “without kids” to “with kids”.  But once you are “with kids” two kids is not that much harder than one.  You have already baby proofed the house, and changed your life around.
-1. Allowing comments on your baby’s birth story is stupid.  I learned that after the first one.  Therefore I have disabled them on this one.  Sorry for anyone that wants to wish us well, but one can ruin it for everyone.
+1. Life is hardest after the first one.  It is hard to go from "without kids" to "with kids".  But once you are "with kids" two kids is not that much harder than one.  You have already baby proofed the house, and changed your life around.
+1. Allowing comments on your baby's birth story is stupid.  I learned that after the first one.  Therefore I have disabled them on this one.  Sorry for anyone that wants to wish us well, but one can ruin it for everyone.
 1. Sleep is less of an issue with the 2nd.  To be honest we get a lot less sleep this time around.  The difference is that we know we are going to get sleep 30 minutes at a time.  And we love it when he gives us more.  With Frankie we were scared to sleep because we should only get 1 hour or so.
 1. A vaginal birth is front loaded, while a C-Section is back loaded.  I am not a proponent for one vs the other, but in our case the C-Section was over and done with in a matter of minutes.  The vaginal birth took hours (31 to be exact).  In the C-Section case, all of the recovery started after the birth with 3 days in the hospital.  With the VBAC once the delivery was over we were free to go.  So with Vaginal birth (assuming there are no complications) everything happens leading up to the birth, with a C-Section everything happens after the birth.
 1. Writing a birth plan, having a Doula, and using Midwifes was ideal for us.  Everyone was really supportive, and the Doula stayed with us the entire time.  The midwives and nurses reviewed the birth plan and where very engaged with us if there were reasons we had to go off plan.

@@ -11,7 +11,7 @@ categories:
 ---
 
 
-This is the first in a series of posts related to reducing the number of emails in your inbox, and more importantly, keeping it reduced.  This idea comes from the world of GTD (specifically 43Folders) and is a good strategy for anyone who needs quick access to “important” emails.
+This is the first in a series of posts related to reducing the number of emails in your inbox, and more importantly, keeping it reduced.  This idea comes from the world of GTD (specifically 43Folders) and is a good strategy for anyone who needs quick access to "important" emails.
 
 The filter-then-process method that I am about to describe works with pretty much any job you can think of: You sort laundry then wash it, you rake leaves into piles before you bag them, you collect dishes before you wash them.
 
@@ -22,9 +22,9 @@ Everything I describe is done with stock Gmail: no add-ons, no configurations, n
 Background
 ----------
 
-I do not to live out of email, but part of my job requires reading it.  I check email at most twice a day, and I am still more responsive than anyone else at the company; especially those that who  “live” out of email.
+I do not to live out of email, but part of my job requires reading it.  I check email at most twice a day, and I am still more responsive than anyone else at the company; especially those that who "live" out of email.
 
-The reason is focus.  Those who jump around have too much to focus on, and lose details.  They are great people for the quick one-line “Got it” emails, but rarely have any follow-through.
+The reason is focus.  Those who jump around have too much to focus on, and lose details.  They are great people for the quick one-line "Got it" emails, but rarely have any follow-through.
 
 The goal
 --------
@@ -40,13 +40,13 @@ The goals are simple: see the emails worth reading and responding to.  To achiev
 The Fear of Missing Out
 -----------------------
 
-At this point you are probably looking at my comment on checking email twice a day and thinking “that will never work for me.”  Chances are you said to yourself “What if I miss out on something important,” or a variant like:
+At this point you are probably looking at my comment on checking email twice a day and thinking "that will never work for me."  Chances are you said to yourself "What if I miss out on something important," or a variant like:
 
 1. What if I miss an email that my child/husband/wife/father/mother is in trouble?
 1. What if my boss emails me work that must be done immediately?
 1. What if my friends invite me to a party and I miss the email?
 
-To that I say “nonsense.”  Your mind is inventing scenarios that will never happen.  Nobody has ever turned to email in times of emergencies.  If a boss wants something immediately they will tell you in person, or over the phone. And if your friends were really inviting you to a party, they would do so via Evite, Meetup, or something similar.
+To that I say "nonsense."  Your mind is inventing scenarios that will never happen.  Nobody has ever turned to email in times of emergencies.  If a boss wants something immediately they will tell you in person, or over the phone. And if your friends were really inviting you to a party, they would do so via Evite, Meetup, or something similar.
 
 Conclusion
 ----------
