@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-12-15T21:56:47-05:00</updated>
+  <updated>2015-02-10T20:30:51-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -472,12 +472,12 @@ $ firefox example.png</code></pre></noscript></div>
 <noscript><pre><code>var assert = YAHOO.util.Assert;
 
 YAHOO.tool.TestRunner.add(new YAHOO.tool.TestCase({
-  name: 'Tests for string',
+  name: &#39;Tests for string&#39;,
   
   test_true: function(){
     var test = String(true);
     assert.isString(test);
-    assert.areEqual('true',test);
+    assert.areEqual(&#39;true&#39;,test);
   }
 });</code></pre></noscript></div>
 </p>
@@ -538,10 +538,10 @@ Namespace = {
 };
 
 function String(item){
-  if(!item.push &amp;&amp; typeof(item) === 'object'){
-    return item.name || '';
+  if(!item.push &amp;&amp; typeof(item) === &#39;object&#39;){
+    return item.name || &#39;&#39;;
   }
-  return ''+item; //yup this is faster then toString
+  return &#39;&#39;+item; //yup this is faster then toString
 }
 
 function Int(item){
@@ -551,9 +551,9 @@ function Int(item){
 function Array(item){
   var type = typeof(item);
 
-  if(type === 'string'){
+  if(type === &#39;string&#39;){
     return item.split(&quot;\n&quot;);
-  } else if(type === 'object'){
+  } else if(type === &#39;object&#39;){
     if(item.push &amp;&amp; item.length &amp;&amp; item.concat){
       return item;
     }
@@ -608,9 +608,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae2159d360></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x00000101b336c8></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae2159ce38></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x00000101b33218></p>
 
 <h2>Using RSpec</h2>
 
@@ -679,19 +679,19 @@ end
 </code></pre></noscript></div>
 </p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae2159b7b8></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x00000101b308b0></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae2159b290></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x00000101b303d8></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae2159ad68></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x0000010230fe50></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae2159a840></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x0000010230f8b0></p>
 
-<p>Liquid error: undefined method `lstrip' for #<Array:0x007fae2159a318></p>
+<p>Liquid error: undefined method `lstrip' for #<Array:0x0000010230f3b0></p>
 
 <h3>Putting it all together</h3>
 
@@ -699,9 +699,9 @@ end
 <div><script src='https://gist.github.com/1151478.js?file=runner.rb'></script>
 <noscript><pre><code>#!/usr/bin/env ruby 
 if ARGV.any? {|arg| %w[--drb -X --generate-options -G --help -h --version -v].include?(arg)} 
-  require 'rubygems' unless ENV['NO_RUBYGEMS'] 
+  require &#39;rubygems&#39; unless ENV[&#39;NO_RUBYGEMS&#39;] 
 end 
-require 'spec/autorun' 
+require &#39;spec/autorun&#39; 
 exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
 </p>
 

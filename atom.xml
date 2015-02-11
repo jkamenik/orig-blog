@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-12-15T21:56:47-05:00</updated>
+  <updated>2015-02-10T20:30:51-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,118 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Emacs Tabs and Tab Groups]]></title>
+    <link href="http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups/"/>
+    <updated>2015-02-10T20:28:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups</id>
+    <content type="html"><![CDATA[<p>From other editors I am used to having Tabbars.  Switching to Emacs I
+miss that behavior.  Emacs does have a <code>tabbar</code> plugin, but it isn&#8217;t
+quite what I want.</p>
+
+<!-- more -->
+
+
+<p>By default it groups the tabs in a seemingly random way.  I am sure it
+makes sense if you wrote it, but for me I want the things group by my
+projects.  For me a project is a diretory wich has a <code>.git</code> directory
+at its root.</p>
+
+<p>First I created a simple function to get the project root, or return nil.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="nb">defun</span> <span class="nv">my-project-root</span> <span class="p">()</span>
+</span><span class='line'>  <span class="s">&quot;Return the root of the project.&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nv">locate-dominating-file</span> <span class="nv">default-directory</span>
+</span><span class='line'>    <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Basically this search all parent directories until it finds one
+containing the &#8220;.git&#8221; directory.  The build in function details are.</p>
+
+<p><code>locate-dominating-file BASE FILE</code> searches the parent directory tree
+from BASE until it finds FILE.</p>
+
+<p><code>default-directory</code> is a file local variable which is the directory of
+the current file.</p>
+
+<p>Next I set the <code>tabbar-buffer-groups-function</code> to return the group
+name of the current file.  The only requirement is that the function
+return a list, but it is recommended that the list only contain a
+single item.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">tabbar-buffer-groups-function</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span>
+</span><span class='line'>        <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">dir</span> <span class="p">(</span><span class="nv">expand-file-name</span> <span class="nv">default-directory</span><span class="p">)))</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">cond</span> <span class="p">((</span><span class="nb">member</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;*Completions*&quot;</span>
+</span><span class='line'>                                         <span class="s">&quot;*scratch*&quot;</span>
+</span><span class='line'>                                         <span class="s">&quot;*Messages*&quot;</span>
+</span><span class='line'>                                         <span class="s">&quot;*Ediff Registry*&quot;</span><span class="p">))</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#misc&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="c1">;; All Magit status goes the same place</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^*magit&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#magic&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^COMMIT_EDITMSG&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#magic&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="c1">;; All Cider windows</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^*nrepl-server&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#cider&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^*cider&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#cider&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="c1">;; Group tabs based on project root</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">my-project-root</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="p">(</span><span class="nv">my-project-root</span><span class="p">)))</span>
+</span><span class='line'>                <span class="c1">;; Use the current dir</span>
+</span><span class='line'>                <span class="p">(</span><span class="no">t</span> <span class="p">(</span><span class="nb">list</span> <span class="nv">dir</span><span class="p">))))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we capture the absolute path of the current file.  Then we check
+a bunch of things to determine which best represents the group name.
+The first thing we do is group various special buffers together.  Then we
+use the project root to group files.  And if nothing else we use the
+file&#8217;s directory as the group name.</p>
+
+<p><code>lambda ARG BLOCK</code> creates an anonymous function.</p>
+
+<p><code>let VAR BLOCK</code> sets a variable and then calls a block.  The variable
+is then local to that block.</p>
+
+<p><code>cond TUPLE TUPLE...</code> executes tuples until the first time in the
+tuple is true.  When it finds a true tuple it executes the second item
+and returns it.</p>
+
+<p><code>member ITEM LIST</code> returns true if the first item is contained within
+the second list.</p>
+
+<p><code>buffer-name</code> returns the name of the current buffer.</p>
+
+<p><code>list ITEM</code> converts an item into a single item list.</p>
+
+<p><code>string-match REGEXP STRING</code> returns the index of the regex in the
+string, or nil.</p>
+
+<p><code>my-project-root</code> See above.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[emacs key bindings]]></title>
@@ -1148,7 +1260,7 @@
     <link href="http://jkamenik.github.com/blog/2014/03/23/inbox-zero-part-1/"/>
     <updated>2014-03-23T16:45:00-04:00</updated>
     <id>http://jkamenik.github.com/blog/2014/03/23/inbox-zero-part-1</id>
-    <content type="html"><![CDATA[<p>This is the first in a series of posts related to reducing the number of emails in your inbox, and more importantly, keeping it reduced.  This idea comes from the world of GTD (specifically 43Folders) and is a good strategy for anyone who needs quick access to “important” emails.</p>
+    <content type="html"><![CDATA[<p>This is the first in a series of posts related to reducing the number of emails in your inbox, and more importantly, keeping it reduced.  This idea comes from the world of GTD (specifically 43Folders) and is a good strategy for anyone who needs quick access to &#8220;important&#8221; emails.</p>
 
 <p>The filter-then-process method that I am about to describe works with pretty much any job you can think of: You sort laundry then wash it, you rake leaves into piles before you bag them, you collect dishes before you wash them.</p>
 
@@ -1159,9 +1271,9 @@
 
 <h2>Background</h2>
 
-<p>I do not to live out of email, but part of my job requires reading it.  I check email at most twice a day, and I am still more responsive than anyone else at the company; especially those that who  “live” out of email.</p>
+<p>I do not to live out of email, but part of my job requires reading it.  I check email at most twice a day, and I am still more responsive than anyone else at the company; especially those that who &#8220;live&#8221; out of email.</p>
 
-<p>The reason is focus.  Those who jump around have too much to focus on, and lose details.  They are great people for the quick one-line “Got it” emails, but rarely have any follow-through.</p>
+<p>The reason is focus.  Those who jump around have too much to focus on, and lose details.  They are great people for the quick one-line &#8220;Got it&#8221; emails, but rarely have any follow-through.</p>
 
 <h2>The goal</h2>
 
@@ -1178,7 +1290,7 @@
 
 <h2>The Fear of Missing Out</h2>
 
-<p>At this point you are probably looking at my comment on checking email twice a day and thinking “that will never work for me.”  Chances are you said to yourself “What if I miss out on something important,” or a variant like:</p>
+<p>At this point you are probably looking at my comment on checking email twice a day and thinking &#8220;that will never work for me.&#8221;  Chances are you said to yourself &#8220;What if I miss out on something important,&#8221; or a variant like:</p>
 
 <ol>
 <li>What if I miss an email that my child/husband/wife/father/mother is in trouble?</li>
@@ -1187,7 +1299,7 @@
 </ol>
 
 
-<p>To that I say “nonsense.”  Your mind is inventing scenarios that will never happen.  Nobody has ever turned to email in times of emergencies.  If a boss wants something immediately they will tell you in person, or over the phone. And if your friends were really inviting you to a party, they would do so via Evite, Meetup, or something similar.</p>
+<p>To that I say &#8220;nonsense.&#8221;  Your mind is inventing scenarios that will never happen.  Nobody has ever turned to email in times of emergencies.  If a boss wants something immediately they will tell you in person, or over the phone. And if your friends were really inviting you to a party, they would do so via Evite, Meetup, or something similar.</p>
 
 <h2>Conclusion</h2>
 
@@ -1227,7 +1339,7 @@
 
 <p><strong>6:30am</strong> We are home again, and try to relax.</p>
 
-<p><strong>11am</strong> Midwife appointment.  We are 5cm dilated.  They tell us to go walk around for 2 hours and report to the hospital again.  We head to the near by Annapolis mall to eat lunch, and walk around.  I am massaging Mel’s back as she has contractions while we walk.  People stare but we don’t care.</p>
+<p><strong>11am</strong> Midwife appointment.  We are 5cm dilated.  They tell us to go walk around for 2 hours and report to the hospital again.  We head to the near by Annapolis mall to eat lunch, and walk around.  I am massaging Mel&#8217;s back as she has contractions while we walk.  People stare but we don&#8217;t care.</p>
 
 <p><strong>1:30pm</strong> Go back to the hospital, are admitted and settle into our room.</p>
 
@@ -1286,7 +1398,7 @@
 <li>Frankie slept for the first week, even sleeping through feedings.  Ronin was awake for several hours after birth, and spends several hours a day awake.</li>
 <li>Frankie could lift his head after 1 week.  Ronin was born with the ability to lift his head.</li>
 <li>Frankie was easier to carry because he was a lump.  Ronin moves a lot and throws his head around and is much harder to carry when he is awake.</li>
-<li>Frankie didn’t care to be held.  Ronin prefers to be held.</li>
+<li>Frankie didn&#8217;t care to be held.  Ronin prefers to be held.</li>
 <li>Frankie prefers to sit in his own filth rather than being changed.  Ronin hates to be dirty and prefers to be changed.</li>
 <li>Frankie fit well into a size bigger (3 month clothes when he was born).  Ronin is slightly longer than Frankie, but lighter so nothing fits him correctly.</li>
 </ol>
@@ -1298,8 +1410,8 @@
 <li>Each pregnancy gets easier.  Even though everything hurts more you are expecting it, and can better deal with it.</li>
 </ol>
 </li>
-<li>Life is hardest after the first one.  It is hard to go from “without kids” to “with kids”.  But once you are “with kids” two kids is not that much harder than one.  You have already baby proofed the house, and changed your life around.</li>
-<li>Allowing comments on your baby’s birth story is stupid.  I learned that after the first one.  Therefore I have disabled them on this one.  Sorry for anyone that wants to wish us well, but one can ruin it for everyone.</li>
+<li>Life is hardest after the first one.  It is hard to go from &#8220;without kids&#8221; to &#8220;with kids&#8221;.  But once you are &#8220;with kids&#8221; two kids is not that much harder than one.  You have already baby proofed the house, and changed your life around.</li>
+<li>Allowing comments on your baby&#8217;s birth story is stupid.  I learned that after the first one.  Therefore I have disabled them on this one.  Sorry for anyone that wants to wish us well, but one can ruin it for everyone.</li>
 <li>Sleep is less of an issue with the 2nd.  To be honest we get a lot less sleep this time around.  The difference is that we know we are going to get sleep 30 minutes at a time.  And we love it when he gives us more.  With Frankie we were scared to sleep because we should only get 1 hour or so.</li>
 <li>A vaginal birth is front loaded, while a C-Section is back loaded.  I am not a proponent for one vs the other, but in our case the C-Section was over and done with in a matter of minutes.  The vaginal birth took hours (31 to be exact).  In the C-Section case, all of the recovery started after the birth with 3 days in the hospital.  With the VBAC once the delivery was over we were free to go.  So with Vaginal birth (assuming there are no complications) everything happens leading up to the birth, with a C-Section everything happens after the birth.</li>
 <li>Writing a birth plan, having a Doula, and using Midwifes was ideal for us.  Everyone was really supportive, and the Doula stayed with us the entire time.  The midwives and nurses reviewed the birth plan and where very engaged with us if there were reasons we had to go off plan.</li>
@@ -2199,85 +2311,6 @@
 <p>I did not use any assets from their library because their License doesn&#8217;t allow me to share the Keynote files if I do.  However, I wanted to allow people to download my base library and hopefully help me improve my design.  The Keynote file can be found <a href="http://jkamenik.github.com/assets/Technical%20Debt%20Calculator.key">here</a>.</p>
 
 <p>Let me know what you think, in the comments below.  In a later post I will talk about my findings.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Automator - Start work - workflow]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/09/10/automator-workflow/"/>
-    <updated>2013-09-10T09:25:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/09/10/automator-workflow</id>
-    <content type="html"><![CDATA[<p>I don&#8217;t like to repeat myself, and I use a Mac, so I have a great little tool called &#8220;Automator&#8221;.  Every morning when I am about to start work I open Spotlight (<code>cmd + space</code> for me) and type &#8220;startwork&#8221;.  The first app that shows up is my Automator workflow for opening all the programs that I need to work.</p>
-
-<p>Here is my Automator workflow:</p>
-
-<p><img src="http://jkamenik.github.com/images/start-work.png"></p>
-
-<!-- more -->
-
-
-<h2>The apple script (The first action)</h2>
-
-<p>This is a template apple script that just launches all my applications.</p>
-
-<ol>
-<li>Adium - An OS X chat client that can almost all IM protocols.</li>
-<li>Waterfall Campfire - My company&#8217;s campfire chatroom isolated inside a Fluid app.</li>
-<li>iTerm - My terminal of choice.</li>
-<li>Tower - My git client of choice.</li>
-<li>RubyMine - My IDE of choice.</li>
-</ol>
-
-
-<p><em>Note: I use &#8220;activate&#8221; with iTerm, because &#8220;launch&#8221; throws an error</em></p>
-
-<h3>Assigning apps to desktops</h3>
-
-<p>Automator cannot do this for you (at least not yet).  But I am very particular about where and how I like my windows setup.  Luckily the Mac remembers the last window settings on exit, so moving things around, resizing windows, and quitting does the trick.  However, it does <strong>not</strong> remember which screen an app is on.</p>
-
-<p>To assign an app to open on a specific screen follow these steps:</p>
-
-<ol>
-<li>Open the app</li>
-<li>Move the app to the screen you want (using mission control)</li>
-<li>Switch to that screen</li>
-<li>In the dock
-
-<ol>
-<li>Right click the application icon</li>
-<li>Click Options -> Assign To -> This desktop</li>
-</ol>
-</li>
-</ol>
-
-
-<p><em>Note: this only effects where the app opens, you can move windows to other screens anytime you want</em></p>
-
-<h2>Opening URLs (Last 3 actions)</h2>
-
-<p>The last three actions are the easiest way I can find to open multiple URLs in the same browser at once.  The automator task uses the system&#8217;s default browser which for me is Chrome.</p>
-
-<p><em>Note: the URLs are opened in a semi-random order.  I don&#8217;t know how to fix that.</em></p>
-
-<p>I like to open URLs as close to where I actually do my work as possible.  The trick is hacking the URLs.  These are the URLs that I use most.  Other URLs come and go - like right now where I open github.</p>
-
-<ol>
-<li>Pivotal Tracker - https://www.pivotaltracker.com/s/projects/<code>project id</code>
-
-<ol>
-<li>I tend to work on a single project for long periods of time so I just open that project every time.</li>
-</ol>
-</li>
-<li>Google Mail - https://mail.google.com/mail/u/<code>multi-login index</code>
-
-<ol>
-<li>The <code>/u/...</code> tells google to open a different logged in account.  I <em>always</em> log into my personal gmail account first (index 0) and my work account second.  So <code>/u/1</code> is my work email.</li>
-<li>If you add <code>/u/...</code> but aren&#8217;t logged into google multiple times it will ask you to login again.  This can be jarring if you are not expecting it.</li>
-</ol>
-</li>
-<li>Basecamp - https://basecamp.com/<code>account-id</code></li>
-</ol>
-
 ]]></content>
   </entry>
   

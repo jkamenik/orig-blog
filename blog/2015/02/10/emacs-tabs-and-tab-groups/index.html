@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Random Software Inklings</title>
+  <title>Emacs Tabs and Tab Groups - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
@@ -20,7 +20,7 @@ quite &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.com/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -69,15 +69,12 @@ quite &hellip;">
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/02/10/emacs-tabs-and-tab-groups/">Emacs Tabs and Tab Groups</a></h1>
+      <h1 class="entry-title">Emacs Tabs and Tab Groups</h1>
     
     
       <p class="meta">
@@ -100,222 +97,44 @@ quite &hellip;">
   </header>
 
 
-  <div class="entry-content"><p>From other editors I am used to having Tabbars.  Switching to Emacs I
+<div class="entry-content"><p>From other editors I am used to having Tabbars.  Switching to Emacs I
 miss that behavior.  Emacs does have a <code>tabbar</code> plugin, but it isn&#8217;t
 quite what I want.</p>
 
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/02/10/emacs-tabs-and-tab-groups/">Read on &rarr;</a>
-    </footer>
-  
+<!-- more -->
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/12/15/emacs-key-bindings/">Emacs Key Bindings</a></h1>
-    
-    
-      <p class="meta">
-        
+<p>By default it groups the tabs in a seemingly random way.  I am sure it
+makes sense if you wrote it, but for me I want the things group by my
+projects.  For me a project is a diretory wich has a <code>.git</code> directory
+at its root.</p>
 
+<p>First I created a simple function to get the project root, or return nil.</p>
 
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="nb">defun</span> <span class="nv">my-project-root</span> <span class="p">()</span>
+</span><span class='line'>  <span class="s">&quot;Return the root of the project.&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nv">locate-dominating-file</span> <span class="nv">default-directory</span>
+</span><span class='line'>    <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Basically this search all parent directories until it finds one
+containing the &#8220;.git&#8221; directory.  The build in function details are.</p>
 
+<p><code>locate-dominating-file BASE FILE</code> searches the parent directory tree
+from BASE until it finds FILE.</p>
 
+<p><code>default-directory</code> is a file local variable which is the directory of
+the current file.</p>
 
-
-  
-
-
-<time datetime="2014-12-15T21:09:00-05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently switched to Emacs as my editor of choice.  It has taken a bit of work to get it to where I like it.  My full settings are on github <a href="https://github.com/jkamenik/.emacs.d">here</a>.</p>
-
-<p>In this post I will share how I added a key binding to only a single mode.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/12/15/emacs-key-bindings/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/17/go-concurrency-patterns/">Go Concurrency Patterns</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-17T20:57:00-04:00" pubdate data-updated="true">Oct 17<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>One of Golangs strengths is its composibility.  This strength is only useful if you know how to make those composable parts.  That is where patterns are useful.</p>
-
-<p>Golang is concurrent, which is not necessarily parallel.  However, to make things concurrent you have to break thing into automatic steps.  If you are careful in how two step share information then you can easily turn concurrent design into parallel design.  Go channels make this communication stupid simple.</p>
-
-<p>In this post I am going to share what I think are the basis of most other concurrency patterns: The Generator, The Worker, and The Consumer.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/10/17/go-concurrency-patterns/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/29/golang-steam-file/">Golang Steam File</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-29T15:25:00-04:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Go (golang) is a highly concurrent language.  But more then that it is a simple language built using modular components and string them together in useful ways.  This modularity has lead me to play around a bit and one of things that I found was a easy way to stream a file.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/29/golang-steam-file/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/21/using-and-and-instead-of-if/">Using &amp;&amp; Instead of If</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-21T21:54:00-04:00" pubdate data-updated="true">Sep 21<span>st</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>You can use <code>&amp;&amp;</code> to perform a logical <code>if</code>.  And there are a few reasons it may be better to use <code>&amp;&amp;</code>.</p>
-
-<p>If I was a Computer Scientist I might pull out logic maps or Turing completeness or do a mathematical proof.  If I was a Computer Architect I might argue that I do not need to prove anything and you should trust my experience.  Luckily I am a Software Engineer, so I will prove my point with tests.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/21/using-and-and-instead-of-if/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/02/bats/">Bats</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-02T12:06:00-04:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Shell scripting is a great tool, but rarely is it tested.  Enter <a href="https://github.com/sstephenson/bats">BATS</a>!  In this post I will give a quick tutorial on how to use it to test scripts.</p>
+<p>Next I set the <code>tabbar-buffer-groups-function</code> to return the group
+name of the current file.  The only requirement is that the function
+return a list, but it is recommended that the list only contain a
+single item.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -324,80 +143,75 @@ quite what I want.</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/usr/bin/env bats</span>
-</span><span class='line'>
-</span><span class='line'>@test <span class="s2">&quot;running a command&quot;</span> <span class="o">{</span>
-</span><span class='line'>  run foogrep <span class="s2">&quot;bar&quot;</span> foo_file
-</span><span class='line'>  <span class="o">[</span> <span class="s2">&quot;$status&quot;</span> -eq 1 <span class="o">]</span>
-</span><span class='line'>  <span class="o">[</span> <span class="s2">&quot;$output&quot;</span> <span class="o">=</span> <span class="s2">&quot;1: bar baz&quot;</span> <span class="o">]</span>
-</span><span class='line'><span class="o">}</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">tabbar-buffer-groups-function</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span>
+</span><span class='line'>        <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">dir</span> <span class="p">(</span><span class="nv">expand-file-name</span> <span class="nv">default-directory</span><span class="p">)))</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">cond</span> <span class="p">((</span><span class="nb">member</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;*Completions*&quot;</span>
+</span><span class='line'>                                         <span class="s">&quot;*scratch*&quot;</span>
+</span><span class='line'>                                         <span class="s">&quot;*Messages*&quot;</span>
+</span><span class='line'>                                         <span class="s">&quot;*Ediff Registry*&quot;</span><span class="p">))</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#misc&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="c1">;; All Magit status goes the same place</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^*magit&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#magic&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^COMMIT_EDITMSG&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#magic&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="c1">;; All Cider windows</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^*nrepl-server&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#cider&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">string-match</span> <span class="s">&quot;^*cider&quot;</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;#cider&quot;</span><span class="p">))</span>
+</span><span class='line'>                <span class="c1">;; Group tabs based on project root</span>
+</span><span class='line'>                <span class="p">((</span><span class="nv">my-project-root</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="p">(</span><span class="nv">my-project-root</span><span class="p">)))</span>
+</span><span class='line'>                <span class="c1">;; Use the current dir</span>
+</span><span class='line'>                <span class="p">(</span><span class="no">t</span> <span class="p">(</span><span class="nb">list</span> <span class="nv">dir</span><span class="p">))))))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Here we capture the absolute path of the current file.  Then we check
+a bunch of things to determine which best represents the group name.
+The first thing we do is group various special buffers together.  Then we
+use the project root to group files.  And if nothing else we use the
+file&#8217;s directory as the group name.</p>
 
+<p><code>lambda ARG BLOCK</code> creates an anonymous function.</p>
 
+<p><code>let VAR BLOCK</code> sets a variable and then calls a block.  The variable
+is then local to that block.</p>
+
+<p><code>cond TUPLE TUPLE...</code> executes tuples until the first time in the
+tuple is true.  When it finds a true tuple it executes the second item
+and returns it.</p>
+
+<p><code>member ITEM LIST</code> returns true if the first item is contained within
+the second list.</p>
+
+<p><code>buffer-name</code> returns the name of the current buffer.</p>
+
+<p><code>list ITEM</code> converts an item into a single item list.</p>
+
+<p><code>string-match REGEXP STRING</code> returns the index of the regex in the
+string, or nil.</p>
+
+<p><code>my-project-root</code> See above.</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/08/02/bats/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/23/rake-publish/">Rake Publish</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
 
-<time datetime="2014-06-23T08:29:00-04:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Octoblog (the engine behind this blog) uses <a href="http://jekyllrb.com/">Jekyll</a>.  As such, it also supports the <code>publish</code> flag.  I a previous post I detailed how I added this feature back to Octopress.  Here I will show you a little rake task to easily publish an unpublished post.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/06/23/rake-publish/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/22/google-query-language/">Google Query Language</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -409,118 +223,46 @@ quite what I want.</p>
   
 
 
-<time datetime="2014-06-22T11:19:00-04:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A while back, my wife and I started keeping a budget.  We need something very easy that shows us where we are every moment.  Also, to ensure that it is not something we &#8220;forget&#8221; it must be something that we manually enter.</p>
-
-<p>I created a Google Form in order to allow us to capture the receipts.  The form dumps into a Google Spreadsheet.  I then use a Pivot Table and the Google Query Lanauage to create a Chart.  In this post I will cover the entire process.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/06/22/google-query-language/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2015-02-10T20:28:00-05:00" pubdate data-updated="true">Feb 10<span>th</span>, 2015</time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/10/code-does-rust/">Code Does Rust</a></h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-
-
-
-
+<span class="categories">
   
+    <a class='category' href='/blog/categories/emacs/'>emacs</a>, <a class='category' href='/blog/categories/howto/'>howto</a>
+  
+</span>
 
 
-<time datetime="2014-04-10T14:58:00-04:00" pubdate data-updated="true">Apr 10<span>th</span>, 2014</time>
-        
-      </p>
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>Fourteen years ago Joel Spolsky wrote an article entitled &#8220;Netscape Goes Bonkers&#8221;.  In that article he states that &#8220;old software doesn&#8217;t rust&#8221;.  The rest of the article is good, but that statement is &#8220;off&#8221;.</p>
-
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/04/10/code-does-rust/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/09/bmore-on-rails-4-8-2014/">BMore on Rails 4-8-2014</a></h1>
-    
-    
-      <p class="meta">
-        
+        <a class="basic-alignment left" href="/blog/2014/12/15/emacs-key-bindings/" title="Previous Post: emacs key bindings">&laquo; emacs key bindings</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-09T12:51:00-04:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As always, last nights B&#8217;More on Rails meetup was enjoyable.  There were two talks and a lot of the new people.  The first talk was on solving the &#8220;Eight queens&#8221; problem in Haskell.  The second was about Postgresql and Rails 4.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/04/09/bmore-on-rails-4-8-2014/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -560,7 +302,7 @@ quite what I want.</p>
 <li class='category'><a href='/blog/categories/ui/'>UI (1)</a></li>
 <li class='category'><a href='/blog/categories/antipattern/'>antipattern (1)</a></li>
 <li class='category'><a href='/blog/categories/automator/'>automator (1)</a></li>
-<li class='category'><a href='/blog/categories/b-more/'>b&#8217;more (2)</a></li>
+<li class='category'><a href='/blog/categories/b-more/'>b'more (2)</a></li>
 <li class='category'><a href='/blog/categories/budget/'>budget (1)</a></li>
 <li class='category'><a href='/blog/categories/bunco/'>bunco (3)</a></li>
 <li class='category'><a href='/blog/categories/ci/'>ci (1)</a></li>
@@ -611,7 +353,7 @@ quite what I want.</p>
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/jkamenik">@jkamenik</a> on GitHub
@@ -641,6 +383,7 @@ quite what I want.</p>
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -655,7 +398,10 @@ quite what I want.</p>
       var disqus_shortname = 'randomsoftwareinklings';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

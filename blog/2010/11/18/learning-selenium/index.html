@@ -138,10 +138,10 @@ Namespace = {
 };
 
 function String(item){
-  if(!item.push &amp;&amp; typeof(item) === 'object'){
-    return item.name || '';
+  if(!item.push &amp;&amp; typeof(item) === &#39;object&#39;){
+    return item.name || &#39;&#39;;
   }
-  return ''+item; //yup this is faster then toString
+  return &#39;&#39;+item; //yup this is faster then toString
 }
 
 function Int(item){
@@ -151,9 +151,9 @@ function Int(item){
 function Array(item){
   var type = typeof(item);
 
-  if(type === 'string'){
+  if(type === &#39;string&#39;){
     return item.split(&quot;\n&quot;);
-  } else if(type === 'object'){
+  } else if(type === &#39;object&#39;){
     if(item.push &amp;&amp; item.length &amp;&amp; item.concat){
       return item;
     }
@@ -209,9 +209,9 @@ function Array(item){
 
 <p>There really is nothing more to it then that.  The one thing to note is that the test uses <code>verifyEval</code> which takes a JavaScript string.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fae20bd0a58></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x00000101c24618></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fae20bd0148></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x00000101c243c0></p>
 
 <h2>Using RSpec</h2>
 
@@ -282,19 +282,19 @@ end
 </code></pre></noscript></div>
 
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fae20bcdee8></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x00000101c3b188></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fae20bcd6f0></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x00000101c3af58></p>
 
 <h3>Remote Controls</h3>
 
 <p>A remote control is what Selenium uses to execute the test.  The IDE comes with it built-in, but it is tied to FireFox.  To use IE, Safari, or Chrome you need to download the remote control software: <a href="http://seleniumhq.org/projects/remote-control">http://seleniumhq.org/projects/remote-control</a>.  This software is just a Java server that opens your machine on port 4444 (by default) to allow Selenium clients to run tests.  Each client gets its own browser instance to run the tests in.</p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fae20bcd0d8></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x00000101c3ad28></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fae20bcc9a8></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x00000101c3aaf8></p>
 
-<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x007fae20bcc2a0></p>
+<p>Liquid error: undefined method `lstrip&#8217; for #&lt;Array:0x00000101c3a8c8></p>
 
 <h3>Putting it all together</h3>
 
@@ -303,9 +303,9 @@ end
 <div><script src='https://gist.github.com/1151478.js?file=runner.rb'></script>
 <noscript><pre><code>#!/usr/bin/env ruby 
 if ARGV.any? {|arg| %w[--drb -X --generate-options -G --help -h --version -v].include?(arg)} 
-  require 'rubygems' unless ENV['NO_RUBYGEMS'] 
+  require &#39;rubygems&#39; unless ENV[&#39;NO_RUBYGEMS&#39;] 
 end 
-require 'spec/autorun' 
+require &#39;spec/autorun&#39; 
 exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
 
 
@@ -395,6 +395,10 @@ exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/02/10/emacs-tabs-and-tab-groups/">Emacs Tabs and Tab Groups</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/12/15/emacs-key-bindings/">emacs key bindings</a>
       </li>
     
@@ -408,10 +412,6 @@ exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
     
       <li class="post">
         <a href="/blog/2014/09/21/using-and-and-instead-of-if/">Using &amp;&amp; instead of if</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/02/bats/">Bats</a>
       </li>
     
   </ul>
@@ -434,14 +434,14 @@ exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
 <li class='category'><a href='/blog/categories/concurrency/'>concurrency (2)</a></li>
 <li class='category'><a href='/blog/categories/continuous-integration/'>continuous_integration (1)</a></li>
 <li class='category'><a href='/blog/categories/deployment/'>deployment (1)</a></li>
-<li class='category'><a href='/blog/categories/emacs/'>emacs (1)</a></li>
+<li class='category'><a href='/blog/categories/emacs/'>emacs (2)</a></li>
 <li class='category'><a href='/blog/categories/email/'>email (2)</a></li>
 <li class='category'><a href='/blog/categories/factory-girl/'>factory_girl (1)</a></li>
 <li class='category'><a href='/blog/categories/fatherhood/'>fatherhood (2)</a></li>
 <li class='category'><a href='/blog/categories/game-design/'>game design (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>git (1)</a></li>
 <li class='category'><a href='/blog/categories/go/'>go (2)</a></li>
-<li class='category'><a href='/blog/categories/howto/'>howto (14)</a></li>
+<li class='category'><a href='/blog/categories/howto/'>howto (15)</a></li>
 <li class='category'><a href='/blog/categories/js/'>js (1)</a></li>
 <li class='category'><a href='/blog/categories/keynote/'>keynote (1)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>octopress (3)</a></li>
@@ -512,7 +512,7 @@ exit ::Spec::Runner::CommandLine.run</code></pre></noscript></div>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - John T. Kamenik -
+  Copyright &copy; 2015 - John T. Kamenik -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

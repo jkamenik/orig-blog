@@ -4,7 +4,7 @@
   <title><![CDATA[Category: howto | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/howto/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2014-12-15T21:56:47-05:00</updated>
+  <updated>2015-02-10T20:30:51-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Emacs Tabs and Tab Groups]]></title>
+    <link href="http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups/"/>
+    <updated>2015-02-10T20:28:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2015/02/10/emacs-tabs-and-tab-groups</id>
+    <content type="html"><![CDATA[<p>From other editors I am used to having Tabbars.  Switching to Emacs I
+miss that behavior.  Emacs does have a <code>tabbar</code> plugin, but it isn't
+quite what I want.</p>
+
+<!-- more -->
+
+
+<p>By default it groups the tabs in a seemingly random way.  I am sure it
+makes sense if you wrote it, but for me I want the things group by my
+projects.  For me a project is a diretory wich has a <code>.git</code> directory
+at its root.</p>
+
+<p>First I created a simple function to get the project root, or return nil.</p>
+
+<p>```common-lisp
+(defun my-project-root ()
+  "Return the root of the project."
+  (locate-dominating-file default-directory</p>
+
+<pre><code>".git"))
+</code></pre>
+
+<p>```</p>
+
+<p>Basically this search all parent directories until it finds one
+containing the ".git" directory.  The build in function details are.</p>
+
+<p><code>locate-dominating-file BASE FILE</code> searches the parent directory tree
+from BASE until it finds FILE.</p>
+
+<p><code>default-directory</code> is a file local variable which is the directory of
+the current file.</p>
+
+<p>Next I set the <code>tabbar-buffer-groups-function</code> to return the group
+name of the current file.  The only requirement is that the function
+return a list, but it is recommended that the list only contain a
+single item.</p>
+
+<p>```common-lisp
+(setq tabbar-buffer-groups-function</p>
+
+<pre><code>  (lambda ()
+    (let ((dir (expand-file-name default-directory)))
+      (cond ((member (buffer-name) '("*Completions*"
+                                     "*scratch*"
+                                     "*Messages*"
+                                     "*Ediff Registry*"))
+             (list "#misc"))
+            ;; All Magit status goes the same place
+            ((string-match "^*magit" (buffer-name)) (list "#magic"))
+            ((string-match "^COMMIT_EDITMSG" (buffer-name)) (list "#magic"))
+            ;; All Cider windows
+            ((string-match "^*nrepl-server" (buffer-name)) (list "#cider"))
+            ((string-match "^*cider" (buffer-name)) (list "#cider"))
+            ;; Group tabs based on project root
+            ((my-project-root) (list (my-project-root)))
+            ;; Use the current dir
+            (t (list dir))))))
+</code></pre>
+
+<p>```</p>
+
+<p>Here we capture the absolute path of the current file.  Then we check
+a bunch of things to determine which best represents the group name.
+The first thing we do is group various special buffers together.  Then we
+use the project root to group files.  And if nothing else we use the
+file's directory as the group name.</p>
+
+<p><code>lambda ARG BLOCK</code> creates an anonymous function.</p>
+
+<p><code>let VAR BLOCK</code> sets a variable and then calls a block.  The variable
+is then local to that block.</p>
+
+<p><code>cond TUPLE TUPLE...</code> executes tuples until the first time in the
+tuple is true.  When it finds a true tuple it executes the second item
+and returns it.</p>
+
+<p><code>member ITEM LIST</code> returns true if the first item is contained within
+the second list.</p>
+
+<p><code>buffer-name</code> returns the name of the current buffer.</p>
+
+<p><code>list ITEM</code> converts an item into a single item list.</p>
+
+<p><code>string-match REGEXP STRING</code> returns the index of the regex in the
+string, or nil.</p>
+
+<p><code>my-project-root</code> See above.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[emacs key bindings]]></title>
@@ -428,100 +524,6 @@ Crafty.scene('Loading',-&gt;
 <body></body>
 </html>
 ```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Drafts]]></title>
-    <link href="http://jkamenik.github.com/blog/2014/01/21/drafts/"/>
-    <updated>2014-01-21T11:38:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2014/01/21/drafts</id>
-    <content type="html"><![CDATA[<p>Jekyll supports unpublished posts, but Octopress does not make it clear.  This is how I fixed that for my own blog.</p>
-
-<!-- more -->
-
-
-<p>Octopress actually does support "published: false" in the front matter.  And because it based on Jekyll it means that those posts will be available in "preview" but will be ignored when the site is generated/published.</p>
-
-<p>My main care is that I know what I can do with a post in 3 to 4 months.  So I added the the published flag to the generated frontmatter of every new post.</p>
-
-<p>```ruby Rakefile</p>
-
-<h1>around line 93, for me</h1>
-
-<p>task :new_post, :title do |t, args|
-  # code omitted
-  open(filename, 'w') do |post|</p>
-
-<pre><code>post.puts "---"
-post.puts "layout: post"
-post.puts "title: \"#{title.gsub(/&amp;/,'&amp;amp;')}\""
-post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
-post.puts "comments: true"
-post.puts "toc: false"
-# add published flag to the template
-post.puts "published: false"
-post.puts "categories: "
-post.puts "  - cat1"
-post.puts "---"
-post.puts
-post.puts "Summary"
-post.puts
-post.puts "&lt;!-- more --&gt;"
-post.puts
-post.puts "Post text"
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>I also had to update <code>rake push</code> to regenerate the full site before deployment.  This is because preview works on the same directly that is copied to production.  And since you can preview unpublished posts they will be visible in production, unless you run <code>rake generate</code> first.</p>
-
-<p>```ruby Rakefile</p>
-
-<h1>around line 254</h1>
-
-<p>multitask :push do
-  # add the generate rake task first
-  Rake::Task[:generate].invoke
-  # code omitted
-end
-```</p>
-
-<p>Additionally I want to know visually when a page is a draft.  For that I add "Draft: " to the title.</p>
-
-<p>```html _includes/article.html
-</p>
-
-<h1>in the <header> tag</h1>
-
-<p>{% if index %}
-  # add {% if post.published == false %}Draft: {% endif %}
-  <h1 class="entry-title"><a href="{{ root_url }}{{ post.url }}">{% if post.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h1>
-{% else %}
-  # add {% if page.published == false %}Draft: {% endif %}
-  <h1 class="entry-title">{% if page.published == false %}Draft: {% endif %}{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
-{% endif %}
-
-```</p>
-
-<p>Now you will see "Draft: " in front of any unpublished posts.</p>
-
-<h2>Manual management</h2>
-
-<p>A few additional things I like to do, but I haven't automated yet are:</p>
-
-<ol>
-<li>Add "-draft" to the file name.</li>
-<li>Change the publish date to the day I publish the article
-
-<ol>
-<li>This involves changing the file name as well as the front matter</li>
-</ol>
-</li>
-</ol>
-
 ]]></content>
   </entry>
   
