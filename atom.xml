@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2015-02-10T20:30:51-05:00</updated>
+  <updated>2015-06-05T09:22:21-04:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gmail &amp; Vimium]]></title>
+    <link href="http://jkamenik.github.com/blog/2015/06/05/gmail-and-vimium/"/>
+    <updated>2015-06-05T09:21:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2015/06/05/gmail-and-vimium</id>
+    <content type="html"><![CDATA[<p>Recently I memorized most of the GMail keyboard short cuts, but I was
+very disappointed with the fact that I could not quickly and easily
+open links.  Using the Vimium extension, now I can.</p>
+
+<!-- more -->
+
+
+<h1>1. Download Vimium</h1>
+
+<p><a href="https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb">Chrome</a></p>
+
+<p><a href="https://addons.mozilla.org/en-US/firefox/addon/vimium">Firefox</a></p>
+
+<p>Not sure if browsers have it.</p>
+
+<h1>2. Stop it from stealing input</h1>
+
+<p>In order for the Gmail shortcuts to work you need to disable the
+conflicting Vimium ones.  Open the Vimium configuration menu and add
+an exception for Gmail.  I use the following:</p>
+
+<ul>
+<li>Pattern - https?://mail.google.com/*</li>
+<li>Keys - ? / g r y v x f u d o O n p</li>
+</ul>
+
+
+<p>For GMail, all I care about is the <code>shift + f</code> key which opens links in a new
+window.</p>
+
+<h1>3. Disable focus stealing</h1>
+
+<p>Sites that automatically focus a form item will disable Vimium, until
+you exit the form item.  This is annoying, but luckily Vimium can
+prevent that.</p>
+
+<p>Open the Advanced options and click &#8220;Don&#8217;t let pages steal the focus
+on load&#8221;</p>
+
+<h1>4. Use Vimium</h1>
+
+<p>Some of the most basic commands I find useful are:</p>
+
+<ul>
+<li>? - Opens the Vimium help menu</li>
+<li>f - Marks each link with a key-cord.  Pressing the cord will open
+the link</li>
+<li>F - Same as &#8220;f&#8221; but in a new windows</li>
+<li>yy - Copy current URL</li>
+</ul>
+
+
+<p>A lot of the other commands have a standard shortcut, so I generally
+ignore them.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Emacs Tabs and Tab Groups]]></title>
@@ -2289,28 +2351,6 @@ string, or nil.</p>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[TDC Prototype]]></title>
-    <link href="http://jkamenik.github.com/blog/2013/09/28/tdc-prototype/"/>
-    <updated>2013-09-28T14:58:00-04:00</updated>
-    <id>http://jkamenik.github.com/blog/2013/09/28/tdc-prototype</id>
-    <content type="html"><![CDATA[<p>In a <a href="http://jkamenik.github.com/blog/2013/09/01/technical-debt-calculator/">previous post</a> I talked about creating a Technical Debt Calculator.  And in an <a href="#">even earlier</a> post I talked about using Keynote to mockup UIs before coding.  Here I revisit the TDC with a Keynote mockup.</p>
-
-<!-- more -->
-
-
-<h2>Working prototype</h2>
-
-<p>The <a href="http://jkamenik.github.com/assets/Technical%20Debt%20Calculator.pdf">working prototype</a> is a clickable PDF.  You will need Adobe Acrobat Reader or a Mac computer.  From there just download the PDF and play with it.</p>
-
-<p>I used concepts that I gained from working with <a href="http://keynotopia.com/">Keynotopia</a>.  Keynotopdia is an awesome library, which you should own, but at a minimum you should check out their tutorials <a href="">here</a>.</p>
-
-<p>I did not use any assets from their library because their License doesn&#8217;t allow me to share the Keynote files if I do.  However, I wanted to allow people to download my base library and hopefully help me improve my design.  The Keynote file can be found <a href="http://jkamenik.github.com/assets/Technical%20Debt%20Calculator.key">here</a>.</p>
-
-<p>Let me know what you think, in the comments below.  In a later post I will talk about my findings.</p>
 ]]></content>
   </entry>
   

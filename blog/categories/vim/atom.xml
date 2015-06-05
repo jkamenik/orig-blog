@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: vim | Random Software Inklings]]></title>
+  <link href="http://jkamenik.github.com/blog/categories/vim/atom.xml" rel="self"/>
+  <link href="http://jkamenik.github.com/"/>
+  <updated>2015-06-05T09:22:21-04:00</updated>
+  <id>http://jkamenik.github.com/</id>
+  <author>
+    <name><![CDATA[John T. Kamenik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Gmail &amp; Vimium]]></title>
+    <link href="http://jkamenik.github.com/blog/2015/06/05/gmail-and-vimium/"/>
+    <updated>2015-06-05T09:21:00-04:00</updated>
+    <id>http://jkamenik.github.com/blog/2015/06/05/gmail-and-vimium</id>
+    <content type="html"><![CDATA[<p>Recently I memorized most of the GMail keyboard short cuts, but I was
+very disappointed with the fact that I could not quickly and easily
+open links.  Using the Vimium extension, now I can.</p>
+
+<!-- more -->
+
+
+<h1>1. Download Vimium</h1>
+
+<p><a href="https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb">Chrome</a></p>
+
+<p><a href="https://addons.mozilla.org/en-US/firefox/addon/vimium">Firefox</a></p>
+
+<p>Not sure if browsers have it.</p>
+
+<h1>2. Stop it from stealing input</h1>
+
+<p>In order for the Gmail shortcuts to work you need to disable the
+conflicting Vimium ones.  Open the Vimium configuration menu and add
+an exception for Gmail.  I use the following:</p>
+
+<ul>
+<li>Pattern - https?://mail.google.com/*</li>
+<li>Keys - ? / g r y v x f u d o O n p</li>
+</ul>
+
+
+<p>For GMail, all I care about is the <code>shift + f</code> key which opens links in a new
+window.</p>
+
+<h1>3. Disable focus stealing</h1>
+
+<p>Sites that automatically focus a form item will disable Vimium, until
+you exit the form item.  This is annoying, but luckily Vimium can
+prevent that.</p>
+
+<p>Open the Advanced options and click "Don't let pages steal the focus
+on load"</p>
+
+<h1>4. Use Vimium</h1>
+
+<p>Some of the most basic commands I find useful are:</p>
+
+<ul>
+<li>? - Opens the Vimium help menu</li>
+<li>f - Marks each link with a key-cord.  Pressing the cord will open
+the link</li>
+<li>F - Same as "f" but in a new windows</li>
+<li>yy - Copy current URL</li>
+</ul>
+
+
+<p>A lot of the other commands have a standard shortcut, so I generally
+ignore them.</p>
+]]></content>
+  </entry>
+  
+</feed>
