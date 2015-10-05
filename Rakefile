@@ -149,8 +149,9 @@ task :check do |t, args|
   files = Dir[File.join(source_dir,posts_dir,"**/*")]
 
   files.each do |f|
-    puts `iconv -t US-ASCII #{f} > /dev/null`
-  end  
+    output=`iconv -t US-ASCII #{f} >/dev/null`
+    puts output unless output.nil? || output.empty?
+  end
 end
 
 desc "Publishes an unpublished entry by changing its name, updating its internal timestamp, and setting published: true"
@@ -251,10 +252,10 @@ task :hide, :filename do |t, args|
   stash_dir = "#{source_dir}/#{stash_dir}"
   FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
   Dir.glob("#{source_dir}/#{posts_dir}/#{args.filename}") do |post|
-    
+
     FileUtils.mv post, stash_dir
   end
-end  
+end
 
 desc "Move all stashed posts back into the posts directory, ready for site generation."
 task :integrate do
