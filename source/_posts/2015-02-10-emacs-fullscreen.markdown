@@ -1,16 +1,16 @@
 ---
 layout: post
-title: "Emacs Fullscreen"
+title: "Emacs Full-screen"
 date: 2015-02-10 10:10
 comments: true
 toc: false
 published: false
-categories: 
+categories:
   - emacs
   - howto
 ---
 
-On a Mac the short cut to put a window into fullscreen mode is `ctrl +
+On a Mac the short cut to put a window into full-screen mode is `ctrl +
 cmd + f`.  Unfortunately this does not directly for emacs.  Here I
 will explain how I made it work.
 
@@ -18,7 +18,7 @@ Note: This is only applicable to windowed versions of Emacs!
 
 <!-- more -->
 
-First, I needed to figure out if it was possilbe to make emacs full
+First, I needed to figure out if it was possible to make emacs full
 screen.  To do this I turned to the help system for a function
 
 `M+x fullscreen<tab>` did not turn up anything useful.  Then I checked
@@ -33,8 +33,8 @@ toggle-frame-fullscreen     <f11>
    Toggle fullscreen mode of the selected frame.
 ```
 
-That looks promissing so I run it as an interact command: `M+x
-toogle-frame-fullscreen` and it does what I expect.  Now to bind it to
+That looks promising so I run it as an interact command: `M+x
+toggle-frame-fullscreen` and it does what I expect.  Now to bind it to
 a key.
 
 I added the following to my config:
@@ -46,7 +46,7 @@ I added the following to my config:
 Note: "s" is "super" which is what the "cmd" key maps to.
 
 
-I run `C+x e` to evalute the lisp code and then I use the keyboard
+I run `C+x e` to evaluate the lisp code and then I use the keyboard
 combination `ctrl + cmd + f`, but nothing happens.  What gives?
 
 I use the help system describe-key to find out what it is bound to
