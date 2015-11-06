@@ -4,7 +4,7 @@
   <title><![CDATA[Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2015-06-05T09:22:21-04:00</updated>
+  <updated>2015-11-06T06:22:12-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Emacs Full-screen]]></title>
+    <link href="http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen/"/>
+    <updated>2015-11-06T06:21:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen</id>
+    <content type="html"><![CDATA[<p>On a Mac the short cut to put a window into full-screen mode is <code>ctrl +
+cmd + f</code>.  Unfortunately this does not work directly for emacs.  Here I
+will explain how I made it work.</p>
+
+<p>Note: This is only applicable to windowed versions of Emacs!</p>
+
+<!-- more -->
+
+
+<p>First, I needed to figure out if it was possible to make emacs full
+screen.  To do this I turned to the help system for a function</p>
+
+<p><code>M+x fullscreen&lt;tab&gt;</code> did not turn up anything useful.  Then I checked
+the apropos help command.</p>
+
+<p><code>C+h a fullscreen</code> produced the following:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Type RET on an entry to view its full documentation.
+</span><span class='line'>
+</span><span class='line'>toggle-frame-fullscreen     &lt;f11&gt;
+</span><span class='line'>   Toggle fullscreen mode of the selected frame.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That looks promising so I run it as an interact command: <code>M+x
+toggle-frame-fullscreen</code> and it does what I expect.  Now to bind it to
+a key.</p>
+
+<p>I added the following to my config:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-s f&quot;</span><span class="p">)</span> <span class="ss">&#39;toggle-frame-fullscreen</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: &#8220;s&#8221; is &#8220;super&#8221; which is what the &#8220;cmd&#8221; on a Mac maps to.</p>
+
+<p>I run <code>C+x e</code> to evaluate the lisp code and then I use the keyboard
+combination <code>ctrl + cmd + f</code>, but nothing happens.  What gives?</p>
+
+<p>I use the help system describe-key to find out what it is bound to</p>
+
+<p><code>C+h k &lt;ret&gt; ctrl + cmd + f</code> prints &#8221;<C-s-268632070> is undefined.&#8221;</p>
+
+<p>As it turns out &#8220;ctrl + cmd&#8221; will almost always present as a
+numerical key value.  Using the help system causes emacs to print what
+it sees when those buttons are pressed.  It is simple matter of using
+angle bracket key form (like is printed).</p>
+
+<p><code>(global-set-key (kbd "&lt;C-s-268632070"&gt;) 'toggle-frame-fullscreen)</code>
+works like a champ!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gmail &amp; Vimium]]></title>
@@ -2200,156 +2262,6 @@ string, or nil.</p>
 </ol>
 </li>
 </ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RBAC in Ruby]]></title>
-    <link href="http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby/"/>
-    <updated>2014-01-10T15:07:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2014/01/10/rbac-in-ruby</id>
-    <content type="html"><![CDATA[<p>RBAC stands for <em>Role Based Access Control</em>.  It is basically a means to programmitically configure access rights without hardcoding.</p>
-
-<p>The full details are <a href="http://en.wikipedia.org/wiki/Role-based_access_control">here</a>, but to be honest I don&#8217;t fully understand it as writen.  What I understand of it is from trial and error.</p>
-
-<p>This entry is an attempt to codify that understanding and apply it using the ruby language.</p>
-
-<!-- more -->
-
-
-<h2>Basics</h2>
-
-<p>The inputs to the policy are:</p>
-
-<ol>
-<li>User or Actor</li>
-<li>Action being performed</li>
-<li>Resource being acted on</li>
-</ol>
-
-
-<pre>
-    +-------------------------------------------------------+
-    | +-------+                                +----------+ |
-    | |       |            +------+            |          | |
-    | |  User |+---------->|Action|+---------->| Resource | |
-    | |       |            +------+            |          | |
-    | +-------+                                +----------+ |
-    +-------------------------------------------------------+
-                               +
-                               |
-                               v
-                            +------+
-                            |Policy|
-                            +------+
-                               +
-                               |
-                               v
-                          +---------+
-                          |Yes or No|
-                          +---------+
-</pre>
-
-
-<h2>Policy</h2>
-
-<p>The policy is where the business logic goes.  It can be as simple as a set of Ruby classes that simply return values, or it can be as complicated as ActiveDirectory.</p>
-
-<p>The players are:</p>
-
-<ol>
-<li>Role - collection of permissions bound to a user</li>
-<li>Permission - an answer which is limited to a resource and action</li>
-</ol>
-
-
-<p>Here is the basic flow of a permission:</p>
-
-<pre>
-    +------+            +------+             +------------+
-    | User |+---------->| Role |+----------->| Permission |
-    +------+            +------+             |------------|
-              Has many            Has many   | Resource   |
-                                             | Action     |
-                                             | Allowed?   |
-                                             +------------+
-</pre>
-
-
-<p>A user can have 1 or more roles.  Each role can have 1 or more permissions.  Each permission associates an action on a resource with an answer.  Either the user is explicitly allowed or explicitly not allowed to access the Resource.</p>
-
-<p><em>Note:</em> I have purposely kept the data model simple.  In more complicated setups there can be several levels of permissions, permissions can have filters, and/or permissions can be directly bound to a user (instead of being bound to a role).  These complications are often introduced to deal with edge cases which are outside the scope of this article.</p>
-
-<h3>Policy logic sample code</h3>
-
-<p>Once the actors are known the logic is easy.  Simply filter in only the permission on a user for the resource and action in question then &#8220;and&#8221; all permissions together.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Policy</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># returns true if the user *can* perform action on resource, false otherwise</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">allowed?</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">reduce_permissions</span> <span class="n">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="kp">private</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># returns an array of filtered permissions</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">list_permissions</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">resource</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">perm</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">array</span><span class="p">,</span><span class="n">role</span><span class="o">|</span>
-</span><span class='line'>            <span class="n">array</span><span class="o">.</span><span class="n">concat</span> <span class="n">role</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">.</span><span class="n">compact</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_permissions</span><span class="p">(</span><span class="n">perm_array</span><span class="p">)</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">implicit_allow</span> <span class="k">if</span> <span class="n">perm_array</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">perm_array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span><span class="ss">:&amp;</span><span class="o">&amp;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># &quot;and&quot;, for &quot;or&quot; use &quot;:||&quot;</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">reduce_function</span>
-</span><span class='line'>        <span class="ss">:&amp;</span><span class="o">&amp;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># default behavior is NOT to give access</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">implicit_allow</span>
-</span><span class='line'>        <span class="kp">false</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>

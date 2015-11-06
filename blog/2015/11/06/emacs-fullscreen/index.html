@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: ruby - Random Software Inklings</title>
+  <title>Emacs Full-screen - Random Software Inklings</title>
   <meta name="author" content="John T. Kamenik">
 
   
-  <meta name="description" content="Category: ruby">
+  <meta name="description" content="On a Mac the short cut to put a window into full-screen mode is ctrl +
+cmd + f. Unfortunately this does not work directly for emacs. Here I
+will &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jkamenik.github.comblog/categories/ruby/">
+  <link rel="canonical" href="http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,67 +70,146 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Ruby</h1>
+    
+      <h1 class="entry-title">Emacs Full-screen</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-06T06:21:00-05:00" pubdate data-updated="true">Nov 6<span>th</span>, 2015</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>On a Mac the short cut to put a window into full-screen mode is <code>ctrl +
+cmd + f</code>.  Unfortunately this does not work directly for emacs.  Here I
+will explain how I made it work.</p>
 
-  
-  <h2>2014</h2>
+<p>Note: This is only applicable to windowed versions of Emacs!</p>
 
-<article>
-  
-<h1><a href="/blog/2014/09/21/using-and-and-instead-of-if/">Using &amp;&amp; instead of if</a></h1>
-<time datetime="2014-09-21T21:54:00-04:00" pubdate><span class='month'>Sep</span> <span class='day'>21</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/programing/'>programing</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
+<!-- more -->
 
 
-</article>
+<p>First, I needed to figure out if it was possible to make emacs full
+screen.  To do this I turned to the help system for a function</p>
+
+<p><code>M+x fullscreen&lt;tab&gt;</code> did not turn up anything useful.  Then I checked
+the apropos help command.</p>
+
+<p><code>C+h a fullscreen</code> produced the following:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Type RET on an entry to view its full documentation.
+</span><span class='line'>
+</span><span class='line'>toggle-frame-fullscreen     &lt;f11&gt;
+</span><span class='line'>   Toggle fullscreen mode of the selected frame.</span></code></pre></td></tr></table></div></figure>
 
 
+<p>That looks promising so I run it as an interact command: <code>M+x
+toggle-frame-fullscreen</code> and it does what I expect.  Now to bind it to
+a key.</p>
 
-<article>
-  
-<h1><a href="/blog/2014/01/10/rbac-in-ruby/">RBAC in Ruby</a></h1>
-<time datetime="2014-01-10T15:07:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>10</span> <span class='year'>2014</span></time>
+<p>I added the following to my config:</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-s f&quot;</span><span class="p">)</span> <span class="ss">&#39;toggle-frame-fullscreen</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Note: &#8220;s&#8221; is &#8220;super&#8221; which is what the &#8220;cmd&#8221; on a Mac maps to.</p>
 
-  
-  <h2>2011</h2>
+<p>I run <code>C+x e</code> to evaluate the lisp code and then I use the keyboard
+combination <code>ctrl + cmd + f</code>, but nothing happens.  What gives?</p>
 
-<article>
-  
-<h1><a href="/blog/2011/11/21/ruby-module-instance-and-class-methods/">Ruby module instance and class methods</a></h1>
-<time datetime="2011-11-21T00:00:00-05:00" pubdate><span class='month'>Nov</span> <span class='day'>21</span> <span class='year'>2011</span></time>
+<p>I use the help system describe-key to find out what it is bound to</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
+<p><code>C+h k &lt;ret&gt; ctrl + cmd + f</code> prints &#8221;<C-s-268632070> is undefined.&#8221;</p>
 
+<p>As it turns out &#8220;ctrl + cmd&#8221; will almost always present as a
+numerical key value.  Using the help system causes emacs to print what
+it sees when those buttons are pressed.  It is simple matter of using
+angle bracket key form (like is printed).</p>
 
-</article>
-
+<p><code>(global-set-key (kbd "&lt;C-s-268632070"&gt;) 'toggle-frame-fullscreen)</code>
+works like a champ!</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">John T. Kamenik</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-06T06:21:00-05:00" pubdate data-updated="true">Nov 6<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/emacs/'>emacs</a>, <a class='category' href='/blog/categories/howto/'>howto</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen/" data-via="jkamenik" data-counturl="http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/06/05/gmail-and-vimium/" title="Previous Post: Gmail &amp; Vimium">&laquo; Gmail &amp; Vimium</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -270,7 +351,10 @@
       var disqus_shortname = 'randomsoftwareinklings';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen/';
+        var disqus_url = 'http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

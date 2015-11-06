@@ -4,7 +4,7 @@
   <title><![CDATA[Category: howto | Random Software Inklings]]></title>
   <link href="http://jkamenik.github.com/blog/categories/howto/atom.xml" rel="self"/>
   <link href="http://jkamenik.github.com/"/>
-  <updated>2015-06-05T09:22:21-04:00</updated>
+  <updated>2015-11-06T06:22:12-05:00</updated>
   <id>http://jkamenik.github.com/</id>
   <author>
     <name><![CDATA[John T. Kamenik]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Emacs Full-screen]]></title>
+    <link href="http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen/"/>
+    <updated>2015-11-06T06:21:00-05:00</updated>
+    <id>http://jkamenik.github.com/blog/2015/11/06/emacs-fullscreen</id>
+    <content type="html"><![CDATA[<p>On a Mac the short cut to put a window into full-screen mode is <code>ctrl +
+cmd + f</code>.  Unfortunately this does not work directly for emacs.  Here I
+will explain how I made it work.</p>
+
+<p>Note: This is only applicable to windowed versions of Emacs!</p>
+
+<!-- more -->
+
+
+<p>First, I needed to figure out if it was possible to make emacs full
+screen.  To do this I turned to the help system for a function</p>
+
+<p><code>M+x fullscreen&lt;tab&gt;</code> did not turn up anything useful.  Then I checked
+the apropos help command.</p>
+
+<p><code>C+h a fullscreen</code> produced the following:</p>
+
+<p>```
+Type RET on an entry to view its full documentation.</p>
+
+<p>toggle-frame-fullscreen     <f11>
+   Toggle fullscreen mode of the selected frame.
+```</p>
+
+<p>That looks promising so I run it as an interact command: <code>M+x
+toggle-frame-fullscreen</code> and it does what I expect.  Now to bind it to
+a key.</p>
+
+<p>I added the following to my config:</p>
+
+<p><code>common-lisp
+(global-set-key (kbd "C-s f") 'toggle-frame-fullscreen)
+</code></p>
+
+<p>Note: "s" is "super" which is what the "cmd" on a Mac maps to.</p>
+
+<p>I run <code>C+x e</code> to evaluate the lisp code and then I use the keyboard
+combination <code>ctrl + cmd + f</code>, but nothing happens.  What gives?</p>
+
+<p>I use the help system describe-key to find out what it is bound to</p>
+
+<p><code>C+h k &lt;ret&gt; ctrl + cmd + f</code> prints "<C-s-268632070> is undefined."</p>
+
+<p>As it turns out "ctrl + cmd" will almost always present as a
+numerical key value.  Using the help system causes emacs to print what
+it sees when those buttons are pressed.  It is simple matter of using
+angle bracket key form (like is printed).</p>
+
+<p><code>(global-set-key (kbd "&lt;C-s-268632070"&gt;) 'toggle-frame-fullscreen)</code>
+works like a champ!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Emacs Tabs and Tab Groups]]></title>
@@ -366,164 +424,6 @@ end
 <li>Send to link to anyone that needs to be kept informed about the budget</li>
 </ol>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Crafty Timer]]></title>
-    <link href="http://jkamenik.github.com/blog/2014/02/24/crafty-timer/"/>
-    <updated>2014-02-24T13:28:00-05:00</updated>
-    <id>http://jkamenik.github.com/blog/2014/02/24/crafty-timer</id>
-    <content type="html"><![CDATA[<p>Crafty JS is a game engine written in Javascript.  Like many game engines there is a main event loop that drives everything.  This is actually a great thing, unless you are trying to use timers.</p>
-
-<p>Javascript is single threaded but asynchronous.  This means there is no way to "sleep" the main loop.  Instead there is a <code>setTimeout</code> function which takes a callback that is called after the timer has expired.  In most JS programs having one or more timers setup via <code>setTimeout</code> isn't much of an issue.</p>
-
-<p>In Crafty there is already a main event loop that actually performs the same function and it better fits the separation of background and rendering responsibilities.  Remember that in a game you will have hundreds or thousands of background calculation per second but only 40 to 60 rendering calculations.</p>
-
-<p>With that in mind I created two components: a Timer which does everything in the background, and TimePrinter which is a timer and rerenders the current seconds until the timer expires.</p>
-
-<!-- more -->
-
-
-<h2>Timer</h2>
-
-<p>```coffeescript timer.coffee
-Crafty.c('Timer',{
-  <em>stopFunc:    null,
-  </em>expireTime:  null,
-  _secondsLeft: null,</p>
-
-<p>  start: -></p>
-
-<pre><code>return if this._stopFunc
-return if this._calculateTime &lt;= 0
-
-self = this
-this._stopFunc = Crafty.bind('EnterFrame', -&gt;
-  # a proxy callback which sets the "this"
-  self._calculateTime()
-)
-this
-</code></pre>
-
-<p>  stop: -></p>
-
-<pre><code>return unless this._stopFunc
-Crafty.unbind('EnterFrame', this._stopFunc)
-this._stopFunc = null
-this
-</code></pre>
-
-<p>  expiresIn: (seconds, autoStart = false)-></p>
-
-<pre><code>this._expireTime = Date.now() + (seconds * 1000)
-this.start() if autoStart
-this
-</code></pre>
-
-<p>  addSeconds: (seconds, autoStart = false)-></p>
-
-<pre><code>this._expireTime = Date.now() if this._secondsLeft &lt;= 0
-this._expireTime += (seconds * 1000)
-this.start() if autoStart
-this
-</code></pre>
-
-<p>  _calculateTime: (event)-></p>
-
-<pre><code>now  = Date.now()
-left = this._expireTime - now
-this._secondsLeft = Math.floor(left / 1000)
-
-this.stop() if this._secondsLeft &lt;= 0
-this._secondsLeft
-</code></pre>
-
-<p>})
-```</p>
-
-<p><code>start</code> starts the timer.  It binds to the "EnterFrame" event and sets up a proxy callback to ensure the "this" variable is maintained during the callback.</p>
-
-<p><code>stop</code> remotes the "EnterFrame" callback thereby detacting it from the timer loop.</p>
-
-<p><code>expiresIn</code> sets up a number of seconds to expire the timer in.  There is an optional second paramter to start the timer loop.</p>
-
-<p><code>addSeconds</code> adds seconds to the existing timer, making it take longer to expire.  If the timer has expired then it behaves like <code>expiresIn</code></p>
-
-<p><code>_calculateTime</code> is the work horse.  It calculates the real time and compares it to the expire time and returns the number of seconds until it expires.  If the current time is greater or equal to the expire time then the timer is considered expired and is stopped.  Stopping the timer removes any useless calculations, speeding up the overall game.</p>
-
-<h2>Time Printer</h2>
-
-<p>In order to separate concerns I created a separate component to print the number of seconds until the timer expires.  By separating things out I can have a general purpose timer which is displayed many different ways.</p>
-
-<p>This class simply shows the number of seconds left as a string.</p>
-
-<p>```coffeescript time_printer.js
-Crafty.c('TimePrinter',{
-  init: -></p>
-
-<pre><code>this.requires '2D, DOM, Text, Timer'
-this.attr({
-  x: 100,
-  y: 100,
-  w: 200
-})
-self = this
-this.bind('RenderScene',-&gt;
-  self.render()
-)
-</code></pre>
-
-<p>  render: -></p>
-
-<pre><code>this.text ''+this._secondsLeft+' seconds'
-</code></pre>
-
-<p>})
-```</p>
-
-<p><code>init</code> requires the DOM, 2D, and Text components so that I can render text.  It also requires Timer so that it behaves like a Timer.  It also binds to the "RenderScene" event, which just rendering thread.</p>
-
-<p><code>render</code> is the call back called when it is time to render the entity.</p>
-
-<h2>Usage</h2>
-
-<p>A simple usage might look something like this:</p>
-
-<p><code>coffeescript scene/loading.coffee
-Crafty.scene('Loading',-&gt;
-  printer = Crafty.e("TimePrinter")
-  printer.expiresIn 10, true
-)
-</code></p>
-
-<p>```html timer.html
-<html>
-<head></p>
-
-<pre><code>&lt;script src="lib/crafty.js"&gt;&lt;/script&gt;
-&lt;script src="src/components/timer.js"&gt;&lt;/script&gt;
-&lt;script src="src/components/time_printer.js"&gt;&lt;/script&gt;
-&lt;script src="src/scenes/loading.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  window.addEventListener('load',-&gt;
-    Crafty.init()
-
-    Crafty.scene('Loading')
-  )
-&lt;/script&gt;
-&lt;style&gt;
-    body { 
-        padding: 0;
-        margin:  0;
-    }
-&lt;/style&gt;
-</code></pre>
-
-<p></head>
-<body></body>
-</html>
-```</p>
 ]]></content>
   </entry>
   
