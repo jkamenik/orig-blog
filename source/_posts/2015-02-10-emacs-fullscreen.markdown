@@ -11,7 +11,7 @@ categories:
 ---
 
 On a Mac the short cut to put a window into full-screen mode is `ctrl +
-cmd + f`.  Unfortunately this does not directly for emacs.  Here I
+cmd + f`.  Unfortunately this does not work directly for emacs.  Here I
 will explain how I made it work.
 
 Note: This is only applicable to windowed versions of Emacs!
@@ -43,7 +43,7 @@ I added the following to my config:
 (global-set-key (kbd "C-s f") 'toggle-frame-fullscreen)
 ```
 
-Note: "s" is "super" which is what the "cmd" key maps to.
+Note: "s" is "super" which is what the "cmd" on a Mac maps to.
 
 
 I run `C+x e` to evaluate the lisp code and then I use the keyboard
